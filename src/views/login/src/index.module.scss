@@ -1,0 +1,81 @@
+.container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: url('~@/assets/login.jpg') no-repeat;
+  background-size:100% 100%;
+  .box{
+    position: absolute;
+    width:100%;
+    top:50%;
+    transform: translateY(-50%);
+    .title{
+      font-size: 48px;
+      font-family: PingFangSC, PingFangSC-Semibold;
+      font-weight: 600;
+      text-align: left;
+      text-align: center;
+      line-height: 66px;
+      color:#fff;
+      // -webkit-text-fill-color: #fff; /*文字的填充色*/
+      // -webkit-text-stroke: 1px  rgba(49,67,219,0.72);
+      // text-shadow: 2px 2px 15px  rgba(35,119,255,0.76);
+      // text-shadow: 2px 2px 15px rgba(49,67,219,0.72);
+      text-shadow: 2px 2px 20px rgba(49,67,219,0.72);
+    }
+    .login-form{
+      width: 384px;
+      padding:32px 32px 24px;
+      margin:0 auto;
+      margin-top:48px;
+      background: linear-gradient(180deg,rgba(5,16,91,0.53) 2%, rgba(1,4,30,0.53) 97%);
+      border-radius: 8px;
+      box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.5);
+      // filter: blur(4px);
+      .title-login{
+        font-size: 36px;
+        font-family: PingFangSC, PingFangSC-Medium;
+        font-weight: 500;
+        text-align: center;
+        color:#fff;
+        margin-bottom: 48px;
+      }
+      :global(.el-form-item){
+        margin-top:24px;
+      }
+      .user,.password{
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+      :global(.el-input__inner){
+        padding-left:48px;
+        height:46px;
+      }
+      .login-btn{
+        margin-top:60px;
+        width:100%;
+        height: 46px;
+        background: linear-gradient(180deg,#33a7ff, #1b82ff 99%);
+        border-radius: 2px;
+        font-size: 20px;
+        font-family: PingFangSC, PingFangSC-Medium;
+        font-weight: 500;
+        text-align: center;
+        color: #fff;
+      }
+    }
+  }
+  .copyright{
+    position: absolute;
+    width:100%;
+    bottom: 16px;
+    font-size: 14px;
+    font-family: PingFangSC, PingFangSC-Regular;
+    font-weight: 400;
+    text-align: center;
+    color: #fff;
+  }
+}

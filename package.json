@@ -1,0 +1,81 @@
+{
+  "name": "hx-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build:report": "vue-cli-service build --report",
+    "release": "npm i && npm run build && node build/release.js",
+    "lint": "vue-cli-service lint",
+    "deploy": "npm run release && sh build/evaluation_93.sh d ./dist"
+  },
+  "dependencies": {
+    "@cci/cp-svg-icon": "^1.0.4",
+    "@cci/cui": "^1.3.1",
+    "@cci/ml-form": "^1.0.10",
+    "@cci/ml-table": "^1.0.9",
+    "axios": "^0.21.0",
+    "babel-plugin-lodash": "^3.3.4",
+    "clipboard": "^2.0.6",
+    "core-js": "^3.6.5",
+    "echarts": "^4.9.0",
+    "element-ui": "^2.14.0",
+    "hls.js": "^0.14.17",
+    "lodash": "^4.17.20",
+    "lodash-webpack-plugin": "^0.11.6",
+    "nprogress": "^0.2.0",
+    "path-to-regexp": "^6.2.0",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^9.1.2",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.167",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-vue": "^6.2.2",
+    "lint-staged": "^10.5.1",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.19.1",
+    "sass-loader": "^8.0.2",
+    "svg-sprite-loader": "^5.0.0",
+    "typescript": "~3.9.3",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "babel": {
+    "presets": [
+      "@vue/cli-plugin-babel/preset"
+    ],
+    "plugins": [
+      "lodash"
+    ]
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx,json,css,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title></title>
+    <defs>
+        <path d="M14.295,1.705 C13.9056393,1.31563925 13.2743607,1.31563925 12.885,1.705 L8,6.59 L8,6.59 L3.115,1.705 C2.72563925,1.31563925 2.09436075,1.31563925 1.705,1.705 C1.31563925,2.09436075 1.31563925,2.72563925 1.705,3.115 L6.59,8 L6.59,8 L1.705,12.885 C1.31563925,13.2743607 1.31563925,13.9056393 1.705,14.295 C2.09436075,14.6843607 2.72563925,14.6843607 3.115,14.295 L8,9.41 L8,9.41 L12.885,14.295 C13.2743607,14.6843607 13.9056393,14.6843607 14.295,14.295 C14.6843607,13.9056393 14.6843607,13.2743607 14.295,12.885 L9.41,8 L9.41,8 L14.295,3.115 C14.6843607,2.72563925 14.6843607,2.09436075 14.295,1.705 Z" id="path-1"></path>
+    </defs>
+    <g id="考核管理" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="系统管理/收件箱备份-2" transform="translate(-964.000000, -293.000000)">
+            <g id="编组-10" transform="translate(436.000000, 275.000000)">
+                <g id="编组" transform="translate(528.000000, 18.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="close" fill="#373D41" fill-rule="nonzero" xlink:href="#path-1"></use>
+                    <g id="-mockplus-" mask="url(#mask-2)" fill="#888888">
+                        <g id="Color-/-Black-/-600">
+                            <polygon id="button_ok_bg" points="0 0 80 0 80 80 0 80"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

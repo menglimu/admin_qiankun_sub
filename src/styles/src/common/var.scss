@@ -1,0 +1,208 @@
+/* Colors
+-------------------------- */
+$--color-white: #fff !default;
+$--color-black: #000 !default;
+$--color-blue: #2d3a4b !default;
+$--color-dark_blue: #293444 !default;
+$--color-dark_gray: #889aa4 !default;
+$--color-light_gray: #eee !default;
+
+/* 主题色变量 */
+$--color-primary: #3786fd !default;
+
+$--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default; /* 53a8ff */
+$--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default; /* 66b1ff */
+$--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default; /* 79bbff */
+$--color-primary-light-4: mix($--color-white, $--color-primary, 40%) !default; /* 8cc5ff */
+$--color-primary-light-5: mix($--color-white, $--color-primary, 50%) !default; /* a0cfff */
+$--color-primary-light-6: mix($--color-white, $--color-primary, 60%) !default; /* b3d8ff */
+$--color-primary-light-7: mix($--color-white, $--color-primary, 70%) !default; /* c6e2ff */
+$--color-primary-light-8: mix($--color-white, $--color-primary, 80%) !default; /* d9ecff */
+$--color-primary-light-9: mix($--color-white, $--color-primary, 90%) !default; /* ecf5ff */
+
+$--color-primary-dark-1: mix($--color-black, $--color-primary, 10%) !default; /* #3a8ee6 */
+$--color-primary-dark-2: mix($--color-black, $--color-primary, 20%) !default; /* #337ecc */
+$--color-primary-dark-3: mix($--color-black, $--color-primary, 30%) !default; /* #2d6fb3 */
+$--color-primary-dark-4: mix($--color-black, $--color-primary, 40%) !default; /* #265f99 */
+$--color-primary-dark-5: mix($--color-black, $--color-primary, 50%) !default; /* #204f80 */
+$--color-primary-dark-6: mix($--color-black, $--color-primary, 60%) !default; /* #1a3f66 */
+$--color-primary-dark-7: mix($--color-black, $--color-primary, 70%) !default; /* #132f4d */
+$--color-primary-dark-8: mix($--color-black, $--color-primary, 80%) !default; /* #0d2033 */
+$--color-primary-dark-9: mix($--color-black, $--color-primary, 90%) !default; /* #06101a */
+
+
+$--color-success: #67c23a !default;
+$--color-warning: #e6a23c !default;
+$--color-danger: #f56c6c !default;
+$--color-info: #909399 !default;
+
+$--color-success-light: mix($--color-white, $--color-success, 80%) !default;
+$--color-warning-light: mix($--color-white, $--color-warning, 80%) !default;
+$--color-danger-light: mix($--color-white, $--color-danger, 80%) !default;
+$--color-info-light: mix($--color-white, $--color-info, 80%) !default;
+
+$--color-success-lighter: mix($--color-white, $--color-success, 90%) !default;
+$--color-warning-lighter: mix($--color-white, $--color-warning, 90%) !default;
+$--color-danger-lighter: mix($--color-white, $--color-danger, 90%) !default;
+$--color-info-lighter: mix($--color-white, $--color-info, 90%) !default;
+
+$--color-text-primary: #303133 !default;
+$--color-text-regular: #606266 !default;
+$--color-text-secondary: #909399 !default;
+$--color-text-placeholder: #c0c4cc !default;
+
+
+/* Font
+-------------------------- */
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~@cci/cui/lib/theme-default/fonts';
+$--font-size-base: 14px !default;
+$--font-size-small: 13px !default;
+$--font-size-large: 18px !default;
+$--font-color-disabled-base: #bbb !default;
+$--font-weight-primary: 400 !default;
+$--font-line-height-primary: 24px !default;
+$--font-style-base: normal !default;
+
+/* z-index
+-------------------------- */
+$--index-normal: 1 !default;
+$--index-top: 1000 !default;
+$--index-popper: 2000 !default;
+
+/* Border
+-------------------------- */
+$--border-width-base: 1px !default;
+$--border-style-base: solid !default;
+$--border-color-base: #dcdfe6 !default;
+$--border-color-light: #e4e7ed !default;
+$--border-color-lighter: #ebeef5 !default;
+$--border-color-custom: #e6e6e6 !default;
+$--border-color-extra-light: #f2f6fc !default;
+$--border-color-hover: $--color-text-placeholder !default;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
+$--border-radius-base: 4px !default;
+$--border-radius-small: 2px !default;
+$--border-radius-circle: 100% !default;
+
+//components
+// cui
+$--cui-message-info-background-color: #D2E8FF;
+// columns
+$--right-section-border-color: #eee;
+// treePanel
+$--tree-panel-form-header-border-color: #dddfe7;
+// table
+$--table-tool-panel-button-sync-background-color: #70bdc5;
+$--table-tool-panel-button-sync-border-color: #70bdc5;
+$--table-tool-panel-button-sync-color: $--color-white;
+$--table-tool-panel-button-export-background-color: #b0c07d;
+$--table-tool-panel-button-export-border-color: #b0c07d;
+$--table-tool-panel-button-export-color: $--color-white;
+$--table-tool-panel-button-import-background-color: #24adc2;
+$--table-tool-panel-button-import-border-color: #24adc2;
+$--table-tool-panel-button-import-color: $--color-white;
+$--table-search-input-border-color: #e6e6e6;
+$--table-search-input-border-radius: 20px;
+$--table-button-edit-color: #409eff;
+$--table-button-delete-color: #f56c6c;
+$--table-button-check-color: #156dfb;
+$--table-button-remove-color: #ff696e;
+$--table-button-config-color: #0465ff;
+$--table-pager-color: #606266;
+$--table-form-header-border-color: #dddfe7;
+$--subtable-container-border-color: #e6e6e6;
+// WrapTree
+$--wrap-tree-color: #000000;
+$--wrap-tree-button-color: #606266;
+$--wrap-tree-menu-height: 50px;
+$--wrap-tree-menu-button-color: $--color-primary;
+$--wrap-tree-border-color: #eee;
+$--wrap-tree-title-color: $--color-primary-dark-7;
+$--wrap-tree-panel-icon-color: $--color-black;
+$--wrap-tree-search-background-color: $--color-white;
+$--wrap-tree-search-color: #606266;
+$--wrap-tree-search-icon-color: #c0c4cc;
+$--wrap-tree-search-border-color: #e6e6e6;
+$--wrap-tree-search-border-radius: 20px;
+$--wrap-tree-label-color:#606266;
+$--wrap-tree-item-current-background-color: #f0f7ff;
+$--wrap-tree-item-background-color: $--color-white;
+// WrapTable
+$--wrap-table-header-th-background-color: $--color-primary-light-9;
+$--wrap-table-pager-color: #606266;
+$--wrap-table-pager-font-style: normal;
+// Tinymce
+$--tinymce-button-height: 28px;
+$--tinymce-container-line-height: 16.1px;
+// ContainerList
+$--container-title-background-color: $--color-white;
+$--container-border-color: #dddfe7;
+// DialogForm
+$--dialog-form-header-background-color: $--color-white;
+$--dialog-form-header-color: #303133;
+$--dialog-form-header-font-size: 18px;
+$--dialog-form-header-line-height: 14px;
+$--dialog-form-body-background-color: $--color-white;
+$--dialog-form-footer-background-color: $--color-white;
+$--dialog-form-border-color: #dddfe7;
+// Scrollbar
+$--scrollbar-background-color: #304156;
+// Card
+$--card-background-color: #f5f5f5;
+$--card-header-color: #e6e6e6;
+$--card-header-title-color: #868686;
+$--card-body-color: #868686;
+// CardList
+$--card-list-total-color: #868aa1;
+$--card-list-box-height: 197px;
+$--card-list-plus-color: #c1c1c1;
+$--card-list-plus-font-size: 100px;
+$--card-list-plus-line-height: 174px;
+$--card-list-all-loaded-color: #888888;
+$--card-list-card-body-color: #cfcfcf;
+$--card-list-card-body-piciton-icon-font-size: 100px;
+$--card-list-card-body-title-color: #333333;
+$--card-list-card-body-description-color: #888888;
+$--card-list-card-body-detail-color: #888888;
+$--card-list-card-body-detail-hover-color: #55aafe;
+$--card-list-card-footer-border-color: #ebeef5;
+$--card-list-card-footer-edit-icon-color: #878787;
+$--card-list-card-footer-edit-icon-hover-color: #55aafe;
+$--card-list-card-footer-more-color: #878787;
+$--card-list-card-footer-more-hover-color: #55aafe;
+$--card-list-card-footer-dot-background-color: red;
+$--card-list-card-footer-time-color: #cccccc;
+// SearchForm
+$--search-form-border-color: #e6e6e6;
+$--search-form-item-input-height: 36px;
+$--search-form-button-height: 40px;
+$--search-form-el-switch-height: 16px;
+$--search-form-el-switch-background-color: $--color-white;
+// Avatar
+$--avatar-background-color: #ccc;
+$--avatar-color: $--color-white;
+$--avatar-line-height-base: 1.5;
+$--avatar-size-base: 32px;
+$--avatar-size-lg: 40px;
+$--avatar-size-sm: 24px;
+$--avatar-font-size-base: 18px;
+$--avatar-font-size-lg: 24px;
+$--avatar-font-size-sm: 14px;
+$--avatar-text-color: mix($--color-black, $--color-white, 65%) !default;
+$--avatar-font-family-no-number: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$--avatar-font-family: "Monospaced Number", $--avatar-font-family-no-number;
+// List
+$--list-border-color-split: #e8e8e8;
+$--list-border-radius-base: $--border-radius-base * 6;
+$--list-border-color: #d9d9d9;
+$--list-text-color: mix($--color-black, $--color-white, 65%);
+$--list-text-color-secondary: mix($--color-black, $--color-white, 45%);
+$--list-font-size: $--font-size-base + 2px;
+$--list-line-height-base: 1.5;
+$--list-primary-color: $--color-primary;
+$--list-heading-color: mix($--color-black, $--color-white, 85%);
+$--list-font-family-no-number: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$--list-font-family: "Monospaced Number", $--list-font-family-no-number;
+$--list-screen-md: 768px;
+$--list-screen-xs: 480px;

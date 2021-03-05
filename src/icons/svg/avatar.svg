@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Oval Copy 7 + Oval 蒙版</title>
+    <defs>
+        <ellipse id="path-1" cx="12" cy="11.9225806" rx="12" ry="11.9225806"></ellipse>
+        <ellipse id="path-3" cx="12" cy="21" rx="9" ry="6"></ellipse>
+        <filter x="-72.2%" y="-91.7%" width="244.4%" height="316.7%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0823529412   0 0 0 0 0.388235294   0 0 0 0 0.760784314  0 0 0 0.111314467 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <circle id="path-5" cx="12" cy="9" r="4"></circle>
+        <filter x="-162.5%" y="-137.5%" width="425.0%" height="425.0%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0823529412   0 0 0 0 0.388235294   0 0 0 0 0.760784314  0 0 0 0.111314467 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="考核管理" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="考核管理-首页" transform="translate(-1281.000000, -20.000000)">
+            <g id="Oval-Copy-7-+-Oval-蒙版" transform="translate(1281.000000, 20.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="蒙版" fill="#87B7FF" xlink:href="#path-1"></use>
+                <g id="Oval-Copy-7" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                </g>
+                <g id="Oval" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
