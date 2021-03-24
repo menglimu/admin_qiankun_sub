@@ -1,32 +1,48 @@
 <template>
   <c-breadcrumb class="app-breadcrumb" separator="/">
-    <c-breadcrumb-item v-for="(item, index) in navitems" :key="item.id">
-      <a @click="handleNav(item, index)">{{ item.text }}</a>
-      <!-- <router-link :to="item.redirect||item.path">{{item.name}}</router-link> -->
+    <c-breadcrumb-item
+      v-for="item in levelList"
+      :to="item.url && item.url != $route.meta.url ? item.url : null"
+      :key="item.id"
+      >{{ item.text }}
     </c-breadcrumb-item>
   </c-breadcrumb>
 </template>
 
 <script>
 export default {
-  props: {
-    items: {
-      type: Array,
-      default: () => []
+  data() {
+    return {
+      levelList: null
+    }
+  },
+  watch: {
+    $route() {
+      this.getBreadcrumb()
     }
   },
   computed: {
-    navitems() {
-      return this.items.filter(item => {
-        return item.text
-      })
+    menu() {
+      return this.$store.getters.menu
     }
   },
+  created() {
+    this.getBreadcrumb()
+  },
   methods: {
-    handleNav(item) {
-      this.$router.push({
-        path: item.url || item.redirect || item.path
-      })
+    getBreadcrumb() {
+      this.levelList = this.getList(this.menu, this.$route.meta.url)
+    },
+    getList(data, val, key = 'url', childrenKey = 'children') {
+      for (const i in data) {
+        if (data[i][key] && data[i][key] === val) {
+          return [data[i]]
+        }
+        if (data[i][childrenKey] && data[i][childrenKey].length) {
+          const result = this.getList(data[i][childrenKey], val, key, childrenKey)
+          if (result) return [data[i], ...result]
+        }
+      }
     }
   }
 }

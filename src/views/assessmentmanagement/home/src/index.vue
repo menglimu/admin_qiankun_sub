@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="home">
     首页测试
+    <div class="content">dsakfjkldsa</div>
   </div>
 </template>
 
@@ -17,4 +18,10 @@ export default {
   methods: {}
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.home {
+  .content {
+    height: 1200px;
+  }
+}
+</style>

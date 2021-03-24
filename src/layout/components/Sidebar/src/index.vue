@@ -1,36 +1,7 @@
 <script>
 import { parseUrl } from '@/permission'
 
-// function parseUrl(url) {
-//   if (Object.prototype.toString.call(url) !== '[object String]') {
-//     return { url: '', isExternal: false }
-//   }
-//   if (/^https?:\/\//.test(url)) {
-//     return {
-//       url: '/iframe/' + encodeURIComponent(url),
-//       isExternal: true
-//     }
-//   } else if (url.substring(0, 8) === '/iframe/') {
-//     return {
-//       url,
-//       isExternal: true
-//     }
-//   } else if (url.charAt(0) === '/') {
-//     return {
-//       url: url.toLocaleLowerCase(),
-//       isExternal: false
-//     }
-//   } else {
-//     return { url: '', isExternal: false }
-//   }
-// }
 export default {
-  props: {
-    menu: {
-      type: Object,
-      required: true
-    }
-  },
   data() {
     return {
       isCollapse: false,
@@ -38,9 +9,18 @@ export default {
       menuCache: []
     }
   },
+
   computed: {
+    menu() {
+      const obj = this.$store.getters.sidebarItem || {}
+      return Object.keys(obj).length
+        ? obj
+        : {
+            id: 0
+          }
+    },
     subMenu() {
-      return this.menu.children
+      return this.menu?.children || []
     }
   },
   inject: ['reloadRouter'],
@@ -147,54 +127,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .el-menu-vertical-demo:not(.el-menu--collapse) {
-//   width: 256px;
-//   min-height: 400px;
-// }
-// .el-menu {
-//   border-right: 0px;
-// }
-
-// .el-submenu__title:hover {
-//   outline: none;
-//   // background: rgba(55,134,253,0.12);
-//   background: red;
-// }
-// .el-submenu__title:hover {
-//   background-color: green;
-// }
-// .el-submenu{
-//   &.is-active{
-//     .el-submenu__title{
-//       background: red;
-//     }
-//   }
-// }
-// .el-menu{
-//   color: red;
-//   .el-menu-item {
-//     font-size: 14px;
-//     font-family: PingFangSC, PingFangSC-Regular;
-//     font-weight: 400;
-//     text-align: left;
-//     color: red;
-//     &.is-active{
-//       position: relative;
-//       background: rgba(55,134,253,0.12);
-//       color: #3786fd;
-//       &::before {
-//         content: '';
-//         position: absolute;
-//         left: 0;
-//         top: 0;
-//         background: #d9f0f7;
-//         height: 100%;
-//         width: 3px;
-//       }
-//     }
-//   }
-// }
-
 .sidebar {
   width: 256px;
   height: 100%;
@@ -213,21 +145,6 @@ export default {
       font-weight: 400;
       text-align: left;
       color: #666;
-      // padding-left: 24px !important;
-      // &.is-active {
-      //   display: flex;
-      //   align-items: center;
-      // background: none !important;
-      //   color: #3786fd;
-      //   padding-left: 0px !important;
-      //   &::before {
-      //     width: 4px;
-      //     height: 40px;
-      //     background: #3786fd;
-      //     content: '';
-      //     margin-right: 36px;
-      //   }
-      // }
     }
     .el-submenu {
       .el-submenu__title {
@@ -239,8 +156,6 @@ export default {
         text-align: left;
         color: #666;
         // padding-left: 24px !important;
-      }
-      &.is-active {
       }
       &:hover {
         background: #f8f8f8;
