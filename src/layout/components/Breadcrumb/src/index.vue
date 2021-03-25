@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     getBreadcrumb() {
-      this.levelList = this.getList(this.menu, this.$route.meta.url)
+      this.levelList = this.getList(this.menu, this.$route.path)
     },
     getList(data, val, key = 'url', childrenKey = 'children') {
       for (const i in data) {
