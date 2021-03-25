@@ -65,111 +65,130 @@ npm run lint
 ## 代码结构
 
 ```text
-├── ansible/                             // 自动化相关脚本
-│
-├── build/                               // 构建目录
-│   ├── bin/                                // 构建脚本目录
-│   │   └── route.js                        // 根据 views 目录文件自动生成路由配置脚本
-│   └── mock.js                             // 无需重启自动加载 mock 数据脚本
-│
-├── docs/                                // 公司一些公共组件和mixin的使用说明，需要自己引入组件
-│
-├── env                                 // 环境变量配置
-│   
-├── public/                              // vue-cli 静态页面模板目录
-│   ├── favicon.ico                         // 站点图标
-│   └── index.html                          // 站点主页模板
-│
-├── src/                                 // 源码目录
-│   ├── main.js                             // 项目入口 js 文件
-│   ├── permission.js                       // 进入路由权限判断
-│   ├── App.vue                             // 入口页面组件
-│   ├── api/                                // api 接口目录
-│   │   ├── request.js                      // 基于axios进行请求的二次封装
-│   │   ├── login.js                        // 封装 login 相关接口请求
-│   │   └── modules/                        // 业务请求分模块放入其中
-│   │ 
-│   ├── assets/                          // 静态资源目录
-│   │ 
-│   ├── components/                      // 静态资源目录
-│   │   ├── Editor                          // 组件结构demo
-│   
-│   ├── icons/                           // icon 目录
-│   │   ├── index.js                        // 全局注册 svg icon 组件
-│   │   └── svg/                            // svg 文件目录
-│   │       ├── example.svg
-│   │       ├── ...
-│   │ 
-│   ├── layout/                          // 页面框架目录
-│   │    ├── LayoutComponents/              // 公司封装的布局组件，具体使用参考其文档
-│   │    ├── Message/                       // 消息通知，目前好像没有使用
-│   │    ├── Header.vue                     // 顶部
-│   │    ├── index.vue                      // 入口布局框架入口
-│   │    ├── Sidebar.vue                    // 左侧菜单
-│   │    └── store.js                       // 消息相关store
-│   │
-│   ├── router/                          // 路由目录
-│   │   ├── child.js                        // 二级页面，不需后台权限配置，直接注入
-│   │   ├── index.js                        // 生成路由配置，并导出 router 实例
-│   │   └── static.js                       // 静态路由，不使用后台配置权限的时候使用本地静态路由
-│   │
-│   ├── components/                      // 组件目录
-│   │   ├── Tree                            // tree 视图业务组件目录
-│   │   │   └── TreeRender.vue              // tree 操作菜单项渲染组件
-│   │   ├── ScrollBar/                      // 左侧边栏滚动组件目录
-│   │   │   └── index.vue                   // 左侧边栏滚动组件
-│   │   ├── ScrollPane/                     // 顶部标签切换滚动组件目录
-│   │   │   └── index.vue                   // 顶部标签切换滚动组件
-│   │   └── SvgIcon/                        // svg icon 组件目录
-│   │       └── index.vue                   // svg icon 组件
-│   │ 
-│   ├── store/                           // vuex
-│   │   ├── index.js                        // 导出 vuex 实例
-│   │   └── modules/                        // modules 目录
-│   │       ├── app.js                      // app 模块
-│   │       ├── user.js                     // user 模块
-│   │       ├── tagsView.js                 // tagsView 模块
-│   │       └── ...
-│   │ 
-│   ├── styles/                          // 样式目录
-│   │   ├── cui.scss                        // 针对 cui 库样式
-│   │   ├── index.scss                      // 一些全局样式
-│   │   ├── mixin.scss                      // 框架mixin
-│   │   ├── _mixin.scss                     // 自定义的一些
-│   │   ├── sidebar.scss                    // 针对 sidebar 样式
-│   │   ├── transition.scss                 // transition
-│   │   └── variables.scss                  // 定义项目中使用的样式变量
-│   │ 
-│   ├── utils/                           // 工具函数目录
-│   │   ├── map/                            // 地图相关
-│   │   │    ├── mapconfig.js                   // 地图初始化参数
-│   │   │    ├── mapHelper.js                   // 地图实例化工具
-│   │   │    └── markerRotate.js                // marker旋转插件
-│   │   │
-│   │   ├── socket/                         // websocket相关
-│   │   │    ├── socket.js                      // websocket封装
-│   │   │    └── ws.js                          // websocket使用类
-│   │   │
-│   │   ├── storage/                         // 浏览器存储相关
-│   │   │    ├── local.js                      // localStorage
-│   │   │    └── session.js                    // sessionStorage
-│   │   │
-│   │   ├── auth.js                         // 操作 cookie 相关函数
-│   │   ├── createRoutes.js                 // 根据目录文件生成路由配置函数
-│   │   ├── index.js                        // 常规工具函数
-│   │   └── validate.js                     // 常见正则验证
-│   │ 
-│   ├── views/                           // 页面目录
-│   │   ├── 404.vue                         // 404页面
-│   │   ├── iframeTemplateEmpty.vue         // 插入iframe异常的默认文件
-│   │
-│   ├── App.vue                          // vue入口
-│   ├── main.js                          // 项目入口
-│   └── permission.js                    // 权限相关处理以及拦截
-│   
-├── package.json                            // 项目依赖文件
-└── vue.config.js                           // 项目 vue webpack 配置文件
-
+web_template_qiankun_sub
+├─ .env                     // 全局环境变量
+├─ .eslintignore            // eslint忽略文件
+├─ .eslintrc.js             // eslint配置文件
+├─ .gitignore               // git忽略文件
+├─ ansible                  // 部署相关脚本
+├─ build
+│  └─ release.js            // 构建打包发布前添加version.json表示当前git版本分支
+├─ package.json             // npm package相关信息
+├─ public                   // 静态资源
+│  ├─ favicon.ico
+│  └─ index.html
+├─ README.md
+├─ src                      // 开发的主要源码
+│  ├─ api                   // api接口相关，此处主要放公共的api。业务接口在页面模块中就行处理
+│  │  ├─ modules
+│  │  │  ├─ login.ts        // 登录相关接口
+│  │  │  └─ public.ts       // 一些公共接口
+│  │  └─ request.ts         // 接口请求的公共封装，包括拦截，token，401等的处理
+│  ├─ App.vue               // vue入口
+│  ├─ assets                // 项目内的资源，主要放图片等
+│  ├─ components            // 公共组件文件放在这
+│  ├─ directives            // 指令放在这
+│  │  └─ index.ts 
+│  ├─ global.d.ts           // 一些全局的ts的定义
+│  ├─ icons                 // svg相关图标
+│  │  ├─ index.js
+│  │  └─ svg
+│  ├─ layout                // 整体页面布局相关
+│  │  ├─ components
+│  │  │  ├─ Breadcrumb      // 面包屑
+│  │  │  │  ├─ index.ts
+│  │  │  │  └─ src
+│  │  │  │     └─ index.vue
+│  │  │  ├─ NavBar          // 顶部
+│  │  │  │  ├─ index.ts
+│  │  │  │  └─ src
+│  │  │  │     └─ index.vue
+│  │  │  ├─ Sidebar         // 左侧菜单
+│  │  │  │  ├─ index.ts
+│  │  │  │  └─ src
+│  │  │  │     └─ index.vue
+│  │  │  └─ TagsView        // 标签选项卡
+│  │  │     ├─ index.ts
+│  │  │     └─ src
+│  │  │        └─ index.vue
+│  │  └─ index.vue          // layout入口
+│  ├─ main.ts               // 项目入口
+│  ├─ mixins                // 全局mixin
+│  │  └─ emitter.tsx
+│  ├─ permission.ts         // 权限处理。添加router
+│  ├─ public-path.js        // qiankun的微服务使用
+│  ├─ router                // 路由相关
+│  │  ├─ child.ts
+│  │  ├─ index.ts
+│  │  └─ static.ts
+│  ├─ shims-tsx.d.ts        // ts的一些定义
+│  ├─ shims-vue.d.ts        // ts的一些定义
+│  ├─ store                 // 全局的一些store处理
+│  │  ├─ index.ts           // store入口
+│  │  └─ modules
+│  │     ├─ app.ts          // 系统全局store
+│  │     ├─ dict.ts         // 字典相关
+│  │     ├─ table.ts        // 表格存储当前用户选择的表格显示字段相关
+│  │     └─ user.ts         // 用户相关
+│  ├─ styles                // 全局样式的处理
+│  │  ├─ .gitignore
+│  │  ├─ gulpfile.js
+│  │  ├─ mixin.scss         // 全局的混入，会注入所有文件中
+│  │  ├─ package.json
+│  │  └─ src
+│  │     ├─ base.scss
+│  │     ├─ common
+│  │     │  ├─ mixin.scss
+│  │     │  └─ var.scss
+│  │     ├─ cui.scss
+│  │     ├─ index.scss
+│  │     ├─ resetGlobal.scss
+│  │     └─ SvgIcon.scss
+│  ├─ types
+│  │  └─ index.ts
+│  ├─ utils                 // 全局的公共函数
+│  │  ├─ index.ts
+│  │  ├─ loading.js
+│  │  ├─ socket
+│  │  │  ├─ socket.js
+│  │  │  └─ ws.js
+│  │  ├─ storage
+│  │  │  ├─ local.ts
+│  │  │  └─ session.ts
+│  │  ├─ store
+│  │  │  ├─ index.js
+│  │  │  ├─ jsonCode.js
+│  │  │  ├─ jsonCodeConfig.js
+│  │  │  ├─ proxyAjax.js
+│  │  │  └─ proxyMemory.js
+│  │  └─ validate.js
+│  └─ views                 // 具体的页面开发文件夹
+│     ├─ 404
+│     │  ├─ index.ts
+│     │  └─ src
+│     │     └─ index.vue
+│     ├─ assessmentmanagement // 当作为一个微服务的子应用时。所有的菜单都放在一个文件中方便区分
+│     │  └─ home
+│     │     ├─ index.ts
+│     │     └─ src
+│     │        ├─ api.js
+│     │        ├─ assets
+│     │        │  ├─ home_Ag.png
+│     │        │  ├─ home_Au.png
+│     │        │  └─ home_Cu.png
+│     │        └─ index.vue
+│     ├─ iframeTemplateEmpty
+│     │  ├─ index.ts
+│     │  └─ src
+│     │     └─ index.vue
+│     └─ login
+│        ├─ index.ts
+│        └─ src
+│           ├─ index.module.scss
+│           └─ index.tsx
+├─ tsconfig.json
+├─ vue.config.js
+└─ 项目开发规范说明.docx
 ```
 
 ## 开发规范
