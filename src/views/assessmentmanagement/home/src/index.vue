@@ -20,6 +20,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .home {
+  padding: 0;
   .content {
     height: 1200px;
   }
