@@ -41,3 +41,8 @@ declare module 'hls.js'
 declare module 'webpack-merge' {
   export default function merge<T>(...obj: any): T
 }
+
+interface Window {
+  appEventBus: Vue
+  __POWERED_BY_QIANKUN__: boolean 
+}

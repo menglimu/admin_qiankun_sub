@@ -14,38 +14,7 @@
 //按需加载lodash
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const path = require('path')
-const proxy_obj = {
-  hechuan: {
-    '/evaluate-api/': 'http://10.10.77.93:8081/',
-    '/filesys-perpc/': 'http://10.10.77.93:9081/',
-    '/userc-api/': 'http://10.10.77.93:8072/',
-    '/oauth-api/': 'http://10.10.77.93:8074/',
-    '/workflow/': 'http://10.10.77.93:8082/'
-  },
-  hushi: {
-    '/evaluate-api/': 'http://10.10.77.237:8081/',
-    '/filesys-perpc/': 'http://10.10.77.237:9081/',
-    '/userc-api/': 'http://10.10.77.237:8072/',
-    '/oauth-api/': 'http://10.10.77.237:8074/',
-    '/workflow/': 'http://10.10.77.237:8082/'
-  }
-}
-const proxy_out = {}
-for (const key in proxy_obj) {
-  const element = proxy_obj[key]
-  Object.keys(element).forEach(item => {
-    const rewriteObj = {}
-    rewriteObj[`/${key}`] = ''
-    proxy_out['/' + key + item] = {
-      target: `${element[item]}`,
-      changeOrigin: true,
-      pathRewrite: rewriteObj,
-      onProxyReq: function(proxyReq) {
-        proxyReq.removeHeader('origin')
-      }
-    }
-  })
-}
+
 module.exports = {
   lintOnSave: false,
   publicPath: process.env.VUE_APP_BASEURL || '/',
@@ -93,7 +62,10 @@ module.exports = {
   devServer: {
     https: false,
     proxy: {
-      ...proxy_out
+      '/v1': {
+        target: `http://10.10.10.10:80`,
+        changeOrigin: true
+      }
     },
     headers: {
       'Access-Control-Allow-Origin': '*'

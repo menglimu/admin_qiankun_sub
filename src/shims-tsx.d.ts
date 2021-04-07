@@ -27,10 +27,8 @@ declare module 'vue/types/options' {
   }
 }
 
-// 设置VueOptions为任意属性。屏蔽jsx检测属性报错问题
+// 扩展vue原型上的方法
 declare module 'vue/types/vue' {
   interface Vue {
-    $viewfile: any
-    $viewImage:(fileKey: string, fileSrc?: string)=>void
   }
 }

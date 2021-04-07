@@ -180,6 +180,8 @@ const userStore: Module<UserState, {}> = {
           return Promise.reject(data.message)
         }
         commit('SET_TOKEN', data.data.accessToken)
+        await dispatch('GetUserDetail')
+        return Promise.resolve('login:success')
       } catch (error) {
         commit('SET_TOKEN', null)
         return Promise.reject(error)

@@ -8,7 +8,7 @@ import router from '@/router'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '/' : '/hechuan/',
+  baseURL: '/',
   timeout: 60 * 1000 // 请求超时时间
 })
 // service.defaults.transformRequest = function(data, headers) {
@@ -119,7 +119,7 @@ function ajax<R>(method: Method, url: string, params?: AnyObj, options?: AxiosRe
 
 // 请求封装
 export default {
-  service(options: AxiosRequestConfigAll) {
+  service<R = any>(options: AxiosRequestConfigAll): AxiosPromise<R> | R {
     //用于自定义其他扩展，或调用方法
     return service(options)
   },

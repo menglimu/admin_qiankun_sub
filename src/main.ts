@@ -126,7 +126,7 @@ function render(props: any = {}) {
   }).$mount(container ? container.querySelector('#app') : '#app')
 }
 // 独立运行时
-if (!(window as any).__POWERED_BY_QIANKUN__) {
+if (!window.__POWERED_BY_QIANKUN__) {
   render()
 }
 export async function bootstrap() {
