@@ -8,10 +8,10 @@ import { Storage } from '@/utils/storage/local'
 import { Module } from 'vuex'
 
 let storage = new Storage()
-const qiankun = (window as any).__POWERED_BY_QIANKUN__
+const qiankun = window.__POWERED_BY_QIANKUN__
 if (qiankun) {
   // 从全局加载当前项目的项目名
-  storage = new Storage((window as any).qiankun_app_name)
+  storage = new Storage(window.qiankun_app_name)
 }
 
 export interface UserInfo {

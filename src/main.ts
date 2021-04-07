@@ -55,7 +55,7 @@ Vue.prototype.$confirm = function(...params) {
 // 是否使用 cas 认证
 const isCasLogin = process.env.VUE_APP_CAS === '1'
 Vue.config.productionTip = false
-;(window as any).eventBus = new Vue()
+window.eventBus = new Vue()
 
 import { Route, NavigationGuardNext } from 'vue-router'
 async function casLogin(to: Route, from: Route, next: NavigationGuardNext<Vue>) {

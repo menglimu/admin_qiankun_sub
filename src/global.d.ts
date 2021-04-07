@@ -43,6 +43,14 @@ declare module 'webpack-merge' {
 }
 
 interface Window {
-  appEventBus: Vue
+  /* 项目的全局eventBus */
+  eventBus: Vue
+  /* 主项目的全局eventBus */
+  appEventBus?: Vue
+  /* 是否是qiankun的子系统运行 */
   __POWERED_BY_QIANKUN__: boolean 
+  /* 主应用的baseURL */
+  qiankun_app_baseurl?: string
+  /* 主应用的项目名 */
+  qiankun_app_name?: string
 }

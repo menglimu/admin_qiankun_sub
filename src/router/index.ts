@@ -47,8 +47,7 @@ export const constantRouterMap: RouteCustom[] = [
 ]
 const router: Router = new Router({
   mode: 'history', //后端支持可开
-  base:
-    ((window as any).__POWERED_BY_QIANKUN__ ? (window as any).qiankun_app_baseurl : process.env.VUE_APP_BASEURL) || '/',
+  base: (window.__POWERED_BY_QIANKUN__ ? window.qiankun_app_baseurl : process.env.VUE_APP_BASEURL) || '/',
   scrollBehavior: () => ({
     y: 0,
     x: 0

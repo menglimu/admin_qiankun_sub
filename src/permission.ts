@@ -99,7 +99,7 @@ function findFirstRoute(obj) {
 }
 
 function menuToRoute(menu: MenuAsync[]) {
-  const qiankun = (window as any).__POWERED_BY_QIANKUN__
+  const qiankun = window.__POWERED_BY_QIANKUN__
   if (qiankun) {
     const route = []
     menu.forEach(item => {
