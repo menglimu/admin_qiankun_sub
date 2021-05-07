@@ -64,7 +64,7 @@ module.exports = {
         ignores: []
       }
     ],
-    eqeqeq: [1, 'allow-null'], // 使用 === 替代 ==
+    eqeqeq: [2, 'allow-null'], // 使用 === 替代 ==
     '@typescript-eslint/camelcase': [0, { properties: 'always' }],
     // "no-unused-vars": [0],
     // "@typescript-eslint/no-unused-vars": [1],
