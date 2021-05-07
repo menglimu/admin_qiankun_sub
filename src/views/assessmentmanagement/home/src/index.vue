@@ -1,28 +1,23 @@
-<template>
-  <div class="home">
-    首页测试
-    <div class="content">dsakfjkldsa</div>
-  </div>
-</template>
+<script lang="tsx">
+import { defineComponent } from '@vue/composition-api'
 
-<script>
-export default {
-  components: {},
-
+/** 测试页面 */
+export default defineComponent({
+  name: 'Demo',
   data() {
-    return {}
+    return {
+      a: 123
+    }
   },
-
-  computed: {},
-
-  methods: {}
-}
-</script>
-<style lang="scss" scoped>
-.home {
-  padding: 0;
-  .content {
-    height: 1200px;
+  methods: {
+    onClick() {
+      this.a++
+      console.log(12356)
+    }
+  },
+  render() {
+    return <div onClick={this.onClick}>测试页{this.a}</div>
   }
-}
-</style>
+})
+</script>
+<style lang="scss" scoped></style>

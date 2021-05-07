@@ -23,6 +23,9 @@ import 'nprogress/nprogress.css' // Progress 进度条样式
 
 import '@/directives'
 
+import VueCompositionAPI from '@vue/composition-api'
+Vue.use(VueCompositionAPI)
+
 // cui 公司内部ui框架，基于elementui
 import cui from '@cci/cui'
 Vue.use(cui)
