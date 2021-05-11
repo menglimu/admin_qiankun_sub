@@ -26,17 +26,14 @@ import '@/directives'
 import VueCompositionAPI from '@vue/composition-api'
 Vue.use(VueCompositionAPI)
 
-// cui 公司内部ui框架，基于elementui
-import cui from '@cci/cui'
-Vue.use(cui)
-// 公司elementui版本过低，需要使用其他的，按需引入
-import { Image } from 'element-ui'
-Vue.use(Image)
+// 引入elementUi
+import elementUi from 'element-ui'
+Vue.use(elementUi)
 // 基于cui和elementui的基础组件
 import MlForm from '@cci/ml-form'
 import MlTable from '@cci/ml-table'
-Vue.use(MlForm)
-Vue.use(MlTable)
+Vue.use(MlForm, { MlForm: { framework: 'element-ui' } })
+Vue.use(MlTable, { MlTable: { framework: 'element-ui' } })
 
 import '@/icons' // icon
 
