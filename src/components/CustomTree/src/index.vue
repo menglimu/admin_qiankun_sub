@@ -3,7 +3,7 @@
  * @Date: 2020-05-22 17:58:48
  * @LastEditors: wenlin
  * @LastEditTime: 2020-12-11 18:51:22
- * @Description:  
+ * @Description:
 -->
 <script lang="tsx">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
@@ -245,7 +245,7 @@ export default class MlTree extends Vue {
   }
   renderSearch() {
     return (
-      <c-input
+      <el-input
         ref="searchInput"
         class="search-input"
         v-model={this.searchInputTree}
@@ -255,7 +255,7 @@ export default class MlTree extends Vue {
           ev.keyCode === 13 ? this.handleInputTreeClick() : null
         }}>
         <i slot="suffix" class="el-input__icon el-icon-search" on-click={this.handleInputTreeClick}></i>
-      </c-input>
+      </el-input>
     )
   }
 
@@ -263,7 +263,7 @@ export default class MlTree extends Vue {
     return (
       <div>
         {this.showSearch && this.renderSearch()}
-        <c-tree
+        <el-tree
           class={['custom_tree', !this.multiple ? 'isSingle' : '']}
           ref="elTree"
           data={this.options}

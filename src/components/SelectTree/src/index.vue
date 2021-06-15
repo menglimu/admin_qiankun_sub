@@ -86,9 +86,9 @@ export default class SelectTree extends Vue {
 
   protected render() {
     return (
-      <c-select ref="select" attrs={this.$attrs} value={this.valueTitle} onClear={this.clearHandle}>
-        <c-option value={this.valueTitle} label={this.valueTitle}>
-          <c-tree
+      <el-select ref="select" attrs={this.$attrs} value={this.valueTitle} onClear={this.clearHandle}>
+        <el-option value={this.valueTitle} label={this.valueTitle}>
+          <el-tree
             ref="selectTree"
             {...{ props: { props: this.treeProps }, attrs: this.$attrs, on: { 'node-click': this.handleNodeClick } }}
             data={this.options}
@@ -96,8 +96,8 @@ export default class SelectTree extends Vue {
             default-expanded-keys={this.defaultExpandedKey}
             nativeOnDblclick={this.hideTree}
           />
-        </c-option>
-      </c-select>
+        </el-option>
+      </el-select>
     )
   }
 }

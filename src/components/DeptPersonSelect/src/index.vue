@@ -1,8 +1,8 @@
 <!--
  * @Author: wenlin
  * @Date: 2020-12-02 11:17:39
- * @LastEditors: wenlin
- * @LastEditTime: 2020-12-26 10:41:44
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-06-15 15:43:23
  * @Description:  人员部门选择组件
 -->
 <script lang="tsx">
@@ -80,7 +80,7 @@ export default class DeptPersonSelect extends Vue {
     // 该逻辑在回显会引起，人员的部门id不存在的情况时，被过滤掉的bug，建议开启tags，让用户手动取消
     if (this.relationDept) {
       this.personCheckeds = this.personCheckeds.filter(person => {
-        return this.treeCheckeds.some(dept => dept.id == person.deptId)
+        return this.treeCheckeds.some(dept => dept.id === person.deptId)
       })
     }
     this.$refs.tableDialogSelect?.mlTable?.onSearch?.()
@@ -214,17 +214,17 @@ export default class DeptPersonSelect extends Vue {
     if (this.isDeptShow) {
       return (
         <div class="show-labels">
-          <c-input placeholder="请选择部门" size="small" class="show-labels-dept" value={depts}></c-input>
-          <c-input
+          <el-input placeholder="请选择部门" size="small" class="show-labels-dept" value={depts}></el-input>
+          <el-input
             attrs={this.$attrs}
             placeholder="请选择人员"
             size="small"
             class="show-labels-name"
-            value={names}></c-input>
+            value={names}></el-input>
         </div>
       )
     }
-    // return <c-input clearable={this.clearable} placeholder={this.placeholder} attrs={this.$attrs} value={names} />
+    // return <el-input clearable={this.clearable} placeholder={this.placeholder} attrs={this.$attrs} value={names} />
   }
 
   renderDept() {
@@ -250,7 +250,7 @@ export default class DeptPersonSelect extends Vue {
   renderTableSearch() {
     return (
       <div class="search-input-box">
-        <c-input
+        <el-input
           class="search-input"
           placeholder="搜索人员"
           v-model={this.userNameKey}
@@ -260,7 +260,7 @@ export default class DeptPersonSelect extends Vue {
             ev.stopPropagation()
           }}>
           <i slot="suffix" class="el-input__icon el-icon-search" on-click={this.search}></i>
-        </c-input>
+        </el-input>
       </div>
     )
   }

@@ -51,10 +51,10 @@ export default class PersonSelectInput extends Vue {
     const pSelect = this.isSingle ? 'personSelectSingle' : 'personSelect'
     return (
       <div>
-        <c-input
+        <el-input
           {...{ attrs: this.$attrs, props: { ...this.$props, ...this.$attrs, value: this.names } }}
           placeholder="请选择人员"
-          nativeOn-click={this.onChoose}></c-input>
+          nativeOn-click={this.onChoose}></el-input>
         <pSelect isSingle={this.isSingle} ref="personSelect" on-selected={this.onChoosedUsers} />
       </div>
     )

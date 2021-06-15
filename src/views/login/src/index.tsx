@@ -44,10 +44,10 @@ export default class Login extends Vue {
       <div class={styles.container}>
         <div class={styles.box}>
           <div class={styles.title}>合川区市域社会治理现代化综合管理考核系统</div>
-          <c-form class={styles['login-form']}>
+          <el-form class={styles['login-form']}>
             <div class={styles['title-login']}>系统登录</div>
-            <c-form-item prop="username" class={styles['form-item']}>
-              <c-input
+            <el-form-item prop="username" class={styles['form-item']}>
+              <el-input
                 ref="username"
                 class={styles.input}
                 v-model={this.loginForm.username}
@@ -57,10 +57,10 @@ export default class Login extends Vue {
                 tabindex="1"
                 autocomplete="on">
                 <svg-icon icon-class="user" class={styles.user} slot="prefix" />
-              </c-input>
-            </c-form-item>
-            <c-form-item prop="password" class={styles['form-item']}>
-              <c-input
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password" class={styles['form-item']}>
+              <el-input
                 ref="password"
                 class={styles.input}
                 v-model={this.loginForm.password}
@@ -70,12 +70,12 @@ export default class Login extends Vue {
                 tabindex="2"
                 autocomplete="on">
                 <svg-icon icon-class="password" class={styles.password} slot="prefix" />
-              </c-input>
-            </c-form-item>
-            <c-button loading={this.loading} type="primary" class={styles['login-btn']} on-click={this.login}>
+              </el-input>
+            </el-form-item>
+            <el-button loading={this.loading} type="primary" class={styles['login-btn']} on-click={this.login}>
               确 定
-            </c-button>
-          </c-form>
+            </el-button>
+          </el-form>
         </div>
         <div class={styles.copyright}>copyright 2020 城云科技</div>
       </div>

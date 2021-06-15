@@ -3,7 +3,7 @@
  * @Date: 2020-11-26 09:26:40
  * @LastEditors: wenlin
  * @LastEditTime: 2020-12-26 10:42:39
- * @Description: 
+ * @Description:
  * 占用了 CustomheaderTable 的 afterGetList
  * TODO： 必选
 -->
@@ -313,9 +313,9 @@ export default class TableDialogSelect extends Vue implements TableDialogSelectP
         <div class="tag-list-box">
           {this.selectionList.map((item, index) => {
             return (
-              <c-tag key={item[this.tableKey]} on-close={() => this.onTagClose(item, index)} closable>
+              <el-tag key={item[this.tableKey]} on-close={() => this.onTagClose(item, index)} closable>
                 {item[this.labelKey]}
-              </c-tag>
+              </el-tag>
             )
           })}
         </div>
@@ -330,17 +330,17 @@ export default class TableDialogSelect extends Vue implements TableDialogSelectP
           {this.$scopedSlots.default ? (
             this.$scopedSlots.default(this.value)
           ) : (
-            <c-input
+            <el-input
               size="small"
               clearable={this.clearable}
               disabled={this.disabled}
               placeholder={this.placeholder}
               on-clear={this.onClearInput}
               class="open-input"
-              value={this.dataListNames}></c-input>
+              value={this.dataListNames}></el-input>
           )}
         </div>
-        <c-dialog
+        <el-dialog
           class="ml-dialog"
           visible={this.visible}
           attrs={this.dialogProp}
@@ -361,15 +361,15 @@ export default class TableDialogSelect extends Vue implements TableDialogSelectP
             </div>
             {this.isTag && this.renderBottomTag()}
             <div class="btn-wrapper">
-              <c-button onClick={this.handleConfirm} type="primary" size="small">
+              <el-button onClick={this.handleConfirm} type="primary" size="small">
                 确定
-              </c-button>
-              <c-button onClick={this.hideDialog} size="small">
+              </el-button>
+              <el-button onClick={this.hideDialog} size="small">
                 取消
-              </c-button>
+              </el-button>
             </div>
           </div>
-        </c-dialog>
+        </el-dialog>
       </div>
     )
   }

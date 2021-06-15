@@ -130,7 +130,7 @@ export default {
   },
   render() {
     return (
-      <c-select
+      <el-select
         ref="select"
         onChange={this.changeVal}
         clearable
@@ -139,17 +139,17 @@ export default {
         attrs={{ ...this.$props, ...this.$attrs }}
         placeholder={this.placeholder}
         v-model={this.inputval}>
-        <c-option value={-1} label={-1}>
-          <c-input
+        <el-option value={-1} label={-1}>
+          <el-input
             ref="input"
             nativeOnClick={this.handleInputClick}
             placeholder={this.searchplaceholder}
             v-model={this.searchinput}
           />
-        </c-option>
+        </el-option>
         {this.treeData.length ? (
-          <c-option value={-2} label={-2}>
-            <c-tree
+          <el-option value={-2} label={-2}>
+            <el-tree
               render-content={this.renderContent}
               node-key={this.treeProps.nodeKey}
               show-checkbox={this.type === 'multiple'}
@@ -162,19 +162,19 @@ export default {
               data={this.treeData}
               on-current-change={this.handleTreeCurrentChange}
             />
-          </c-option>
+          </el-option>
         ) : null}
         {this.checkedOptions.map(item => {
           return (
-            <c-option
+            <el-option
               label={item[this.treeProps.label]}
               value={item[this.treeProps.nodeKey]}
               key={item[this.treeProps.nodeKey]}>
               <span style="display: none"></span>
-            </c-option>
+            </el-option>
           )
         })}
-      </c-select>
+      </el-select>
     )
   }
 }

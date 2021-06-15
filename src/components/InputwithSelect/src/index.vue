@@ -33,7 +33,7 @@ export default {
     },
     handleSelectChange(val) {
       const finded = this.options.find(item => {
-        return item.value == val
+        return item.value === val
       })
       if (finded) {
         this.inputval = finded.label
@@ -45,21 +45,21 @@ export default {
   render() {
     return (
       <div class="inputwith_select">
-        <c-select
+        <el-select
           popperClass={'el-select_popper'}
           onChange={this.handleSelectChange}
           v-model={this.selectVal}
           placeholder={this.placeholder}>
           {this.options.map(item => {
-            return <c-option key={item.value} label={item.label} value={item.value}></c-option>
+            return <el-option key={item.value} label={item.label} value={item.value}></el-option>
           })}
-        </c-select>
-        <c-input
+        </el-select>
+        <el-input
           onChange={this.changeVal}
           type="textarea"
           resize="none"
           placeholder={this.textareaplaceholder}
-          v-model={this.inputval}></c-input>
+          v-model={this.inputval}></el-input>
       </div>
     )
   }

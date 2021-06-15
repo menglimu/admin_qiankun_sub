@@ -15,10 +15,10 @@ export default class VerifyCode extends Vue {
   protected render() {
     return (
       <div class="verify-code">
-        <c-input attrs={this.$attrs} placeholder="请输入手机中收到的6位短信验证码" />
-        <c-button class="verify-code-btn" attrs={this.$attrs} type="primary" size="small">
+        <el-input attrs={this.$attrs} placeholder="请输入手机中收到的6位短信验证码" />
+        <el-button class="verify-code-btn" attrs={this.$attrs} type="primary" size="small">
           发送验证码
-        </c-button>
+        </el-button>
       </div>
     )
   }

@@ -48,7 +48,7 @@ export default {
       }
       if (children && children.length) {
         return (
-          <c-submenu index={id}>
+          <el-submenu index={id}>
             <template slot="title">
               {/*<svg-icon class="menu_icon" icon-class={subMenu.icon} />*/}
               <span>{subMenu.text}</span>
@@ -56,36 +56,36 @@ export default {
             {children.map(item => {
               return this.r(h, item)
             })}
-          </c-submenu>
+          </el-submenu>
         )
       } else if (url) {
         if (isExternal) {
           return (
             <router-link to={{ path: url }}>
-              <c-menu-item index={id} class="submenu-title-noDropdown">
+              <el-menu-item index={id} class="submenu-title-noDropdown">
                 <template slot="title">
                   <span>{subMenu.text}</span>
                 </template>
-              </c-menu-item>
+              </el-menu-item>
             </router-link>
           )
         }
         return (
           <router-link to={{ name }}>
-            <c-menu-item index={name} class="submenu-title-noDropdown">
+            <el-menu-item index={name} class="submenu-title-noDropdown">
               {/*<svg-icon class="menu_icon" icon-class={subMenu.icon || ''} />*/}
               <span slot="title">{subMenu.text}</span>
-            </c-menu-item>
+            </el-menu-item>
           </router-link>
         )
       } else {
         return (
-          <c-menu-item index={id} class="submenu-title-noDropdown">
+          <el-menu-item index={id} class="submenu-title-noDropdown">
             <template slot="title">
               {/*<svg-icon class="menu_icon" icon-class={subMenu.icon || ''} />*/}
               <span>{subMenu.text}</span>
             </template>
-          </c-menu-item>
+          </el-menu-item>
         )
       }
     }
@@ -100,7 +100,7 @@ export default {
         {/*background-color="#001B31"
           text-color="#FFFFFF"
           active-text-color="#FFFFFF"*/}
-        <c-menu
+        <el-menu
           mode="vertical"
           class="custom-menu"
           unique-opened
@@ -110,7 +110,7 @@ export default {
           {this._l(this.subMenu, item => {
             return this.r(h, item)
           })}
-        </c-menu>
+        </el-menu>
         {/*<span title={this.isCollapse ? '展开' : '收起'}>
           <svg-icon
             class={'collapse ' + (this.isCollapse ? 'isCollapse' : '')}

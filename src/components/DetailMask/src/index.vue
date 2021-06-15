@@ -56,7 +56,7 @@ export default {
   },
   render(h) {
     return (
-      <c-dialog
+      <el-dialog
         class="ml-dialog"
         title={this.title}
         visible={this.dialogVisible}
@@ -76,16 +76,16 @@ export default {
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <c-button
+          <el-button
             type="primary"
             size="small"
             onClick={() => {
               this.dialogVisible = false
             }}>
             关 闭
-          </c-button>
+          </el-button>
         </span>
-      </c-dialog>
+      </el-dialog>
     )
   }
 }

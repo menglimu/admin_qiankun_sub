@@ -2,15 +2,15 @@
   <div class="navbar-box">
     <div class="header">
       <div class="top-menu" v-if="showTopMenu">
-        <c-tabs v-model="activeName" :before-leave="handleBeforeJump" @tab-click="handleRouteJump" class="custom-tab">
-          <c-tab-pane :label="item.text" :name="item.id" v-for="(item, index) in menu" :key="index"></c-tab-pane>
-        </c-tabs>
+        <el-tabs v-model="activeName" :before-leave="handleBeforeJump" @tab-click="handleRouteJump" class="custom-tab">
+          <el-tab-pane :label="item.text" :name="item.id" v-for="(item, index) in menu" :key="index"></el-tab-pane>
+        </el-tabs>
       </div>
       <ul class="content">
         <li class="item notice-wrapper">
-          <c-badge class="bullet" @click.native.stop="toggleMessageBox" :value="msglen" :max="99">
+          <el-badge class="bullet" @click.native.stop="toggleMessageBox" :value="msglen" :max="99">
             <svg-icon icon-class="notice" class="notice" />
-          </c-badge>
+          </el-badge>
         </li>
         <li class="item">
           <svg-icon icon-class="avatar" class="avatar" />
@@ -115,7 +115,7 @@ export default {
       this.$store
         .dispatch('FedLogOut')
         .then(data => {
-          if (data.logoutType == 1) {
+          if (data.logoutType === 1) {
             this.closeMethods()
           } else {
             window.open(data.loginUrl, '_self')
@@ -162,7 +162,7 @@ export default {
           // 设置当前激活的top上的激活菜单
           const menu = findValByKey(this.menu, this.$route.path, 'url')
           if (menu && menu.pids && menu.pids[0]) {
-            const find = this.menu.find(item => item.id == menu.pids[0])
+            const find = this.menu.find(item => item.id === menu.pids[0])
             if (find) {
               this.$store.commit('SET_SIDEBAR_ITEM', find)
               this.activeName = find.id

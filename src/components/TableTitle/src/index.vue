@@ -18,9 +18,9 @@ export default class TableTitle extends Vue {
     return (
       <div class="table-title">
         <span class="title">{this.title}</span>
-        <c-input class="c-input" v-model={this.searchValue} size="small" placeholder={this.placeholder}>
+        <el-input class="c-input" v-model={this.searchValue} size="small" placeholder={this.placeholder}>
           <i class="el-input__icon el-icon-search" slot="suffix" onClick={this.onSearch} />
-        </c-input>
+        </el-input>
       </div>
     )
   }

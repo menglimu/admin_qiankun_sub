@@ -1,12 +1,12 @@
 <template>
-  <c-breadcrumb class="app-breadcrumb" separator="/">
-    <c-breadcrumb-item
+  <el-breadcrumb class="app-breadcrumb" separator="/">
+    <el-breadcrumb-item
       v-for="item in levelList"
       :to="item.url && item.url != $route.meta.url ? item.url : null"
       :key="item.id"
       >{{ item.text }}
-    </c-breadcrumb-item>
-  </c-breadcrumb>
+    </el-breadcrumb-item>
+  </el-breadcrumb>
 </template>
 
 <script>

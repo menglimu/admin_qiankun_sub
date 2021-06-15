@@ -95,7 +95,7 @@ export default {
             <span onClick={this.handleSelectAll}>全选</span>
           </div>
           <div class="left_tree_bottom">
-            <c-input
+            <el-input
               ref="searchInput"
               class="search-input"
               value={this.searchInputTree}
@@ -111,9 +111,9 @@ export default {
                 slot="suffix"
                 class="el-input__icon el-icon-search"
                 on-click={ev => this.handleInputTreeClick(ev, this.searchInputTree)}></i>
-            </c-input>
+            </el-input>
             <div class="tree_container">
-              <c-tree
+              <el-tree
                 ref="tree"
                 data={this.treeData}
                 show-checkbox
@@ -131,7 +131,7 @@ export default {
     renderTable() {
       return (
         <div class="right_table">
-          <c-input
+          <el-input
             ref="searchInput"
             class="search-input"
             style="width: 240px;"
@@ -148,7 +148,7 @@ export default {
               slot="suffix"
               class="el-input__icon el-icon-search"
               on-click={ev => this.handleInputTableClick(ev, this.searchInputTable)}></i>
-          </c-input>
+          </el-input>
           <MlTable
             ref="table"
             height="370px"
@@ -323,7 +323,7 @@ export default {
   },
   render(h) {
     return (
-      <c-dialog
+      <el-dialog
         visible={this.showdialog}
         {...{ on: { 'update:visible': e => (this.showdialog = e) } }}
         title="选择人员"
@@ -342,7 +342,7 @@ export default {
             <h3 class="tag-list-label">已分配人员({this.selectionList.length})</h3>
             {this.selectionList.map((item, index) => {
               return (
-                <c-tag
+                <el-tag
                   disable-transitions={true}
                   key={item.id}
                   closable
@@ -355,24 +355,24 @@ export default {
                     }
                   }}>
                   {item.userName}
-                </c-tag>
+                </el-tag>
               )
             })}
           </div>
         ) : null}
         <span slot="footer" class="dialog-footer">
-          <c-button type="primary" size="small" onClick={this.handleConfirm}>
+          <el-button type="primary" size="small" onClick={this.handleConfirm}>
             确定
-          </c-button>
-          <c-button
+          </el-button>
+          <el-button
             size="small"
             onClick={() => {
               this.showdialog = false
             }}>
             取消
-          </c-button>
+          </el-button>
         </span>
-      </c-dialog>
+      </el-dialog>
     )
   },
   created() {
