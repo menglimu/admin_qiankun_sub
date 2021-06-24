@@ -7,21 +7,29 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@ml/ml-components": "^1.0.5",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "element-ui": "^2.15.2",
+    "lodash": "^4.17.21",
+    "nprogress": "^0.2.0",
     "vue": "^2.6.11",
-    "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@ml/lint": "^1.1.7",
+    "@types/lodash": "^4.14.170",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "babel-plugin-lodash": "^3.3.4",
+    "lodash-webpack-plugin": "^0.11.6",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "svg-sprite-loader": "^6.0.9",
     "typescript": "~4.1.5",
     "vue-template-compiler": "^2.6.11"
   },
@@ -29,5 +37,13 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "babel": {
+    "presets": [
+      "@vue/cli-plugin-babel/preset"
+    ],
+    "plugins": [
+      "lodash"
+    ]
+  }
 }
