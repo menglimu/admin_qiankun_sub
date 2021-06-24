@@ -8,7 +8,7 @@ module.exports = {
   rules: {
     "value-keyword-case": null,
     "at-rule-no-unknown": [true, {
-      "ignoreAtRules": ["function", "if", "each", "include", "mixin"]
+      "ignoreAtRules": ["function", "if", "else", "each", "for", "include", "mixin"]
     }],
     "property-no-unknown": [
       true,

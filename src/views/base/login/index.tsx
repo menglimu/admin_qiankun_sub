@@ -1,35 +1,36 @@
 import Vue from 'vue';
-// import Forget from './src/components/forget.vue';
 import style from './index.module.scss';
+import Forget from './components/forget';
 import { MlForm, MlFormConfig } from '@ml/ml-components/types/form';
 export default Vue.extend({
   name: 'Login',
   data() {
-    interface DataInterface {
-      [key: string]: any;
-      formConfig: MlFormConfig;
-      formValue: AnyObj;
-    }
-    const data: DataInterface = {
-      formConfig: {
-        inline: false,
-        size: 'large',
-        uiType: 'line',
-        columns: [
-          { prop: 'username', placeholder: '用户名', required: true, error: '请输入注册手机号' },
-          {
-            prop: 'password',
-            placeholder: '密  码',
-            type: 'string',
-            props: { type: 'password' },
-            required: true,
-            error: '请输入密码'
-          }
-        ]
-      },
-      formValue: {}
+    return {
+      formConfig: null as MlFormConfig,
+      formValue: {
+        username: '',
+        password: ''
+      }
     };
-    return data;
+  },
+  created() {
+    this.formConfig = {
+      inline: false,
+      size: 'large',
+      uiType: 'line',
+      labelWidth: '0',
+      columns: [
+        { prop: 'username', placeholder: '用户名', required: true, error: '请输入注册手机号' },
+        {
+          prop: 'password',
+          placeholder: '密  码',
+          type: 'string',
+          props: { type: 'password' },
+          required: true,
+          error: '请输入密码'
+        }
+      ]
+    };
   },
   methods: {
     onForget() {
@@ -57,14 +58,16 @@ export default Vue.extend({
             <el-button class={style.loginBtn} type="primary" size="large" onClick={this.onLogin}>
               登录
             </el-button>
-            <div class="login-box-forget">
-              <el-button class="login-box-forget-btn" type="text" onClick={this.onForget}>
-                忘记密码？
-              </el-button>
-            </div>
+            {false && (
+              <div class="login-box-forget">
+                <el-button class="login-box-forget-btn" type="text" onClick={this.onForget}>
+                  忘记密码？
+                </el-button>
+              </div>
+            )}
           </div>
         </div>
-        {/* <Forget ref="forget" phone={this.formValue?.username} /> */}
+        <Forget ref="forget" phone={this.formValue?.username} />
       </div>
     );
   }

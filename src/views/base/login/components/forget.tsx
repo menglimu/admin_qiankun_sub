@@ -2,7 +2,7 @@ import { updatePwdByCode } from '@/api/modules/login';
 import { REGS } from '@/utils/validate';
 import { MlForm, MlFormConfig } from '@ml/ml-components/types/form';
 import Vue from 'vue';
-import Vcode from './vcode.vue';
+import Vcode from './vcode';
 
 export default Vue.extend({
   name: 'ForgetPassword',

@@ -73,6 +73,26 @@ export function formatTime(time: string | number | Date, format?: string) {
   }
 }
 
+/**
+ * @description: 获取URL后的参数值
+ * @param {string} 参数名
+ * @return: 值或null
+ */
+export function GetQueryString(name: string) {
+  // const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+  // const r = window.location.search.substr(1).match(reg)
+  // if (r != null) return r[2]
+  // return null
+  const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+  let search = window.location.search;
+  if (!search) {
+    search = `?${window.location.href.split('?')[1]}`;
+  }
+  const r = search.substr(1).match(reg);
+  if (r) return r[2];
+  return null;
+}
+
 // TODO: 完善
 // eslint-disable-next-line max-params
 export function findValByKey(data: any, val: any, key = 'id', childrenKey = 'children'): any {

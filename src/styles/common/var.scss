@@ -1,7 +1,8 @@
 /* Font
 -------------------------- */
+
 /* 改变 icon 字体路径变量，必需 */
-$--font-path: '~@cci/cui/lib/theme-default/fonts';
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 /* Colors
 -------------------------- */
@@ -35,7 +36,6 @@ $--color-primary-dark-7: mix($--color-black, $--color-primary, 70%) !default; /*
 $--color-primary-dark-8: mix($--color-black, $--color-primary, 80%) !default; /* #0d2033 */
 $--color-primary-dark-9: mix($--color-black, $--color-primary, 90%) !default; /* #06101a */
 
-
 $--color-success: #67c23a !default;
 $--color-warning: #ffb34f !default;
 $--color-danger: #f56c6c !default;
@@ -55,7 +55,6 @@ $--color-text-primary: #303133 !default;
 $--color-text-regular: #606266 !default;
 $--color-text-secondary: #909399 !default;
 $--color-text-placeholder: #c0c4cc !default;
-
 
 $--font-size-base: 14px !default;
 $--font-size-small: 13px !default;
@@ -88,7 +87,7 @@ $--border-radius-circle: 100% !default;
 
 //components
 // cui
-$--cui-message-info-background-color: #D2E8FF;
+$--cui-message-info-background-color: #d2e8ff;
 // columns
 $--right-section-border-color: #eee;
 // treePanel
@@ -114,7 +113,7 @@ $--table-pager-color: #606266;
 $--table-form-header-border-color: #dddfe7;
 $--subtable-container-border-color: #e6e6e6;
 // WrapTree
-$--wrap-tree-color: #000000;
+$--wrap-tree-color: #000;
 $--wrap-tree-button-color: #606266;
 $--wrap-tree-menu-height: 50px;
 $--wrap-tree-menu-button-color: $--color-primary;
@@ -160,12 +159,12 @@ $--card-list-box-height: 197px;
 $--card-list-plus-color: #c1c1c1;
 $--card-list-plus-font-size: 100px;
 $--card-list-plus-line-height: 174px;
-$--card-list-all-loaded-color: #888888;
+$--card-list-all-loaded-color: #888;
 $--card-list-card-body-color: #cfcfcf;
 $--card-list-card-body-piciton-icon-font-size: 100px;
-$--card-list-card-body-title-color: #333333;
-$--card-list-card-body-description-color: #888888;
-$--card-list-card-body-detail-color: #888888;
+$--card-list-card-body-title-color: #333;
+$--card-list-card-body-description-color: #888;
+$--card-list-card-body-detail-color: #888;
 $--card-list-card-body-detail-hover-color: #55aafe;
 $--card-list-card-footer-border-color: #ebeef5;
 $--card-list-card-footer-edit-icon-color: #878787;
@@ -173,7 +172,7 @@ $--card-list-card-footer-edit-icon-hover-color: #55aafe;
 $--card-list-card-footer-more-color: #878787;
 $--card-list-card-footer-more-hover-color: #55aafe;
 $--card-list-card-footer-dot-background-color: red;
-$--card-list-card-footer-time-color: #cccccc;
+$--card-list-card-footer-time-color: #ccc;
 // SearchForm
 $--search-form-border-color: #e6e6e6;
 $--search-form-item-input-height: 36px;

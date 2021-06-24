@@ -2,13 +2,16 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
+import mlComponents from '@ml/ml-components';
+import '@/styles/index.scss';
 
 Vue.config.productionTip = false;
 
 import elementUi from 'element-ui';
 
-Vue.use(elementUi, { size: 'small', zIndex: 3000 });
+Vue.use(elementUi, { size: 'small', zIndex: 3000 }).use(mlComponents);
 
+// 初始化vue 以及qiankun微服务相关
 let instance = null;
 function render(props: any = {}) {
   const { container } = props;
