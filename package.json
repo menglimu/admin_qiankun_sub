@@ -27,7 +27,7 @@
     "@vue/cli-service": "~4.5.0",
     "babel-plugin-lodash": "^3.3.4",
     "lodash-webpack-plugin": "^0.11.6",
-    "sass": "^1.26.5",
+    "sass": "~1.32.6",
     "sass-loader": "^8.0.2",
     "svg-sprite-loader": "^6.0.9",
     "typescript": "~4.1.5",

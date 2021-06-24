@@ -9,7 +9,8 @@ Vue.config.productionTip = false;
 
 import elementUi from 'element-ui';
 
-Vue.use(elementUi, { size: 'small', zIndex: 3000 }).use(mlComponents);
+Vue.use(elementUi, { size: 'small', zIndex: 3000 });
+Vue.use(mlComponents);
 
 // 初始化vue 以及qiankun微服务相关
 let instance = null;

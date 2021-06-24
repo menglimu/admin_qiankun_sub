@@ -6,19 +6,17 @@ import Vcode from './vcode';
 
 export default Vue.extend({
   name: 'ForgetPassword',
-  props: { phone: null },
+  props: { phone: String },
   data() {
-    interface DataInterface {
-      editConfig: MlFormConfig;
-      editValue: AnyObj;
-      isShow: boolean;
-    }
-    const data: DataInterface = {
-      editConfig: null,
-      editValue: {},
+    return {
+      editConfig: null as MlFormConfig,
+      editValue: {
+        userAccount: '',
+        verifyCode: '',
+        newPassword: ''
+      },
       isShow: false
     };
-    return data;
   },
   created() {
     this.editConfig = {

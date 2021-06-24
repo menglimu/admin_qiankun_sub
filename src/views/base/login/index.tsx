@@ -37,13 +37,13 @@ export default Vue.extend({
       (this.$refs.forget as any).show(this.formValue?.username);
     },
     async onLogin() {
-      const form: MlForm = this.$refs.form as MlForm;
+      const form = this.$refs.form as MlForm;
       await form.validate();
       try {
         await this.$store.dispatch('Login', this.formValue);
         this.$router.push('/');
       } catch (error) {
-        this.$message.error(error);
+        console.error(error);
       }
     }
   },
