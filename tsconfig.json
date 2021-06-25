@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "strict": true,
     "suppressImplicitAnyIndexErrors": true, // 运行通过对象的aa.bb的方式取值
+    "experimentalDecorators": true, // 去除 装饰器 可能被废弃警告
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,

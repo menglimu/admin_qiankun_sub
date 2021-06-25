@@ -1,12 +1,7 @@
 /*
  * @Author: wenlin
- * @Date: 2020-06-09 16:25:28
- * @LastEditors: wenlin
- * @LastEditTime: 2020-12-28 11:00:27
- * @Description:
+ * @Description: 一些全局的类型定义
  */
-// vite中已经引入了
-// CSS modules
 interface CSSModuleClasses {
   readonly [key: string]: string;
 }
@@ -162,7 +157,8 @@ interface Window {
   eventBus: Vue;
   appEventBus?: Vue;
   VUE_APP_WS_URI: string;
-  /* 全局的云际会议的js核心 */
+  /** 全局的云际会议的js核心 */
   PexRTC?: any;
   __POWERED_BY_QIANKUN__: boolean; // 是否是qiankun微服务
+  qiankun_app_name: string; // qiankun主应用的名称
 }
