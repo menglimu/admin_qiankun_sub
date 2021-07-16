@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "api": "node --loader ts-node/esm ./api/generate.ts"
   },
   "dependencies": {
+    "@cci/cmap": "^1.2.5",
     "@ml/ml-components": "^1.0.5",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
@@ -30,6 +32,7 @@
     "sass": "~1.32.6",
     "sass-loader": "^8.0.2",
     "svg-sprite-loader": "^6.0.9",
+    "ts-node": "^10.1.0",
     "typescript": "~4.1.5",
     "vue-template-compiler": "^2.6.11",
     "vuex-module-decorators": "^1.0.1"
