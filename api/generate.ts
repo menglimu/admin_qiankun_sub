@@ -6,13 +6,13 @@ const http = require('http');
 // import path from 'path';
 // import http from 'http';
 
-// TODO: 多个group 文件夹
-// TODO: 多层嵌套fef处理
+// TODO: 多层嵌套ref处理r
+// TODO: 部分更新的时候的处理  -暂无处理方案 - -
 
 
 
 let API_PATH = './modules';
-let url = 'http://47.92.175.76:8101/offline';
+let url = 'http://10.10.77.129:8080';
 
 // 接口
 type Interface  = Method & {
@@ -37,27 +37,27 @@ interface Method{
 
 // swagger的模块
 interface Group {
-  
-    swagger: string;
-    info: {
-        version: string;
-        title: string;
-        termsOfService: string;
-        contact: {
-            name: string;
-            url: string;
-        };
+  name?: string
+  swagger: string;
+  info: {
+    version: string;
+    title: string;
+    termsOfService: string;
+    contact: {
+      name: string;
+      url: string;
     };
-    host: string;
-    basePath: string;
-    tags: {
-        name: string;
-        description: string;
-    }[];
-    consumes: string[];
-    produces: string[];
-    paths: Record<string,Record<string,Method>>;
-    definitions: any;
+  };
+  host: string;
+  basePath: string;
+  tags: {
+    name: string;
+    description: string;
+  }[];
+  consumes: string[];
+  produces: string[];
+  paths: Record<string,Record<string,Method>>;
+  definitions: any;
 
 }
 // 一个文件模块
@@ -167,7 +167,7 @@ ${params_.map(item =>
   
     let interfaceParams = this.interfaceParamsTpl(api, 'I'+fnName)
     if (interfaceParams) {
-      params.push(`params: ${'I'+fnName}`)
+      params.push(`params?: ${'I'+fnName}`)
     }
     let resInterface = ''
     
@@ -216,16 +216,17 @@ import request from "@/api/request";
   
 ${module.interfaces.map(item => this.tplInsertApi(item)).join('\n')}
 `
-      isExist(API_PATH+'/'+this.group.info.title);
-      fs.writeFileSync(API_PATH+'/'+this.group.info.title+'/'+module.name+'.ts',text)
+      isExist(API_PATH+'/'+this.group.name);
+      fs.writeFileSync(API_PATH+'/'+this.group.name+'/'+module.name+'.ts',text)
     })
   }
   
-   async getGroup(url) {
+   async getGroup(url:string) {
     isExist();
     try {
       // 解析url 获得
       this.group = await get(url);
+      this.group.name = decodeURI(url.match(/group=(.*)/)[1])
       let { tags, paths } = this.group;
       // 一个module为一个文件
       let modules:Module[] = tags.map(tag => ({ ...tag, interfaces:[] }));
@@ -310,20 +311,5 @@ function get(url: string, options?) {
   });
 }
 
-
-// getDirs();
-// return;
-// // const SwaggerParser = require('swagger-parser');
-// // const beautify = require('js-beautify').js_beautify;
-// const swaggerUrl = 'http://10.10.77.129:8080/v2/api-docs?group=oa%E7%AE%A1%E7%90%86';
-
-// // api接口方法存放目录
-// const API_PATH = path.resolve(__dirname, './modules');
-
-
 let generateApis = new GenerateApis()
 generateApis.getAll()
-
-// gen('http://10.10.77.129:8080/v2/api-docs?group=%E4%BA%8B%E4%BB%B6%E7%AE%A1%E7%90%86');
-// gen('http://47.92.175.76:8101/offline/v2/api-docs');
-module.exports  = {}
