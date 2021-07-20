@@ -85,24 +85,28 @@ function moduleName(url: string) {
 
 class GenerateApis {
   private group: Group; // 当前处理的group
-
+  // 获取所有接口组
   public async getAll() {
     // 获取文档模块列表
     let data = await get(`${url}/swagger-resources`);
     isExist();
-    data.forEach((group) => {
-      this.getGroup(`${url}${group.url}`);
+    data.forEach(async (group) => {
+      await this.getGroup(`${url}${group.url}`);
     });
     // fs.mkdirSync('./modules');
   }
-
+  // 获取某个组的数据
   public async getGroup(url: string) {
     isExist();
     try {
       // 解析url 获得
       this.group = await get(url);
+      console.log(url, 2);
       this.group.name = decodeURI(url.match(/group=(.*)/)[1]);
       let { tags, paths } = this.group;
+      if (!paths || !tags) {
+        return;
+      }
       // 一个module为一个文件
       let modules: Module[] = tags.map((tag) => ({ ...tag, interfaces: [] }));
       // 找不到tag的接口放这里面
@@ -113,7 +117,7 @@ class GenerateApis {
       });
 
       const urls = Object.keys(paths); // 获取url路径
-
+      // 将一个模块接口.归类到自己对应的module
       urls.forEach((url) => {
         // get post等
         let methods = Object.keys(paths[url]);
@@ -130,13 +134,18 @@ class GenerateApis {
           module.lastUrl = url;
         });
       });
-
+      // 写入模块文件
       this.writeModules(modules);
     } catch (e) {
       console.error(e);
     }
   }
-
+  // 格式注释文本
+  private formatText(text: string) {
+    // 文本说明中的 */会影响注释。替换掉
+    // console.log(typeof text, text);
+    return text ? String(text).replace(/\*\//g, "*\\") : "";
+  }
   // 数据类型
   private dataType(key, propertiesItem?: any) {
     const type = {
@@ -148,6 +157,7 @@ class GenerateApis {
       file: "Blob",
       boolean: "boolean",
     };
+    // 处理嵌套的数据
     if (key === "array" && propertiesItem) {
       return (
         (propertiesItem.items.originalRef
@@ -161,7 +171,7 @@ class GenerateApis {
     }
     return type[key] ? type[key] : "any";
   }
-
+  // 根据 definitions 里面的对象.进行生成一个接口定义
   private getDefinitionsInterface(data: any, interfaceName?: string) {
     if (data.type === "object" && data.properties) {
       let keys = Object.keys(data.properties);
@@ -174,8 +184,9 @@ class GenerateApis {
           ${params_
             .map(
               (item) =>
-                `  /** ${item.description || ""} */ 
-                ${item.key}${data.required && data.required.includes(item.key) ? "" : "?"} : ${this.dataType(
+                `/** ${this.formatText(item.description)} */` +
+                "\n" +
+                `${item.key}${data.required && data.required.includes(item.key) ? "" : "?"} : ${this.dataType(
                   item.type,
                   item,
                 )};`,
@@ -189,9 +200,10 @@ class GenerateApis {
 
   // 参数模板
   private interfaceParamsTpl(api: Interface, interfaceName: string) {
+    console.log(api.url);
     let params_ = [];
     if (api.method === "get" || api.method === "delete") {
-      params_ = api.parameters.filter((item) => item.in === "query");
+      params_ = (api.parameters || []).filter((item) => item.in === "query");
       if (params_.length === 0) {
         return "";
       } else {
@@ -199,15 +211,27 @@ class GenerateApis {
           ${params_
             .map(
               (item) =>
-                `  /** ${item.description || ""} */
-                "${item.name}"${item.required ? "" : "?"}: ${this.dataType(item.type)};`,
+                ` /** ${this.formatText(item.description)} */
+                  "${item.name}"${item.required ? "" : "?"}: ${this.dataType(item.type)};`,
             )
             .join("\n")}
         }`;
       }
     } else {
-      let bodys = api.parameters.filter((item) => item.in === "body");
-      return bodys.map((item) => this.getDefinitionsInterface(item.schema.$ref, interfaceName))[0] || "";
+      // body的数据,理论上应该只有一个
+      let bodys = (api.parameters || []).filter((item) => item.in === "body");
+      return (
+        bodys.map((item) =>
+          item.schema.originalRef
+            ? this.getDefinitionsInterface(this.group.definitions[item.schema.originalRef], interfaceName)
+            : item.schema.type
+            ? `interface ${interfaceName} {
+               /** ${this.formatText(item.description)} */
+                  "${item.name}"${item.required ? "" : "?"}: ${this.dataType(item.schema.type, item.schema)};
+              }`
+            : "",
+        )[0] || ""
+      );
     }
   }
 
@@ -226,7 +250,7 @@ class GenerateApis {
     // post 里面有query时的处理
     if (api.method === "post" || api.method === "put") {
       params.concat(
-        ...api.parameters.filter((item) => item.in === "query").map((item) => item.name + ": string | number"),
+        ...(api.parameters || []).filter((item) => item.in === "query").map((item) => item.name + ": string | number"),
       );
     }
     // 入参作为对象传入
@@ -234,8 +258,8 @@ class GenerateApis {
     if (interfaceParams) {
       params.push(`params?: ${"I" + fnName}`);
     }
+    // 出参的处理
     let resInterface = "";
-
     let resName = "Res" + fnName;
     if (api.responses["200"].schema && api.responses["200"].schema.originalRef) {
       console.log(api.responses["200"].schema.originalRef, 1);
@@ -252,40 +276,40 @@ class GenerateApis {
         }
       }
     }
-
-    return (
-      interfaceParams +
-      resInterface +
-      `/**
-       * @description ${api.summary}
+    // 生成请求的function字符串
+    return `
+      ${interfaceParams}
+      ${resInterface}
+      /**
+       * @description ${this.formatText(api.summary)}
        */
       export function ${fnName}(${params.join(", ")}) {
-        return request.${api.method}${resInterface ? `<${resName}>` : ""}(\`${url}\`${
-        interfaceParams ? ", params" : ""
-      });
-      }`
-    );
+        return request.${api.method}${resInterface ? `<${resName}>` : ""}
+        (\`${url}\`${interfaceParams ? ", params" : ""});
+      }`;
   }
-  // 写接口文件
+  // 写一个模块下的接口接口到一个文件
   private writeModules(modules: Module[]) {
     modules.forEach((module) => {
       if (module.interfaces.length === 0) {
         return;
       }
       // 文件头部
-      let text = `/**
+      let text = `
+        /**
          * ${module.name}
          * @description 自动生成接口文件 ${module.description}
          */
         import request from "@/api/request"; 
         ${module.interfaces.map((item) => this.tplInsertApi(item)).join("\n")}
       `;
-
+      // 路径
       let path = API_PATH + "/" + this.group.name;
       let fileName = path + "/" + module.name + ".ts";
       isExist(path);
+      // 写入文件
       fs.writeFileSync(fileName, text);
-
+      // 使用prettier格式代码
       child_process.exec(`npx prettier ${fileName} --write`, function (error, stdout, stderr) {
         if (error !== null) {
           console.error("exec error: " + error);
@@ -294,7 +318,7 @@ class GenerateApis {
     });
   }
 }
-
+// 根据node的http模块进行数据的请求
 function get(url: string, options?) {
   return new Promise<any>((resolve, reject) => {
     http
@@ -341,5 +365,6 @@ function get(url: string, options?) {
 let generateApis = new GenerateApis();
 generateApis.getAll();
 // generateApis.getGroup(
-//   "http://10.10.77.129:8080/v2/api-docs?group=%E8%B0%83%E5%BA%A6%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86",
+//   "http://10.10.77.129:8080/v2/api-docs?group=%E5%8E%9F%E5%9E%8B%E5%92%8C%E9%9C%80%E8%A7%84%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86",
 // );
+// generateApis.getGroup("http://10.10.77.129:8080/v2/api-docs?group=%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE");
