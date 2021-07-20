@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-const fs = require('fs');
-const path = require('path');
-const http = require('http');
+const fs = require("fs");
+const path = require("path");
+const http = require("http");
+const child_process = require("child_process");
 
 // import fs from 'fs';
 // import path from 'path';
 // import http from 'http';
 
-// TODO: 多层嵌套ref处理r
+// TODO: 中文转英文
 // TODO: 部分更新的时候的处理  -暂无处理方案 - -
-// TODO: 数组处理
 
-let API_PATH = './modules';
-let url = 'http://10.10.77.129:8080';
+let API_PATH = path.resolve(__dirname, "./modules_generate");
+let url = "http://10.10.77.129:8080";
 
 // 接口
 type Interface = Method & {
@@ -30,7 +30,7 @@ interface Method {
   parameters: any[];
   responses: any;
   deprecated: boolean;
-  'x-order': string;
+  "x-order": string;
 }
 
 // swagger的模块
@@ -66,7 +66,7 @@ interface Module {
 }
 
 // 判断目录是否存在
-const isExist = (lastPath = '') => {
+const isExist = (lastPath = "") => {
   const privatePath = `${lastPath ? lastPath : API_PATH}`;
   const stat = fs.existsSync(privatePath);
   if (!stat) {
@@ -80,21 +80,7 @@ function firstUp(str: string) {
 // 模块文件名
 function moduleName(url: string) {
   // "/api/cmsArticle/v1/list"
-  return url.split('/')[2];
-}
-
-// 数据类型
-function dataType(key) {
-  const type = {
-    string: 'string',
-    integer: 'number',
-    int: 'number',
-    long: 'string',
-    Array: 'array',
-    file: 'Blob',
-    boolean: 'boolean'
-  };
-  return type[key] ? type[key] : 'any';
+  return url.split("/")[2];
 }
 
 class GenerateApis {
@@ -104,7 +90,7 @@ class GenerateApis {
     // 获取文档模块列表
     let data = await get(`${url}/swagger-resources`);
     isExist();
-    data.forEach(group => {
+    data.forEach((group) => {
       this.getGroup(`${url}${group.url}`);
     });
     // fs.mkdirSync('./modules');
@@ -118,27 +104,28 @@ class GenerateApis {
       this.group.name = decodeURI(url.match(/group=(.*)/)[1]);
       let { tags, paths } = this.group;
       // 一个module为一个文件
-      let modules: Module[] = tags.map(tag => ({ ...tag, interfaces: [] }));
+      let modules: Module[] = tags.map((tag) => ({ ...tag, interfaces: [] }));
       // 找不到tag的接口放这里面
       modules.push({
-        name: 'other',
-        description: '找不到的模块的接口',
-        interfaces: []
+        name: "other",
+        description: "找不到的模块的接口",
+        interfaces: [],
       });
 
       const urls = Object.keys(paths); // 获取url路径
 
-      urls.forEach(url => {
+      urls.forEach((url) => {
         // get post等
         let methods = Object.keys(paths[url]);
-        let interfaces: Interface[] = methods.map(method => ({
+        let interfaces: Interface[] = methods.map((method) => ({
           ...paths[url][method],
           method: method.toLocaleLowerCase(),
-          url
+          url,
         }));
-        interfaces.forEach(item => {
+        interfaces.forEach((item) => {
           let module =
-            modules.find(module => item.tags.includes(module.name)) || modules.find(module => module.name === 'other');
+            modules.find((module) => item.tags.includes(module.name)) ||
+            modules.find((module) => module.name === "other");
           module.interfaces.push(item);
           module.lastUrl = url;
         });
@@ -146,102 +133,122 @@ class GenerateApis {
 
       this.writeModules(modules);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 
-  private getDefinitionsInterface(ref: string, interfaceName: string) {
-    console.log(ref, 2);
-    let schema = this.group.definitions[ref.split('/').pop()];
-    if (schema.type === 'object' && schema.properties) {
-      let keys = Object.keys(schema.properties);
-      let params_ = keys.map(key => {
-        schema.properties[key]['key'] = key;
-        return schema.properties[key];
+  // 数据类型
+  private dataType(key, propertiesItem?: any) {
+    const type = {
+      string: "string",
+      integer: "number",
+      int: "number",
+      long: "string",
+      Array: "array",
+      file: "Blob",
+      boolean: "boolean",
+    };
+    if (key === "array" && propertiesItem) {
+      return (
+        (propertiesItem.items.originalRef
+          ? this.getDefinitionsInterface(this.group.definitions[propertiesItem.items.originalRef])
+          : propertiesItem.items.type
+          ? this.dataType(propertiesItem.items.type)
+          : "any") + " []"
+      );
+    } else if (propertiesItem && propertiesItem.originalRef) {
+      return this.getDefinitionsInterface(this.group.definitions[propertiesItem.originalRef]);
+    }
+    return type[key] ? type[key] : "any";
+  }
+
+  private getDefinitionsInterface(data: any, interfaceName?: string) {
+    if (data.type === "object" && data.properties) {
+      let keys = Object.keys(data.properties);
+      let params_ = keys.map((key) => {
+        data.properties[key]["key"] = key;
+        return data.properties[key];
       });
       if (params_) {
-        return (
-          `interface ${interfaceName} {` +
-          '\n' +
-          params_
+        return `${interfaceName ? `interface ${interfaceName} {` : "{"}
+          ${params_
             .map(
-              item =>
-                `  /** ${item.description || ''} */` +
-                '\n' +
-                `  ${item.key}${schema.required && schema.required.includes(item.key) ? '' : '?'}: ${dataType(
-                  item.type
-                )};`
+              (item) =>
+                `  /** ${item.description || ""} */ 
+                ${item.key}${data.required && data.required.includes(item.key) ? "" : "?"} : ${this.dataType(
+                  item.type,
+                  item,
+                )};`,
             )
-            .join('\n') +
-          '\n' +
-          `}
-`
-        );
+            .join("\n")}
+          }`;
       }
     }
-    return '';
+    return "";
   }
 
   // 参数模板
   private interfaceParamsTpl(api: Interface, interfaceName: string) {
     let params_ = [];
-    if (api.method === 'get' || api.method === 'delete') {
-      params_ = api.parameters.filter(item => item.in === 'query');
+    if (api.method === "get" || api.method === "delete") {
+      params_ = api.parameters.filter((item) => item.in === "query");
       if (params_.length === 0) {
-        return '';
+        return "";
       } else {
         return `interface ${interfaceName} {
-${params_
-  .map(
-    item =>
-      `  /** ${item.description || ''} */
-  ${item.name}${item.required ? '' : '?'}: ${dataType(item.type)};`
-  )
-  .join('\n')}
-}
-`;
+          ${params_
+            .map(
+              (item) =>
+                `  /** ${item.description || ""} */
+                "${item.name}"${item.required ? "" : "?"}: ${this.dataType(item.type)};`,
+            )
+            .join("\n")}
+        }`;
       }
     } else {
-      let bodys = api.parameters.filter(item => item.in === 'body');
-      return bodys.map(item => this.getDefinitionsInterface(item.schema.$ref, interfaceName))[0] || '';
+      let bodys = api.parameters.filter((item) => item.in === "body");
+      return bodys.map((item) => this.getDefinitionsInterface(item.schema.$ref, interfaceName))[0] || "";
     }
   }
 
-  // 写入模板
+  // 将某个接口写入模板
   private tplInsertApi(api: Interface) {
     let url = api.url;
     let params: string[] = [];
     // 有{id}这样的接口查询的时候
     let reg = /{(.*?)}/g;
     if (reg.test(url)) {
-      url = url.replace(reg, id => `$${id}`);
+      url = url.replace(reg, (id) => `$${id}`);
       // 讲参数拼接进入接口参数
-      params = url.match(reg).map(str => str.replace(/[{}]/g, '') + ': string | number');
+      params = url.match(reg).map((str) => str.replace(/[{}]/g, "") + ": string | number");
     }
     let fnName = api.operationId;
     // post 里面有query时的处理
-    if (api.method === 'post' || api.method === 'put') {
-      params.concat(...api.parameters.filter(item => item.in === 'query').map(item => item.name + ': string | number'));
+    if (api.method === "post" || api.method === "put") {
+      params.concat(
+        ...api.parameters.filter((item) => item.in === "query").map((item) => item.name + ": string | number"),
+      );
     }
-
-    let interfaceParams = this.interfaceParamsTpl(api, 'I' + fnName);
+    // 入参作为对象传入
+    let interfaceParams = this.interfaceParamsTpl(api, "I" + fnName);
     if (interfaceParams) {
-      params.push(`params?: ${'I' + fnName}`);
+      params.push(`params?: ${"I" + fnName}`);
     }
-    let resInterface = '';
+    let resInterface = "";
 
-    let resName = 'Res' + fnName;
-    if (api.responses['200'].schema && api.responses['200'].schema.originalRef) {
-      console.log(api.responses['200'].schema.originalRef, 1);
-      let data = this.group.definitions[api.responses['200'].schema.originalRef].properties.data;
+    let resName = "Res" + fnName;
+    if (api.responses["200"].schema && api.responses["200"].schema.originalRef) {
+      console.log(api.responses["200"].schema.originalRef, 1);
+      let data = this.group.definitions[api.responses["200"].schema.originalRef];
+      // .properties.data;
       if (data) {
-        if (data.type === 'array') {
-          resInterface = this.getDefinitionsInterface(data.items.$ref, resName);
-          resName += [];
-        } else if (!data.type) {
-          resInterface = this.getDefinitionsInterface(data.$ref, resName);
+        if (data.type === "array") {
+          resInterface = this.getDefinitionsInterface(data, resName);
+          resName += "[]";
+        } else if (data.type === "object") {
+          resInterface = this.getDefinitionsInterface(data, resName);
         } else {
-          resName = dataType(data.type);
+          resName = this.dataType(data.type);
         }
       }
     }
@@ -250,31 +257,40 @@ ${params_
       interfaceParams +
       resInterface +
       `/**
- * @description ${api.summary}
- */
-export function ${fnName}(${params.join(', ')}) {
-  return request.${api.method}${resInterface ? `<${resName}>` : ''}(\`${url}\`${interfaceParams ? ', params' : ''});
-}
-`
+       * @description ${api.summary}
+       */
+      export function ${fnName}(${params.join(", ")}) {
+        return request.${api.method}${resInterface ? `<${resName}>` : ""}(\`${url}\`${
+        interfaceParams ? ", params" : ""
+      });
+      }`
     );
   }
   // 写接口文件
   private writeModules(modules: Module[]) {
-    modules.forEach(module => {
+    modules.forEach((module) => {
       if (module.interfaces.length === 0) {
         return;
       }
       // 文件头部
       let text = `/**
- * ${module.name}
- * @description 自动生成接口文件 ${module.description}
- */
-import request from "@/api/request";
+         * ${module.name}
+         * @description 自动生成接口文件 ${module.description}
+         */
+        import request from "@/api/request"; 
+        ${module.interfaces.map((item) => this.tplInsertApi(item)).join("\n")}
+      `;
 
-${module.interfaces.map(item => this.tplInsertApi(item)).join('\n')}`;
+      let path = API_PATH + "/" + this.group.name;
+      let fileName = path + "/" + module.name + ".ts";
+      isExist(path);
+      fs.writeFileSync(fileName, text);
 
-      isExist(API_PATH + '/' + this.group.name);
-      fs.writeFileSync(API_PATH + '/' + this.group.name + '/' + module.name + '.ts', text);
+      child_process.exec(`npx prettier ${fileName} --write`, function (error, stdout, stderr) {
+        if (error !== null) {
+          console.error("exec error: " + error);
+        }
+      });
     });
   }
 }
@@ -282,9 +298,9 @@ ${module.interfaces.map(item => this.tplInsertApi(item)).join('\n')}`;
 function get(url: string, options?) {
   return new Promise<any>((resolve, reject) => {
     http
-      .get(url, options, res => {
+      .get(url, options, (res) => {
         const { statusCode } = res;
-        const contentType = res.headers['content-type'];
+        const contentType = res.headers["content-type"];
 
         let error;
         // 任何 2xx 状态码都表示成功响应，但这里只检查 200。
@@ -300,12 +316,12 @@ function get(url: string, options?) {
           return;
         }
 
-        res.setEncoding('utf8');
-        let rawData = '';
-        res.on('data', chunk => {
+        res.setEncoding("utf8");
+        let rawData = "";
+        res.on("data", (chunk) => {
           rawData += chunk;
         });
-        res.on('end', () => {
+        res.on("end", () => {
           try {
             const parsedData = JSON.parse(rawData);
             resolve(parsedData);
@@ -315,7 +331,7 @@ function get(url: string, options?) {
           }
         });
       })
-      .on('error', e => {
+      .on("error", (e) => {
         reject(e);
         console.error(`Got error: ${e.message}`);
       });
@@ -324,3 +340,6 @@ function get(url: string, options?) {
 
 let generateApis = new GenerateApis();
 generateApis.getAll();
+// generateApis.getGroup(
+//   "http://10.10.77.129:8080/v2/api-docs?group=%E8%B0%83%E5%BA%A6%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86",
+// );
