@@ -11,7 +11,6 @@ const child_process = require("child_process");
 
 // TODO: 中文转英文
 // TODO: 部分更新的时候的处理  -暂无处理方案 - -
-// TODO: 递归调用自己的时候。先存，然后再引用
 // TODO: 入参注释在function里面的时候的注释
 
 let API_PATH = path.resolve(__dirname, "./modules_generate");
@@ -181,7 +180,7 @@ class GenerateApis {
   }
   // 根据 definitions 里面的对象.进行生成一个接口定义
   private getDefinitionsInterface(data: any, interfaceName?: string) {
-    let str = `${interfaceName ? `type ${interfaceName} =` : ""}` + "any";
+    let str = `${interfaceName ? `type ${interfaceName} =` : ""} any`;
     if (data.title && this.interfacesNodes.includes(data.title)) {
       return "DeepCommon" + data.title;
     }
@@ -311,8 +310,8 @@ class GenerateApis {
         return request.${api.method}${resInterface ? `<${resName}>` : ""}
         (\`${url}\`${interfaceParams ? ", params" : ""});
       }`;
-    let regReplace = /DeepCommon.*?(?=[[\s])/g; // /DeepCommon(.*?)[[\s]/;
 
+    let regReplace = /DeepCommon.*?(?=[[\s])/g; // /DeepCommon(.*?)[[\s]/;
     if (apiStr.match(regReplace)) {
       this.interfacesNames.push(...apiStr.match(regReplace));
     }
@@ -331,15 +330,19 @@ class GenerateApis {
          * ${module.name}
          * @description 自动生成接口文件 ${module.description}
          */
-        import request from "@/api/request"; 
-        ${module.interfaces.map(item => this.tplInsertApi(item)).join("\n")}
+        import request from "@/api/request";
       `;
+      // 公共深拷贝的接口定义
       if (this.interfacesNames.length) {
         let names = new Set(this.interfacesNames);
         names.forEach(name => {
-          text = `interface ${name} ` + this.interfaces[name.replace("DeepCommon", "")] + text;
+          text = `interface ${name} ` + this.interfaces[name.replace("DeepCommon", "")] + text + "\n";
         });
       }
+      this.interfacesNames = [];
+      // 接口请求function
+      text += module.interfaces.map(item => this.tplInsertApi(item)).join("\n");
+
       // 路径
       let path = `${API_PATH}${this.group.name ? `/${this.group.name}` : ""}`;
       let fileName = path + "/" + module.name + ".ts";
@@ -400,8 +403,8 @@ function get(url: string, options?) {
 }
 
 let generateApis = new GenerateApis();
-// generateApis.getAll();
-generateApis.getGroup(
-  "http://10.10.77.129:8080/v2/api-docs?group=%E4%B8%89%E4%B8%AD%E5%BF%83%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81",
-);
+generateApis.getAll();
+// generateApis.getGroup(
+//   "http://10.10.77.129:8080/v2/api-docs?group=%E4%B8%89%E4%B8%AD%E5%BF%83%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81",
+// );
 // generateApis.getGroup("http://10.10.77.129:8080/v2/api-docs?group=%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE");
