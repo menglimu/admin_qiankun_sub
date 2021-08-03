@@ -9,12 +9,15 @@ const child_process = require("child_process");
 // import path from 'path';
 // import http from 'http';
 
+// TODO: 加载指定tag
+// TODO: 一个接口存在多个tag中的时候
 // TODO: 中文转英文
 // TODO: 部分更新的时候的处理  -暂无处理方案 - -
 // TODO: 入参注释在function里面的时候的注释
 
-let API_PATH = path.resolve(__dirname, "./modules_generate");
-let url = "http://10.10.77.129:8080";
+let API_PATH = path.resolve(__dirname, "./modules_generate"); // 接口保存的路径
+let url = "http://10.10.77.129:8080"; // 接口的地址
+let simple = true; // 是否简易模式，只加载接口。不出来定义类型
 
 // 接口
 type Interface = Method & {
@@ -74,15 +77,6 @@ const isExist = (lastPath = "") => {
     fs.mkdirSync(privatePath);
   }
 };
-// 首字母大写
-function firstUp(str: string) {
-  return str.slice(0, 1).toUpperCase() + str.slice(1);
-}
-// 模块文件名
-function moduleName(url: string) {
-  // "/api/cmsArticle/v1/list"
-  return url.split("/")[2];
-}
 
 class GenerateApis {
   // 当前处理的group
@@ -279,7 +273,7 @@ class GenerateApis {
     // 入参作为对象传入
     let interfaceParams = this.interfaceParamsTpl(api, "I" + fnName);
     if (interfaceParams) {
-      params.push(`params?: ${"I" + fnName}`);
+      params.push(!simple ? `params?: ${"I" + fnName}` : "params?: any");
     }
     // 出参的处理
     let resInterface = "";
@@ -301,13 +295,13 @@ class GenerateApis {
     }
     // 生成请求的function字符串
     let apiStr = `
-      ${interfaceParams}
-      ${resInterface}
+      ${!simple ? interfaceParams : ""}
+      ${!simple ? resInterface : ""}
       /**
        * @description ${this.formatText(api.summary)}
        */
       export function ${fnName}(${params.join(", ")}) {
-        return request.${api.method}${resInterface ? `<${resName}>` : ""}
+        return request.${api.method}${!simple && resInterface ? `<${resName}>` : ""}
         (\`${url}\`${interfaceParams ? ", params" : ""});
       }`;
 
@@ -333,7 +327,7 @@ class GenerateApis {
         import request from "@/api/request";
       `;
       // 公共深拷贝的接口定义
-      if (this.interfacesNames.length) {
+      if (!simple && this.interfacesNames.length) {
         let names = new Set(this.interfacesNames);
         names.forEach(name => {
           text = `interface ${name} ` + this.interfaces[name.replace("DeepCommon", "")] + text + "\n";
