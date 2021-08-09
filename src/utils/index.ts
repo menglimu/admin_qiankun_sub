@@ -72,6 +72,33 @@ export function formatTime(time: string | number | Date, format?: string) {
     return date.getMonth() + 1 + "月" + date.getDate() + "日" + date.getHours() + "时" + date.getMinutes() + "分";
   }
 }
+// 根据返回的blob流来下载文件
+export function createDownloadLink(res: any) {
+  const downloadLink = window.document.createElement("a");
+  let fileName = res?.headers?.["content-disposition"]
+    ?.split(";")[1]
+    .split("filename=")[1]
+    .replace(/^\"|\"$/g, "");
+  try {
+    fileName = decodeURIComponent(fileName);
+  } catch (e) {}
+  // const fileNameUnicode = res?.headers?.["content-disposition"].split(";")[1].split("filename=")[1];
+  // if (fileNameUnicode) {
+  //   // 当存在 filename* 时，取filename* 并进行解码（为了解决中文乱码问题）
+  //   fileName = decodeURIComponent(fileNameUnicode);
+  // }
+  // const fileName =
+  //   res.headers &&
+  //   Object.prototype.hasOwnProperty.call(res.headers, 'content-disposition') &&
+  //   res.headers['content-disposition'].match(/filename="(.+)"/)[1]
+  const fileUrl = res.data && window.URL.createObjectURL(res.data);
+  downloadLink.href = fileUrl;
+  downloadLink.download = fileName;
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+  window.URL.revokeObjectURL(fileUrl);
+}
 
 /**
  * @description: 获取URL后的参数值
