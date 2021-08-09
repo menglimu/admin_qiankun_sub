@@ -1016,10 +1016,10 @@
     stylelint-scss "^3.19.0"
     typescript "^4.3.2"
 
-"@ml/ml-components@^1.0.5":
-  version "1.0.5"
-  resolved "http://10.12.102.194:4873/@ml%2fml-components/-/ml-components-1.0.5.tgz#1f63d7fca4264704463a1398c06a7e5ccfb963c2"
-  integrity sha512-eBbF4+hFYwxd/LszX4xH69aMBHdmGMP1w611OPgO8SOaQdVb2BHtCJkJ8oGWO+0mIkq6dUjEK6Y+4A9ypF7aJg==
+"@ml/ml-components@^1.0.7":
+  version "1.0.7"
+  resolved "http://10.12.102.194:4873/@ml%2fml-components/-/ml-components-1.0.7.tgz#d1915ca16448ea156089e73892f0a3678f50eb90"
+  integrity sha512-36Hw5IWbRz+STARXI6C49kfsEMMoU9yfgkoLKajuuskj7BHlBulCWS1LFgae/Y6EcxlblpWQSTzI91AaWBzZ8g==
   dependencies:
     dplayer "^1.26.0"
     echarts "^5.1.2"
