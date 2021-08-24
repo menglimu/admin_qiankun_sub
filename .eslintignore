@@ -1,3 +1,7 @@
+/node_modules/
+/dist/
+/public/
 shim-tsx.d.ts
 vue.config.js
 # vite.config.ts
+*.md

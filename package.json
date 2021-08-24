@@ -5,11 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "api": "node --loader ts-node/esm ./api/generate.ts"
+    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md}\"",
+    "api": "node --loader ts-node/esm ./src/api/generate.ts"
   },
   "dependencies": {
     "@cci/cmap": "^1.2.5",
-    "@ml/ml-components": "^1.0.7",
+    "@ml/ml-components": "^1.0.16",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.2",
@@ -20,7 +21,7 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
-    "@ml/lint": "^1.1.10",
+    "@ml/lint": "^1.2.0",
     "@types/lodash": "^4.14.170",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
