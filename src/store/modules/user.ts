@@ -1,18 +1,12 @@
-import { loginByCode, getUserDetail, login, logout, getUserDetailByToken } from '@/api/modules/login'; // 几个自定义的登录
+import { loginByCode, getUserDetail, login, logout, getUserDetailByToken } from "@/api/modules/login"; // 几个自定义的登录
 
-import { staticRoutes } from '@/router/static';
-import { addRoutes } from '@/permission';
-import { Storage } from '@/utils/storage/local';
+import { staticRoutes } from "@/router/static";
+import { addRoutes } from "@/permission";
+import { Storage } from "@/utils/storage/local";
 
-import { Module } from 'vuex';
+import { Module } from "vuex";
 
 let storage = new Storage();
-const qiankun = window.__POWERED_BY_QIANKUN__;
-if (qiankun) {
-  // 从全局加载当前项目的项目名
-  storage = new Storage(window.qiankun_app_name);
-}
-
 export interface UserInfo {
   functionList?: AnyObj[];
   functionTreeList?: AnyObj[];
@@ -47,7 +41,7 @@ function transformFuncs(funcs, pids = []) {
   for (let i = 0; i < funcs.length; i++) {
     const info: any = {
       expanded: true,
-      helpUrl: '',
+      helpUrl: "",
       leaf: false,
       nodeType: { 101: 0, 102: 1, 103: 2, 104: 3 }[funcs[i].funType],
       openNew: false,
@@ -98,7 +92,7 @@ function transformUserInfo(userInfoBase): UserInfo {
 
 const userStore: Module<UserState, {}> = {
   state: {
-    token: '',
+    token: "",
     userInfo: {},
     roles: [],
     pointInfo: {},
@@ -121,26 +115,26 @@ const userStore: Module<UserState, {}> = {
     pointInfo: state => state.pointInfo,
     menu: state => state.userInfo?.functionTreeList,
     sidebarItem: state => state.sidebarItem,
-    isAdminAcount: state => state.userInfo && state.userInfo.userNo === 'admin'
+    isAdminAcount: state => state.userInfo && state.userInfo.userNo === "admin"
   },
   mutations: {
     SET_USERINFO: (state, userInfo: UserInfo) => {
       state.userInfo = userInfo;
       if (userInfo) {
-        storage.set('userInfo', userInfo);
+        storage.set("userInfo", userInfo);
         if (userInfo.functionTreeList && userInfo.functionTreeList.length > 0) {
           addRoutes(userInfo.functionTreeList);
         }
       } else {
-        storage.remove('userInfo');
+        storage.remove("userInfo");
       }
     },
     SET_TOKEN: (state, token) => {
       state.token = token;
       if (token) {
-        storage.set('accessToken', token);
+        storage.set("accessToken", token);
       } else {
-        storage.remove('accessToken');
+        storage.remove("accessToken");
       }
     },
     SET_POINT_INFO: (state, pointInfo) => {
@@ -152,67 +146,64 @@ const userStore: Module<UserState, {}> = {
   },
 
   actions: {
+    // 重新加载登录信息到store
     RE_LOADUSER: ({ commit }) => {
-      const token = storage.get('accessToken');
-      const userInfo = storage.get('userInfo');
+      const token = storage.get("accessToken");
+      const userInfo = storage.get("userInfo");
       console.log(token, userInfo);
       if (!token || !userInfo) {
-        return Promise.reject(Error(''));
+        return Promise.reject(Error(""));
       }
-      commit('SET_TOKEN', token);
-      commit('SET_USERINFO', userInfo);
-      return Promise.resolve();
+      commit("SET_TOKEN", token);
+      commit("SET_USERINFO", userInfo);
+      return Promise.resolve(token);
     },
     // 模拟登录
     async MockLogin({ dispatch }) {
-      await dispatch('GetUserDetail', {
-        userName: '虚拟登录',
+      await dispatch("GetUserDetail", {
+        userName: "虚拟登录",
         functionTreeList: staticRoutes
       });
       return Promise.resolve();
     },
     // 登录和获取用户信息分开接口，如接口合并，需重新处理逻辑
-    // 登录通过code
-    async CasLogin({ commit, dispatch }, obj) {
+    // 登录通过code和state
+    async CasLogin({ commit, dispatch }, access) {
       try {
-        const { code, state } = obj;
+        const { code, state } = access;
         const { data } = await loginByCode(code, state);
         if (data.code !== 200) {
           return Promise.reject(data.message);
         }
-        commit('SET_TOKEN', data.data.accessToken);
-        await dispatch('GetUserDetail');
-        return Promise.resolve('login:success');
+        commit("SET_TOKEN", data.data.accessToken);
+        await dispatch("GetUserDetail");
+        return Promise.resolve("login:success");
       } catch (error) {
-        commit('SET_TOKEN', null);
+        commit("SET_TOKEN", null);
         return Promise.reject(error);
       }
     },
-
+    // 通过用户名和密码登录
     async Login({ commit, dispatch }, { username, password }) {
       try {
         const { data } = await login(username, password);
         if (data.code !== 200) {
           return Promise.reject(data.message);
         }
-        commit('SET_TOKEN', data.data.accessToken);
+        commit("SET_TOKEN", data.data.accessToken);
         // await dispatch('GetUserDetail', data)
-        await dispatch('GetUserDetail');
-        return Promise.resolve('login:success');
+        await dispatch("GetUserDetail");
+        return Promise.resolve("login:success");
       } catch (error) {
-        commit('SET_TOKEN', null);
+        commit("SET_TOKEN", null);
         return Promise.reject(error);
       }
     },
-
+    // 通过token登录
     async TokenLogin({ commit, dispatch }, token) {
-      commit('SET_TOKEN', token);
-      // await dispatch('GetUserDetail', data)
-
-      const userInfo = await getUserDetailByToken(token);
-      console.log(userInfo);
-      commit('SET_USERINFO', userInfo.user);
-      return Promise.resolve('login:success');
+      commit("SET_TOKEN", token);
+      await dispatch("GetUserDetail");
+      return Promise.resolve("login:success");
     },
 
     // 获取用户详情
@@ -220,15 +211,15 @@ const userStore: Module<UserState, {}> = {
       try {
         const userInfo: UserInfo = transformUserInfo(userInfoStatic || (await getUserDetail()));
         // 使用本地static中的菜单
-        const useLocalMenu = process.env.VUE_APP_LOCAL_MENU === '1';
+        const useLocalMenu = process.env.VUE_APP_LOCAL_MENU === "1";
         if (useLocalMenu) {
           userInfo.functionTreeList = staticRoutes;
         }
-        commit('SET_USERINFO', userInfo);
+        commit("SET_USERINFO", userInfo);
         return Promise.resolve(userInfo);
       } catch (error) {
-        commit('SET_TOKEN', null);
-        commit('SET_USERINFO', null);
+        commit("SET_TOKEN", null);
+        commit("SET_USERINFO", null);
         return Promise.reject(error);
       }
     },
@@ -236,8 +227,8 @@ const userStore: Module<UserState, {}> = {
     async FedLogOut({ commit }) {
       try {
         const data = await logout();
-        commit('SET_TOKEN', null);
-        commit('SET_USERINFO', null);
+        commit("SET_TOKEN", null);
+        commit("SET_USERINFO", null);
         return data;
       } catch (error) {
         return Promise.reject(error);

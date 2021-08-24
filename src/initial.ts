@@ -1,0 +1,71 @@
+/*
+ * @Author: wenlin
+ * @Date: 2020-04-24 15:29:36
+ * @LastEditors: wenlin
+ * @LastEditTime: 2020-12-25 09:52:44
+ * @Description:
+ */
+// import 'babel-polyfill'
+import Vue from "vue";
+import App from "./App";
+import router from "./router";
+import store from "./store";
+import mlComponents from "@ml/ml-components";
+import elementUi from "element-ui";
+
+// TODO: 先通过zindex展示处理嵌套到主应用中的层级问题。后面考虑使用主应用和子应用共享同一elementUI框架
+Vue.use(elementUi, { size: "small", zIndex: 3000 }).use(mlComponents);
+
+import "@/styles/index.scss"; // global css
+// import "@/directives"; // 指令
+import "@/icons"; // icon svg图标
+// 微服务启动的时候，引入全局的一些重置样式
+if (process.env?.VUE_APP_QIANKUN === "0") {
+  import("@/styles/common/index.scss");
+}
+
+Vue.config.productionTip = false;
+// 初始化vue
+export function render(props) {
+  const container = props?.container;
+  return new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount(container ? container.querySelector("#app") : "#app");
+}
+
+window.eventBus = window.eventBus || new Vue(); // eventBus
+
+// 给Date原型增加方法
+// eslint-disable-next-line no-extend-native
+Date.prototype.Format = function(fmt = "yyyy-MM-dd hh:mm:ss") {
+  const o = {
+    "M+": this.getMonth() + 1, // 月份
+    "d+": this.getDate(), // 日
+    "h+": this.getHours(), // 小时
+    "m+": this.getMinutes(), // 分
+    "s+": this.getSeconds(), // 秒
+    "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+    S: this.getMilliseconds() // 毫秒
+  };
+  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, String(this.getFullYear()).substr(4 - RegExp.$1.length));
+  for (const k in o)
+    if (new RegExp("(" + k + ")").test(fmt))
+      fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(String(o[k]).length));
+  return fmt;
+};
+
+// 重写c-ui的 confirm 修改默认提示的样式
+const baseConfirm = Vue.prototype.$confirm;
+Vue.prototype.$confirm = function(...params) {
+  if (params.length === 1) {
+    return baseConfirm(params[0], "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning"
+    });
+  } else {
+    return baseConfirm(...params);
+  }
+};

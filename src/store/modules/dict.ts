@@ -7,11 +7,11 @@
  * @Description: 字典
  */
 
-import Vue from 'vue';
-import { getDictByType, getDeptTree } from '@/api/modules/public';
+import Vue from "vue";
+import { getDictByType, getDeptTree } from "@/api/modules/public";
 const refreshTmp = 1000 * 60 * 60 * 2; // 部门树两小时更新一次
 let countTmp = null;
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 // TODO: jest test
 interface DictState {
   [key: string]: {
@@ -56,7 +56,7 @@ export default class Dict extends VuexModule {
     let loadPromise = getDictByType(name)
       .then(data => {
         const value = data.map(item => {
-          if (item.codeFieldType === 'number' && !isNaN(item.code)) {
+          if (item.codeFieldType === "number" && !isNaN(item.code)) {
             item.code = Number(item.code);
           }
           item.label = item.codeName;
@@ -79,10 +79,10 @@ export default class Dict extends VuexModule {
     const nothasTree = !DictObj.state.deptTree || !DictObj.state.deptTree[0];
     if (refresh || !countTmp || new Date().getTime() - countTmp >= refreshTmp || nothasTree) {
       const data = await getDeptTree();
-      this.setDict('deptTree', data);
+      this.setDict("deptTree", data);
       countTmp = new Date().getTime();
       return Promise.resolve(data);
     }
-    return Promise.resolve(DictObj.state['deptTree']);
+    return Promise.resolve(DictObj.state["deptTree"]);
   }
 }

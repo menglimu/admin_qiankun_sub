@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve:qiankun": "vue-cli-service serve --mode prod",
     "build": "vue-cli-service build",
+    "build:qiankun": "vue-cli-service build --mode prod",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md}\"",
     "api": "node --loader ts-node/esm ./src/api/generate.ts"
   },
