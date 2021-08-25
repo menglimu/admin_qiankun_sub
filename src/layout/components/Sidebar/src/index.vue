@@ -1,117 +1,116 @@
 <script>
-import { parseUrl } from '@/permission'
+import { parseUrl } from "@/router/permission";
 
 export default {
+  inject: ["reloadRouter"],
   data() {
     return {
       isCollapse: false,
       menuData: [],
       menuCache: []
-    }
+    };
   },
 
   computed: {
     menu() {
-      const obj = this.$store.getters.sidebarItem || {}
+      const obj = this.$store.getters.sidebarItem || {};
       return Object.keys(obj).length
         ? obj
         : {
             id: 0
-          }
+          };
     },
     subMenu() {
-      return this.menu?.children || []
+      return this.menu?.children || [];
     }
   },
-  inject: ['reloadRouter'],
   methods: {
     handleMenuClick(data) {
       if (data === this.$route.name) {
-        this.reloadRouter()
+        this.reloadRouter();
       }
     },
     // onSelect(index, indexPath) {
     //   // console.log("click", index, indexPath)
     // },
     r(h, subMenu) {
-      const { url, isExternal } = parseUrl(subMenu.url)
-      const name = subMenu.pids ? subMenu.pids.concat(subMenu.id).join('-') : subMenu.id
+      const name = subMenu.pids ? subMenu.pids.concat(subMenu.id).join("-") : subMenu.id;
       const children =
-        Object.prototype.toString.call(subMenu.children) === '[object Array]'
+        Object.prototype.toString.call(subMenu.children) === "[object Array]"
           ? subMenu.children.filter(item => {
-              return item.nodeType !== 3
+              return item.nodeType !== 3;
             })
-          : []
-      const id = subMenu.id
+          : [];
+      const id = subMenu.id;
       if (id) {
-        this.menuCache[id] = subMenu
+        this.menuCache[id] = subMenu;
       }
-      if (children && children.length) {
+      if (children?.length) {
         return (
-          <el-submenu index={id}>
+          <el-submenu index={subMenu.path}>
             <template slot="title">
-              {/*<svg-icon class="menu_icon" icon-class={subMenu.icon} />*/}
+              {/* <svg-icon class="menu_icon" icon-class={subMenu.icon} /> */}
               <span>{subMenu.text}</span>
             </template>
             {children.map(item => {
-              return this.r(h, item)
+              return this.r(h, item);
             })}
           </el-submenu>
-        )
-      } else if (url) {
-        if (isExternal) {
-          return (
-            <router-link to={{ path: url }}>
-              <el-menu-item index={id} class="submenu-title-noDropdown">
-                <template slot="title">
-                  <span>{subMenu.text}</span>
-                </template>
-              </el-menu-item>
-            </router-link>
-          )
-        }
-        return (
-          <router-link to={{ name }}>
-            <el-menu-item index={name} class="submenu-title-noDropdown">
-              {/*<svg-icon class="menu_icon" icon-class={subMenu.icon || ''} />*/}
-              <span slot="title">{subMenu.text}</span>
-            </el-menu-item>
-          </router-link>
-        )
-      } else {
-        return (
+        );
+      }
+
+      return (
+        <router-link to={{ path: url }}>
           <el-menu-item index={id} class="submenu-title-noDropdown">
             <template slot="title">
-              {/*<svg-icon class="menu_icon" icon-class={subMenu.icon || ''} />*/}
               <span>{subMenu.text}</span>
             </template>
           </el-menu-item>
-        )
-      }
+        </router-link>
+      );
+      // TODO:
+      return (
+        <router-link to={{ name }}>
+          <el-menu-item index={name} class="submenu-title-noDropdown">
+            {/* <svg-icon class="menu_icon" icon-class={subMenu.icon || ''} /> */}
+            <span slot="title">{subMenu.text}</span>
+          </el-menu-item>
+        </router-link>
+      );
+
+      return (
+        <el-menu-item index={id} class="submenu-title-noDropdown">
+          <template slot="title">
+            {/* <svg-icon class="menu_icon" icon-class={subMenu.icon || ''} /> */}
+            <span>{subMenu.text}</span>
+          </template>
+        </el-menu-item>
+      );
     }
   },
 
   render(h) {
     return (
-      <div key={this.menu.id} class={'sidebar ' + (this.isCollapse ? 'isCollapse' : '')}>
+      <div key={this.menu.id} class={"sidebar " + (this.isCollapse ? "isCollapse" : "")}>
         <div class="sidebar-header">
           <svg-icon icon-class="nav_title" class="title" />
         </div>
-        {/*background-color="#001B31"
+        {/* background-color="#001B31"
           text-color="#FFFFFF"
-          active-text-color="#FFFFFF"*/}
+          active-text-color="#FFFFFF" */}
         <el-menu
           mode="vertical"
           class="custom-menu"
           unique-opened
-          default-active={this.$route.name}
+          default-active={this.$route.path}
           collapse={this.isCollapse}
-          on-select={this.handleMenuClick}>
+          on-select={this.handleMenuClick}
+        >
           {this._l(this.subMenu, item => {
-            return this.r(h, item)
+            return this.r(h, item);
           })}
         </el-menu>
-        {/*<span title={this.isCollapse ? '展开' : '收起'}>
+        {/* <span title={this.isCollapse ? '展开' : '收起'}>
           <svg-icon
             class={'collapse ' + (this.isCollapse ? 'isCollapse' : '')}
             icon-class="collapse"
@@ -119,58 +118,65 @@ export default {
               this.isCollapse = !this.isCollapse
             }}
           />
-        </span>*/}
+        </span> */}
       </div>
-    )
+    );
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .sidebar {
+  position: relative;
   width: 256px;
   height: 100%;
-  position: relative;
-  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.09);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.09);
+
   &.isCollapse {
     width: 64px;
   }
+
   ::v-deep .custom-menu {
     border-right: none;
+
     .el-menu-item {
-      font-size: 14px;
       height: 40px;
-      line-height: 40px;
       font-family: PingFangSC, PingFangSC-Regular;
+      font-size: 14px;
       font-weight: 400;
-      text-align: left;
+      line-height: 40px;
       color: #666;
+      text-align: left;
     }
+
     .el-submenu {
       .el-submenu__title {
-        font-size: 14px;
         height: 40px;
-        line-height: 40px;
         font-family: PingFangSC, PingFangSC-Regular;
+        font-size: 14px;
         font-weight: 400;
-        text-align: left;
+        line-height: 40px;
         color: #666;
+        text-align: left;
         // padding-left: 24px !important;
       }
+
       &:hover {
         background: #f8f8f8;
       }
+
       .el-menu {
         background: rgb(248, 248, 248);
+
         .el-menu-item {
           height: 40px;
-          line-height: 40px;
+          font-family: PingFangSC, PingFangSC-Regular;
           // background: #f8f8f8;
           font-size: 14px;
-          font-family: PingFangSC, PingFangSC-Regular;
           font-weight: 400;
-          text-align: left;
+          line-height: 40px;
           color: #666;
+          text-align: left;
           // padding-left: 36px !important;
 
           &:hover {
@@ -181,49 +187,56 @@ export default {
     }
 
     .router-link-exact-active.router-link-active {
-      display: flex;
       position: relative;
+      display: flex;
       align-items: center;
-      background: #e7f0fe;
+      padding-left: 0 !important;
       color: #3786fd;
-      padding-left: 0px !important;
+      background: #e7f0fe;
+
       > .el-menu-item {
         // background: none !important;
       }
+
       &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
         width: 4px;
         height: 40px;
+        content: "";
         background: #3786fd;
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 10;
       }
     }
   }
+
   .menu_icon {
     width: 20px;
     height: 20px;
-    vertical-align: middle;
     margin-right: 16px;
+    vertical-align: middle;
   }
+
   &-header {
-    height: 64px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    height: 64px;
     background: #2778f0;
+
     .title {
       width: 143px;
       height: 23px;
     }
   }
+
   .collapse {
     position: absolute;
     top: 18px;
     right: -44px;
     cursor: pointer;
+
     &.isCollapse {
       transform: rotate(180deg);
     }

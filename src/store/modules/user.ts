@@ -1,7 +1,7 @@
 import { loginByCode, getUserDetail, login, logout, getUserDetailByToken } from "@/api/modules/login"; // 几个自定义的登录
 
 import { staticRoutes } from "@/router/static";
-import { addRoutes } from "@/permission";
+import { addRoutes, MenuItem } from "@/router/permission";
 import { Storage } from "@/utils/storage/local";
 
 import { Module } from "vuex";
@@ -9,7 +9,7 @@ import { Module } from "vuex";
 let storage = new Storage();
 export interface UserInfo {
   functionList?: AnyObj[];
-  functionTreeList?: AnyObj[];
+  functionTreeList?: MenuItem[];
   systemType?: string;
 
   group?: {
@@ -39,7 +39,7 @@ export interface UserState {
 
 function transformFuncs(funcs, pids = []) {
   for (let i = 0; i < funcs.length; i++) {
-    const info: any = {
+    const info: MenuItem = {
       expanded: true,
       helpUrl: "",
       leaf: false,
@@ -48,7 +48,9 @@ function transformFuncs(funcs, pids = []) {
       systemType: 0,
       text: funcs[i].funName,
       url: funcs[i].location,
-      pids: pids
+      pids: pids,
+      id: funcs[i].id,
+      children: funcs[i].children
     };
     Object.assign(info, funcs[i]);
     info.id = String(funcs[i].id);
@@ -123,7 +125,8 @@ const userStore: Module<UserState, {}> = {
       if (userInfo) {
         storage.set("userInfo", userInfo);
         if (userInfo.functionTreeList && userInfo.functionTreeList.length > 0) {
-          addRoutes(userInfo.functionTreeList);
+          // 这里直接用对象浅拷贝的特性赋值了。懒得写commit
+          userInfo.functionTreeList = addRoutes(userInfo.functionTreeList);
         }
       } else {
         storage.remove("userInfo");

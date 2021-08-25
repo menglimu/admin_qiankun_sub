@@ -17,59 +17,8 @@ const child_process = require("child_process");
 
 let API_PATH = path.resolve(__dirname, "./modules_generate"); // 接口保存的路径
 let url = "http://10.10.77.129:8080"; // 接口的地址
-let simple = true; // 是否简易模式，只加载接口。不出来定义类型
 
-// 接口
-type Interface = Method & {
-  method: string;
-  url: string;
-};
-// swagger返回的paths内的get等后的内容
-interface Method {
-  tags: string[];
-  summary: string;
-  operationId: string;
-  consumes: string[];
-  produces: string[];
-  parameters: any[];
-  responses: any;
-  deprecated: boolean;
-  "x-order": string;
-}
-
-// swagger的模块
-interface Group {
-  name?: string;
-  swagger: string;
-  info: {
-    version: string;
-    title: string;
-    termsOfService: string;
-    contact: {
-      name: string;
-      url: string;
-    };
-  };
-  host: string;
-  basePath: string;
-  tags: {
-    name: string;
-    description: string;
-  }[];
-  consumes: string[];
-  produces: string[];
-  paths: Record<string, Record<string, Method>>;
-  definitions: any;
-}
-// 一个文件模块
-interface Module {
-  name: string;
-  description: string;
-  interfaces: Interface[];
-  lastUrl?: string;
-}
-
-class GenerateApis {
+export default class GenerateApis {
   // 当前处理的group
   private group: Group;
 
@@ -101,7 +50,7 @@ class GenerateApis {
       modules.push({
         name: "other",
         description: "找不到的模块的接口",
-        interfaces: [],
+        interfaces: []
       });
 
       const urls = Object.keys(paths); // 获取url路径
@@ -112,7 +61,7 @@ class GenerateApis {
         let interfaces: Interface[] = methods.map(method => ({
           ...paths[url][method],
           method: method.toLocaleLowerCase(),
-          url,
+          url
         }));
         interfaces.forEach(item => {
           let module =
@@ -150,7 +99,7 @@ class GenerateApis {
     // post 里面有query时的处理
     if (api.method === "post" || api.method === "put") {
       params.concat(
-        ...(api.parameters || []).filter(item => item.in === "query").map(item => item.name + ": string | number"),
+        ...(api.parameters || []).filter(item => item.in === "query").map(item => item.name + ": string | number")
       );
     }
     // 增加默认的参数
@@ -249,3 +198,53 @@ generateApis.getAll();
 //   "http://10.10.77.129:8080/v2/api-docs?group=%E4%B8%89%E4%B8%AD%E5%BF%83%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81",
 // );
 // generateApis.getGroup("http://10.10.77.129:8080/v2/api-docs?group=%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE");
+
+// 接口
+type Interface = Method & {
+  method: string;
+  url: string;
+};
+// swagger返回的paths内的get等后的内容
+interface Method {
+  tags: string[];
+  summary: string;
+  operationId: string;
+  consumes: string[];
+  produces: string[];
+  parameters: any[];
+  responses: any;
+  deprecated: boolean;
+  "x-order": string;
+}
+
+// swagger的模块
+interface Group {
+  name?: string;
+  swagger: string;
+  info: {
+    version: string;
+    title: string;
+    termsOfService: string;
+    contact: {
+      name: string;
+      url: string;
+    };
+  };
+  host: string;
+  basePath: string;
+  tags: {
+    name: string;
+    description: string;
+  }[];
+  consumes: string[];
+  produces: string[];
+  paths: Record<string, Record<string, Method>>;
+  definitions: any;
+}
+// 一个文件模块
+interface Module {
+  name: string;
+  description: string;
+  interfaces: Interface[];
+  lastUrl?: string;
+}
