@@ -205,6 +205,12 @@ const userStore: Module<UserState, {}> = {
       await dispatch("GetUserDetail");
       return Promise.resolve("login:success");
     },
+    // 通过userInfo和token登录
+    async TokenUserLogin({ commit, dispatch }, { token, userInfo }) {
+      commit("SET_TOKEN", token);
+      await dispatch("GetUserDetail", userInfo);
+      return Promise.resolve("login:success");
+    },
 
     // 获取用户详情
     async GetUserDetail({ commit }, userInfoStatic) {

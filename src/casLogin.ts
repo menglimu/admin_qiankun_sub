@@ -19,7 +19,7 @@ export default async function casLogin(props) {
 
   try {
     if (window.__POWERED_BY_QIANKUN__) {
-      store.commit("SET_USERINFO_TOKEN", props);
+      store.dispatch("TokenUserLogin", props);
       return;
     }
 
