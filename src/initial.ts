@@ -16,17 +16,19 @@ import elementUi from "element-ui";
 // TODO: 先通过zindex展示处理嵌套到主应用中的层级问题。后面考虑使用主应用和子应用共享同一elementUI框架
 Vue.use(elementUi, { size: "small", zIndex: 3000 }).use(mlComponents);
 
-import "@/styles/index.scss"; // global css
-// import "@/directives"; // 指令
 import "@/icons"; // icon svg图标
-// 微服务启动的时候，引入全局的一些重置样式
-if (process.env?.VUE_APP_QIANKUN === "0") {
-  import("@/styles/common/index.scss");
-}
+// import "@/directives"; // 指令
 
+import "@/styles/index.scss"; // global css
 Vue.config.productionTip = false;
 // 初始化vue
-export function render(props) {
+export async function render(props) {
+  // 在这里用await 防止公共样式没加载。页面就展示
+  // 微服务启动的时候，公共样式从主应用引入
+  if (process.env?.VUE_APP_QIANKUN === "0") {
+    await import("@/styles/common/index.scss");
+  }
+
   const container = props?.container;
   return new Vue({
     router,

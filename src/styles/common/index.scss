@@ -1,5 +1,7 @@
+// 自定义全局的一些样式
+@import "./base.scss";
+@import "./global.scss";
+
 // element的一些样式
 @import "./var.scss";
 @import "~element-ui/packages/theme-chalk/src/index";
-// 自定义全局的一些样式
-@import "./global.scss";

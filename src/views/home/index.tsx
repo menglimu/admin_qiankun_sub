@@ -1,2 +1,16 @@
-import { getFunctionsUsingGET } from "@/../api/modules_generate/三中心登录认证/三中心认证";
-let a = getFunctionsUsingGET(1);
+/**
+ * @Author: wenlin
+ * @Description: 测试首页
+ */
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "Home",
+  data() {
+    return {};
+  },
+  methods: {},
+  render() {
+    return <div>这是测试</div>;
+  }
+});

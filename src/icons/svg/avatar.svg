@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32px" height="36px" viewBox="0 0 32 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 56.1 (81669) - https://sketch.com -->
-    <title>touxiang-2</title>
-    <desc>Created with Sketch.</desc>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>图标 / 24 / 默认头像</title>
     <defs>
-        <polygon id="path-1" points="0.00234146341 0.0312195122 31.9687415 0.0312195122 31.9687415 31.999961 0.00234146341 31.999961"></polygon>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
-            <stop stop-color="#FFFFFF" offset="0%"></stop>
-            <stop stop-color="#93D3FF" offset="100%"></stop>
-        </linearGradient>
-        <path d="M15.9517421,32 C20.6499421,32 24.8655241,29.9004906 27.826087,26.7194818 C27.5363826,26.3376892 27.2468353,25.9560521 26.8606151,25.6696688 C25.2517442,24.36547 20.4246601,22.297686 20.4246601,22.297686 L17.3033162,27.9601133 L16.7883299,26.5603498 L17.5928635,24.8743972 L15.8873197,23.1884058 L14.1819331,24.8743972 L14.9862703,26.5603498 L14.4714803,27.9601133 L11.478667,22.329528 C11.478667,22.329528 6.65174001,24.4290373 5.04271197,25.7015108 C4.72095351,26.0196194 4.43140624,26.3695312 4.17391304,26.8148911 C7.10226471,29.9323326 11.2856355,32 15.9517421,32 Z M9.41927136,13.4225245 C9.41927136,16.2218962 12.0258646,21.470689 15.9517421,21.470689 C19.877659,21.470689 22.4842129,16.2854635 22.4842129,13.4225245 C22.4842129,10.5594689 22.4842129,5.56521739 15.9517421,5.56521739 C9.41927136,5.56521739 9.41927136,10.6550335 9.41927136,13.4225245 Z" id="path-4"></path>
-        <filter x="-25.4%" y="-22.7%" width="150.7%" height="145.4%" filterUnits="objectBoundingBox" id="filter-5">
-            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0.631372549   0 0 0 0 1  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        <ellipse id="path-1" cx="12" cy="11.9225806" rx="12" ry="11.9225806"></ellipse>
+        <ellipse id="path-3" cx="12" cy="21" rx="9" ry="6"></ellipse>
+        <filter x="-72.2%" y="-91.7%" width="244.4%" height="316.7%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0823529412   0 0 0 0 0.388235294   0 0 0 0 0.760784314  0 0 0 0.111314467 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <circle id="path-5" cx="12" cy="9" r="4"></circle>
+        <filter x="-162.5%" y="-137.5%" width="425.0%" height="425.0%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0823529412   0 0 0 0 0.388235294   0 0 0 0 0.760784314  0 0 0 0.111314467 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
         </filter>
     </defs>
-    <g id="页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="在线监管" transform="translate(-1615.000000, -14.000000)">
-            <g id="touxiang-2" transform="translate(1615.000000, 14.000000)">
-                <g id="分组">
-                    <mask id="mask-2" fill="white">
-                        <use xlink:href="#path-1"></use>
-                    </mask>
-                    <g id="Clip-2"></g>
-                    <path d="M0,16.0156878 C0,24.8435512 7.15640976,31.999961 15.9844683,31.999961 C24.8123317,31.999961 31.9687415,24.8435512 31.9687415,16.0156878 C31.9687415,7.18762927 24.8123317,0.0312195122 15.9844683,0.0312195122 C7.15640976,0.0312195122 0,7.18762927 0,16.0156878 Z" id="Fill-1" fill="#2EB2FF" mask="url(#mask-2)"></path>
-                </g>
-                <g id="Fill-3">
-                    <use fill="black" fill-opacity="1" filter="url(#filter-5)" xlink:href="#path-4"></use>
-                    <use fill="url(#linearGradient-3)" fill-rule="evenodd" xlink:href="#path-4"></use>
+    <g id="后台规范" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="导航-顶部导航栏" transform="translate(-1401.000000, -426.000000)">
+            <g id="编组-12" transform="translate(80.000000, 344.000000)">
+                <g id="编组-7" transform="translate(40.000000, 37.000000)">
+                    <g id="编组-5" transform="translate(0.000000, 25.000000)">
+                        <g id="编组" transform="translate(1281.000000, 20.000000)">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <use id="蒙版" fill="#87B7FF" xlink:href="#path-1"></use>
+                            <g id="Oval-Copy-7" mask="url(#mask-2)">
+                                <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                            </g>
+                            <g id="Oval" mask="url(#mask-2)">
+                                <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+                            </g>
+                        </g>
+                    </g>
                 </g>
             </g>
         </g>

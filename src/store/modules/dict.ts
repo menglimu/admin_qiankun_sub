@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/member-ordering */
-/*
+/**
  * @Author: wenlin
  * @Date: 2020-11-17 10:59:00
- * @LastEditors: wenlin
- * @LastEditTime: 2020-11-25 14:11:14
  * @Description: 字典
  */
 
@@ -12,6 +10,7 @@ import { getDictByType, getDeptTree } from "@/api/modules/public";
 const refreshTmp = 1000 * 60 * 60 * 2; // 部门树两小时更新一次
 let countTmp = null;
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import store from "../root";
 // TODO: jest test
 interface DictState {
   [key: string]: {
@@ -20,7 +19,7 @@ interface DictState {
     value: any;
   };
 }
-@Module
+@Module({ dynamic: true, store, name: "dict" })
 export default class Dict extends VuexModule {
   private dicts: DictState = {};
 

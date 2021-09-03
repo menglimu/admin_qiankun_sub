@@ -1,27 +1,7 @@
-import Vue from 'vue';
-import Vuex, { Module } from 'vuex';
-// import app from './modules/app'
-import user, { UserState } from './modules/user';
-import dict, { Dict } from './modules/dict';
-export interface RootState {
-  dict: Dict;
-  user: Module<UserState, {}>;
-}
-
-Vue.use(Vuex);
-
-// const vuexLocal = new VuexPersistence({
-//   key: 'App_chat',
-//   storage: window.localStorage
-// })
-
-const store = new Vuex.Store<RootState>({
-  // plugins: [vuexLocal.plugin],
-  modules: {
-    // app,
-    user,
-    dict
-  }
-});
+import store from "./root";
+// 防止有人直接用getters取store的值，先引一次进行注册
+import "./modules/app";
+import "./modules/user";
+import "./modules/dict";
 
 export default store;

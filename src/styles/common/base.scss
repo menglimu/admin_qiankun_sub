@@ -5,7 +5,7 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  color: #fff;
+  color: #333;
 }
 
 html {
@@ -19,13 +19,14 @@ html {
   margin: 0;
 
   &::-webkit-scrollbar {
-    width: 10px;
+    width: 6px;
   }
 
   &::-webkit-scrollbar-thumb {
-    width: 10%;
-    background: rgba(82, 137, 252, 0.6);
-    border-radius: 5px;
+    width: 6px;
+    background-color: rgba(144, 147, 153, 0.3);
+    border-radius: 6px;
+    transition: background-color 0.3s;
   }
 
   &::-webkit-scrollbar-corner {
@@ -47,7 +48,7 @@ html {
   }
 
   &::-webkit-scrollbar-thumb:horizontal {
-    width: 10px;
+    width: 6px;
     height: 10%;
   }
 }

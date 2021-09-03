@@ -1,4 +1,5 @@
 import Vue, { VNode } from "vue";
+import { RouteCustom } from "./router/permission";
 
 declare global {
   namespace JSX {
@@ -19,4 +20,7 @@ declare global {
       [elem: string]: any;
     }
   }
+}
+interface RouteMeta {
+  aa: any;
 }

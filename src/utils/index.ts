@@ -7,6 +7,8 @@
  * js-cookie：操作cookie的js库  https://www.npmjs.com/package/js-cookie
  * sockjs：websocket需后端同时使用   https://www.npmjs.com/package/sockjs-client
  */
+import qs from "qs";
+
 /**
  * 将日期按格式进行格式化为字符串
  * @param time 需要格式的日期
@@ -29,7 +31,7 @@ export function parseTime(time: Date | number | string, format = "yyyy-mm-dd hh:
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay(),
+    a: date.getDay()
   };
   const time_str = format.replace(/(y|m|d|h|i|s|a)+/gi, (result, key) => {
     let value = formatObj[key];
@@ -82,15 +84,6 @@ export function createDownloadLink(res: any) {
   try {
     fileName = decodeURIComponent(fileName);
   } catch (e) {}
-  // const fileNameUnicode = res?.headers?.["content-disposition"].split(";")[1].split("filename=")[1];
-  // if (fileNameUnicode) {
-  //   // 当存在 filename* 时，取filename* 并进行解码（为了解决中文乱码问题）
-  //   fileName = decodeURIComponent(fileNameUnicode);
-  // }
-  // const fileName =
-  //   res.headers &&
-  //   Object.prototype.hasOwnProperty.call(res.headers, 'content-disposition') &&
-  //   res.headers['content-disposition'].match(/filename="(.+)"/)[1]
   const fileUrl = res.data && window.URL.createObjectURL(res.data);
   downloadLink.href = fileUrl;
   downloadLink.download = fileName;
@@ -118,6 +111,33 @@ export function GetQueryString(name: string) {
   const r = search.substr(1).match(reg);
   if (r) return r[2];
   return null;
+}
+
+// 查询url字符串中的值
+export function urlQuery(key: string, url = window.location.href) {
+  const search = url.match(/(?<=[?])(.*?)(?=[\b#])/g);
+  if (!search) return undefined;
+  for (const item of search) {
+    if (qs.parse(item)?.hasOwnProperty(key)) {
+      return qs.parse(item)?.[key] || null;
+    }
+  }
+}
+// 删除url中的某个值
+export function urlDelete(key: string, url = window.location.href) {
+  // replace(/(((?<=[?\b]))b=.*?((?=[\b#])|&))|(&b=.*?)(?=[\b&#])/g,'') // |(\?b=.*?(?=[\b#]))
+  return url.replace(new RegExp(`(((?<=[?\b]))${key}=.*?((?=[\b#\$])|&|$))|(&${key}=.*?)((?=[\b&#])|$)`, "g"), "");
+}
+// url中添加一个值或多个值 // TODO: 已有值的处理，update
+export function urlAdd(obj: AnyObj, url = window.location.href) {
+  let str = qs.stringify(obj);
+  if (!url.includes("?")) {
+    return `${url}?${str}`;
+  }
+  const ary = url.match(/(.*?\?)(.*?)([#?].*|$)/);
+  if (ary) {
+    return `${ary[1]}${ary[2]}${ary[2] ? "&" : ""}${str}${ary[3]}`;
+  }
 }
 
 // TODO: 完善

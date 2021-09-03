@@ -9,23 +9,23 @@
 export class Storage {
   private privatePreKey: string;
   // 所有均添加上项目私有前缀
-  public constructor(name = process.env.VUE_APP_NAME || '') {
-    this.privatePreKey = name ? name + '_' : '';
+  public constructor(name = process.env.VUE_APP_NAME || "") {
+    this.privatePreKey = name ? name + "_" : "";
   }
-  public get<T>(key: string): T | null | string {
+  public get<T = string>(key: string): T | null {
     if (!key) return null;
     let value = window.localStorage.getItem(this.privatePreKey + key);
     try {
-      value = JSON.parse(value!);
-      return value;
+      value = JSON.parse(value);
+      return value as any;
     } catch (e) {
-      return value;
+      return value as any;
     }
   }
 
   public set(key: string, value: any) {
     if (!key) return;
-    if (Object.prototype.toString.call(value) === '[object Object]') {
+    if (Object.prototype.toString.call(value) === "[object Object]") {
       value = JSON.stringify(value);
     }
     window.localStorage.setItem(this.privatePreKey + key, value);

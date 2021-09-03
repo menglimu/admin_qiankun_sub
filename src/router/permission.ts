@@ -1,35 +1,59 @@
-/** 路由处理 */
+/** 路由处理
+ * 不需要左侧菜单的页面: 一级菜单下不配置的时候。左侧菜单不显示
+ */
 import router from "@/router";
-import { RouteConfig } from "vue-router";
+import StoreApp from "@/store/modules/app";
+import { RouteConfigSingleView } from "vue-router/types/router";
 
-// TODO: 不需要layout的页面，不需要登录的页面。后台系统目前没需求。
+// TODO: 不需要layout的页面,  不需要登录的页面。后台系统目前没需求。
+// TODO: 排序
 /** 后端返回的菜单或本地静态菜单 */
-export interface MenuItem {
-  expanded: boolean;
-  helpUrl?: string;
-  icon?: string;
+export interface FunItem {
   id: string;
-  leaf: boolean;
-  nodeType?: number;
-  openNew?: boolean;
-  orderNo?: number;
-  pids?: string[];
-  systemType?: number;
   text: string;
   url: string;
+  expanded?: boolean;
+  helpUrl?: string;
+  icon?: string;
+  leaf?: boolean;
+  nodeType?: number;
+  orderNo?: number;
+  children?: FunItem[];
+}
+export interface MenuItem extends FunItem {
+  /** 父级的id层级 */
+  pids?: string[];
+  /** http为外部链接。点击直接跳转走。iframe为嵌入在系统中的外部链接 */
   urlType?: "http" | "iframe";
-  children: MenuItem[];
+  /** 子菜单 */
+  children?: MenuItem[];
+  /** 是否隐藏的菜单，目前后台没有字段配。通过nodeType和url进行匹配区分 */
+  hidden?: boolean;
+  /** TODO: 是否缓存菜单。目前后台没有字段。应该要通过列表进行匹配 */
+  cache?: boolean;
+}
+
+export interface RouteCustom extends RouteConfigSingleView {
+  meta: {
+    pids?: string[];
+    url?: string;
+    urlType?: "http" | "iframe";
+    btns?: string[];
+    icon?: string;
+    id?: string;
+  };
 }
 
 // 是否是按钮权限菜单 ， 三中心没有是否隐藏的菜单类型。先以 / 开头区分。 非/表示按钮权限
-function isBtn(menu: MenuItem) {
+function isBtn(menu: FunItem) {
   const reg = /^[http|/]/;
   return menu.nodeType === 3 && !reg.test(menu.url);
 }
 
 // type: http为外部链接。点击直接跳转走。iframe为嵌入在系统中的外部链接
 export function parseUrl(url: string): { url: string; urlType?: "http" | "iframe" } {
-  if (/^https?:\/\//.test(url)) {
+  // TODO: 外部链接可能不以http开头
+  if (/^https?:\/\//.test(url) || /^\/http\//.test(url)) {
     return {
       url: "/http/" + window.btoa(url),
       urlType: "http"
@@ -44,93 +68,99 @@ export function parseUrl(url: string): { url: string; urlType?: "http" | "iframe
   return { url };
 }
 
-/** 将menu转换为route */
-const toRoute = function(menu: MenuItem, pids: string[], routes: RouteConfig[]) {
-  const { url, urlType } = parseUrl(menu.url);
-  // 修改菜单的属性
-  menu.pids = pids;
-  menu.url = url;
-  menu.urlType = urlType;
-  // 重定向到第一个
-  let redirectUrl = "";
-  if (!menu.url && menu.children?.length) {
-    for (const item of menu.children) {
-      if (item.nodeType !== 3 && item.url) {
-        redirectUrl = item.url;
-        break;
-      }
-    }
-  }
-
-  // 按钮权限
-  const btns = menu.children?.filter(item => isBtn(item)).map(item => item.url) || [];
-  // menu2route
-  if (!isBtn(menu)) {
-    routes.push({
-      path: `${menu.url}`,
-      component:
-        urlType === "iframe"
-          ? () => import(`@/views/base/iframe`)
-          : menu.url
-          ? () => import(`@/views${menu.url}`)
-          : undefined,
-      name: menu.id || menu.url,
-      meta: { pids, icon: menu.icon, url: `${menu.url}`, btns },
-      redirect: redirectUrl || null
-    });
-  }
-
-  // 加载本地路由中的child部分。这块逻辑有问题，业务无需求。先注释
-  // if (child.hasOwnProperty(menu.url)) {
-  //   [...child[menu.url]].forEach((c, i) => {
-  //     const id = `${menu.id}.${i}`;
-  //     c.meta = {
-  //       children: menu.children || [],
-  //       id,
-  //       pids: pids.concat(menu.id),
-  //       // hideMenu: true,
-  //       addTag: false,
-  //       text: c.name,
-  //       ...(c.meta || {})
-  //     };
-  //     menu.push(c);
-  //   });
-  // }
-
-  if (menu.children?.length) {
-    for (let i = 0, len = menu.children.length; i < len; i++) {
-      toRoute(menu.children[i], [...pids, menu.id], routes);
-    }
-  }
-};
-
 // 找到第一个路由。首页重定向到这个地址
-function findFirstRoute(menu: MenuItem[]) {
-  for (const item of menu) {
-    if (item.url) return item.url;
+function findFirstRoute(menus: MenuItem[]) {
+  if (!menus) return;
+  for (const item of menus) {
+    // 排查按钮，隐藏菜单，外链等一些特殊的菜单
+    if (item.url && !item.hidden && item.urlType !== "http") return item.url;
     if (item.children?.length) {
       const url = findFirstRoute(item.children);
       if (url) return url;
     }
   }
 }
-// 将菜单转换为vue的route
-function menuToRoute(menu: MenuItem[]) {
-  const first = findFirstRoute(menu);
-  const route: RouteConfig = {
-    path: "/",
-    component: !window.__POWERED_BY_QIANKUN__ ? () => import("@/layout/index.vue") : null,
-    children: [],
-    redirect: first
-  };
-  menu.forEach(item => {
-    toRoute(item, [], route.children);
+
+/** 将menu转换为route */
+const toRoute = function(funs: FunItem[], pids: string[]) {
+  const routes: RouteCustom[] = [];
+  const menus: MenuItem[] = [];
+  funs.forEach(fun => {
+    // menu2route
+    if (!isBtn(fun)) {
+      const { url, urlType } = parseUrl(fun.url);
+      // 按钮权限
+      const btns = fun.children?.filter(item => isBtn(item)).map(item => item.url) || [];
+      // 路由
+      const route: RouteCustom = {
+        // url为空的时候。路由会直接进到空这来。不会走父级的重定向。这里给空url写一个id作为path
+        path: url || "/" + fun.id,
+        component:
+          urlType === "iframe"
+            ? () => import(`@/views/base/iframe`)
+            : fun.url && urlType !== "http"
+            ? () => import(`@/views/home`) //  () => import(`@/views${menu.url}`)
+            : undefined,
+        name: fun.id,
+        meta: { pids, url, urlType, btns, icon: fun.icon, id: fun.id },
+        redirect: null
+      };
+      // 菜单
+      const layoutMenu: MenuItem = {
+        ...fun,
+        url,
+        urlType,
+        pids,
+        hidden: fun.nodeType === 3
+      };
+      if (fun.children?.length) {
+        const { routes, menus } = toRoute(fun.children, [...pids, fun.id]);
+        layoutMenu.children = menus;
+        route.children = routes;
+        // 重定向到第一个
+        route.redirect = findFirstRoute(layoutMenu.children);
+      }
+      routes.push(route);
+      menus.push(layoutMenu);
+    }
+
+    // 加载本地路由中的child部分。这块逻辑有问题，业务无需求。先注释
+    // if (child.hasOwnProperty(menu.url)) {
+    //   [...child[menu.url]].forEach((c, i) => {
+    //     const id = `${menu.id}.${i}`;
+    //     c.meta = {
+    //       children: menu.children || [],
+    //       id,
+    //       pids: pids.concat(menu.id),
+    //       // hideMenu: true,
+    //       addTag: false,
+    //       text: c.name,
+    //       ...(c.meta || {})
+    //     };
+    //     menu.push(c);
+    //   });
+    // }
   });
-  return [route];
-}
+  return { routes, menus };
+};
+
 // 添加异步route到vue
-export function addRoutes(menu: MenuItem[]) {
-  if (!menu?.length) return;
-  router.addRoutes(menuToRoute(menu) || []);
-  return menu;
+export function addRoutes(funs: FunItem[]) {
+  if (!funs?.length) return;
+  const { routes, menus } = toRoute(funs, []);
+  const first = findFirstRoute(menus);
+  // 入口路由
+  const main: RouteCustom[] = [
+    {
+      path: "/",
+      component: !window.__POWERED_BY_QIANKUN__ ? () => import("@/layout/") : null,
+      children: routes || [],
+      redirect: first,
+      meta: {}
+    }
+  ];
+  console.log(main);
+  router.addRoutes(main);
+  StoreApp.SetMenus(menus);
+  return routes;
 }

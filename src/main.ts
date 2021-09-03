@@ -1,6 +1,6 @@
 import "./public-path";
 import casLogin from "./casLogin";
-
+// TODO 整体页面加载中的动画
 let instance = null;
 
 async function initial(props: any = {}) {
@@ -11,9 +11,8 @@ async function initial(props: any = {}) {
     alert("登录失效，请重新登录");
     return;
   }
-  import("./initial").then(({ render }) => {
-    instance = render(props);
-  });
+  const { render } = await import("./initial");
+  instance = await render(props);
 }
 // 独立运行时
 if (!window.__POWERED_BY_QIANKUN__) {

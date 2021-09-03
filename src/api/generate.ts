@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 const fs = require("fs");
@@ -11,24 +12,21 @@ const child_process = require("child_process");
 
 // TODO: 加载指定tag
 // TODO: 一个接口存在多个tag中的时候
-// TODO: 中文转英文
 // TODO: 部分更新的时候的处理  -暂无处理方案 - -
-// TODO: 入参注释在function里面的时候的注释
+// declare let __dirname: string;
 
-let API_PATH = path.resolve(__dirname, "./modules_generate"); // 接口保存的路径
-let url = "http://10.10.77.129:8080"; // 接口的地址
-
-export default class GenerateApis {
+class GenerateApis {
+  private url = "http://10.10.77.129:8080"; // 接口的地址
+  private API_PATH = path.resolve(__dirname, "./modules_generate"); // 接口保存的路径
   // 当前处理的group
   private group: Group;
-
   // 获取所有接口组
   public async getAll() {
     // 获取文档模块列表
-    let data = await get(`${url}/swagger-resources`);
+    let data = await get(`${this.url}/swagger-resources`);
 
     data.forEach(async group => {
-      await this.getGroup(`${url}${group.url}`, group.name);
+      await this.getGroup(`${this.url}${group.url}`, group.name);
     });
     // fs.mkdirSync('./modules');
   }
@@ -111,7 +109,7 @@ export default class GenerateApis {
        * @description ${this.formatText(api.summary)}
        */
       export function ${fnName}(${params.join(", ")}) {
-        return request.${api.method}(\`${url}\`, params, options );
+        return request.${api.method}(\`${this.group.basePath}${url}\`, params, options );
       }`;
     return apiStr;
   }
@@ -134,7 +132,7 @@ export default class GenerateApis {
       text += module.interfaces.map(item => this.insertApi(item)).join("\n");
 
       // 路径
-      let path = `${API_PATH}${this.group.name ? `/${this.group.name}` : ""}`;
+      let path = `${this.API_PATH}${this.group.name ? `/${this.group.name}` : ""}`;
       let fileName = path + "/" + module.name + ".ts";
       fs.mkdirSync(path, { recursive: true });
       // 写入文件

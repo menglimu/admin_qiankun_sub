@@ -1,40 +1,10 @@
-@mixin pos($top:0, $right: $top, $bottom: $top, $left: $right) {
+$main: #3786fd;
+
+@mixin pos($top: 0, $right: $top, $bottom: $top, $left: $right) {
   top: $top;
   right: $right;
   bottom: $bottom;
   left: $left;
-}
-
-// flex布局
-@mixin inline($child:null, $class:null) {
-  display: flex;
-  align-items: center;
-
-  // 文字组默认上对齐
-  & > .text-group {
-    align-self: flex-start;
-  }
-
-  @each $childOne in $child {
-    @if $childOne !=null {
-      &>*:nth-child(#{$childOne}) {
-        flex: 1;
-        //display: block;//兼容部分浏览器由于影响子元素布局，现去掉
-
-        width: 0;
-      }
-    }
-  }
-
-  @each $classOne in $class {
-    @if $classOne !=null {
-      &>#{$classOne} {
-        flex: 1;
-        // display: block;
-        width: 0;
-      }
-    }
-  }
 }
 
 // 圆角
@@ -70,43 +40,8 @@
   white-space: nowrap;
 }
 
-// 动画 居中定位
-@mixin center($width: null, $height: null) {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  @if not $width and not $height {
-    transform: translate(-50%, -50%);
-  }
-
-  @else if $width and $height {
-    width: $width;
-    height: $height;
-    margin: -($height / 2) #{0 0} -($width / 2);
-  }
-
-  @else if not $height {
-    width: $width;
-    margin-left: -($width / 2);
-    transform: translateY(-50%);
-  }
-
-  @else {
-    height: $height;
-    margin-top: -($height / 2);
-    transform: translateX(-50%);
-  }
-}
-
-@mixin opacity($opacity) {
-  filter: alpha(opacity=$opacity-ie);
-  opacity: $opacity;
-  $opacity-ie: $opacity * 100;
-}
-
 /* 定义滚动条样式 圆角和阴影不需要则传入null */
-@mixin scrollBar($width:10px, $height:10px, $outColor:$bgColor, $innerColor:$bgGrey, $radius:5px, $shadow:null) {
+@mixin scrollBar($width: 10px, $height: 10px, $outColor: $bgColor, $innerColor: $bgGrey, $radius: 5px, $shadow: null) {
   /* 定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸 */
   &::-webkit-scrollbar {
     width: $width;

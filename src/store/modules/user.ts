@@ -1,15 +1,16 @@
 import { loginByCode, getUserDetail, login, logout, getUserDetailByToken } from "@/api/modules/login"; // 几个自定义的登录
 
 import { staticRoutes } from "@/router/static";
-import { addRoutes, MenuItem } from "@/router/permission";
+import { addRoutes, FunItem } from "@/router/permission";
 import { Storage } from "@/utils/storage/local";
 
-import { Module } from "vuex";
+import { Module, VuexModule, Mutation, Action, getModule } from "vuex-module-decorators";
+import store from "../root";
 
-let storage = new Storage();
+const storage = new Storage();
 export interface UserInfo {
   functionList?: AnyObj[];
-  functionTreeList?: MenuItem[];
+  functionTreeList?: FunItem[];
   systemType?: string;
 
   group?: {
@@ -27,28 +28,18 @@ export interface UserInfo {
   userLevel?: string;
   areaCode?: string;
   avatar?: string;
-}
-
-export interface UserState {
-  token: string;
-  userInfo: UserInfo | null;
-  roles: any[];
-  pointInfo: AnyObj;
-  sidebarItem: AnyObj;
+  roles?: string[];
 }
 
 function transformFuncs(funcs, pids = []) {
   for (let i = 0; i < funcs.length; i++) {
-    const info: MenuItem = {
+    const info: FunItem = {
       expanded: true,
       helpUrl: "",
       leaf: false,
       nodeType: { 101: 0, 102: 1, 103: 2, 104: 3 }[funcs[i].funType],
-      openNew: false,
-      systemType: 0,
       text: funcs[i].funName,
       url: funcs[i].location,
-      pids: pids,
       id: funcs[i].id,
       children: funcs[i].children
     };
@@ -91,159 +82,184 @@ function transformUserInfo(userInfoBase): UserInfo {
   Object.assign(userInfo, userInfoBase);
   return userInfo;
 }
+@Module({ dynamic: true, store, name: "user" })
+class User extends VuexModule {
+  private token_ = "";
+  private userInfo_: UserInfo = {};
+  private pointInfo_ = {};
 
-const userStore: Module<UserState, {}> = {
-  state: {
-    token: "",
-    userInfo: {},
-    roles: [],
-    pointInfo: {},
-    sidebarItem: {}
-  },
-  getters: {
-    token: state => state.token,
-    userInfo: state => state.userInfo,
-    avatar: state => state.userInfo.avatar,
-    groupId: state => state.userInfo?.group?.groupId,
-    groupName: state => state.userInfo?.group?.groupName,
-    userName: state => state.userInfo.userName,
-    userNo: state => state.userInfo?.userNo,
-    userId: state => state.userInfo?.userId,
-    userLevel: state => state.userInfo?.userLevel,
-    projectId: state => state.userInfo?.project?.projectId,
-    projectName: state => state.userInfo?.project?.projectName,
-    systemType: state => state.userInfo?.systemType,
-    roles: state => state.roles,
-    pointInfo: state => state.pointInfo,
-    menu: state => state.userInfo?.functionTreeList,
-    sidebarItem: state => state.sidebarItem,
-    isAdminAcount: state => state.userInfo && state.userInfo.userNo === "admin"
-  },
-  mutations: {
-    SET_USERINFO: (state, userInfo: UserInfo) => {
-      state.userInfo = userInfo;
-      if (userInfo) {
-        storage.set("userInfo", userInfo);
-        if (userInfo.functionTreeList && userInfo.functionTreeList.length > 0) {
-          // 这里直接用对象浅拷贝的特性赋值了。懒得写commit
-          userInfo.functionTreeList = addRoutes(userInfo.functionTreeList);
-        }
-      } else {
-        storage.remove("userInfo");
-      }
-    },
-    SET_TOKEN: (state, token) => {
-      state.token = token;
-      if (token) {
-        storage.set("accessToken", token);
-      } else {
-        storage.remove("accessToken");
-      }
-    },
-    SET_POINT_INFO: (state, pointInfo) => {
-      state.pointInfo = pointInfo;
-    },
-    SET_SIDEBAR_ITEM: (state, sidebarItem) => {
-      state.sidebarItem = sidebarItem;
-    }
-  },
+  public get token(): string {
+    return this.token_;
+  }
+  public get userInfo(): UserInfo {
+    return this.userInfo_;
+  }
+  public get pointInfo() {
+    return this.pointInfo_;
+  }
 
-  actions: {
-    // 重新加载登录信息到store
-    RE_LOADUSER: ({ commit }) => {
-      const token = storage.get("accessToken");
-      const userInfo = storage.get("userInfo");
-      console.log(token, userInfo);
-      if (!token || !userInfo) {
-        return Promise.reject(Error(""));
-      }
-      commit("SET_TOKEN", token);
-      commit("SET_USERINFO", userInfo);
-      return Promise.resolve(token);
-    },
-    // 模拟登录
-    async MockLogin({ dispatch }) {
-      await dispatch("GetUserDetail", {
-        userName: "虚拟登录",
-        functionTreeList: staticRoutes
-      });
-      return Promise.resolve();
-    },
-    // 登录和获取用户信息分开接口，如接口合并，需重新处理逻辑
-    // 登录通过code和state
-    async CasLogin({ commit, dispatch }, access) {
-      try {
-        const { code, state } = access;
-        const { data } = await loginByCode(code, state);
-        if (data.code !== 200) {
-          return Promise.reject(data.message);
-        }
-        commit("SET_TOKEN", data.data.accessToken);
-        await dispatch("GetUserDetail");
-        return Promise.resolve("login:success");
-      } catch (error) {
-        commit("SET_TOKEN", null);
-        return Promise.reject(error);
-      }
-    },
-    // 通过用户名和密码登录
-    async Login({ commit, dispatch }, { username, password }) {
-      try {
-        const { data } = await login(username, password);
-        if (data.code !== 200) {
-          return Promise.reject(data.message);
-        }
-        commit("SET_TOKEN", data.data.accessToken);
-        // await dispatch('GetUserDetail', data)
-        await dispatch("GetUserDetail");
-        return Promise.resolve("login:success");
-      } catch (error) {
-        commit("SET_TOKEN", null);
-        return Promise.reject(error);
-      }
-    },
-    // 通过token登录
-    async TokenLogin({ commit, dispatch }, token) {
-      commit("SET_TOKEN", token);
-      await dispatch("GetUserDetail");
-      return Promise.resolve("login:success");
-    },
-    // 通过userInfo和token登录
-    async TokenUserLogin({ commit, dispatch }, { token, userInfo }) {
-      commit("SET_TOKEN", token);
-      await dispatch("GetUserDetail", userInfo);
-      return Promise.resolve("login:success");
-    },
+  public get roles() {
+    return this.userInfo?.roles;
+  }
+  public get avatar(): string {
+    return this.userInfo?.avatar;
+  }
+  public get groupId(): string {
+    return this.userInfo?.group?.groupId;
+  }
+  public get groupName(): string {
+    return this.userInfo?.group?.groupName;
+  }
+  public get userName(): string {
+    return this.userInfo?.userName;
+  }
+  public get userNo(): string {
+    return this.userInfo?.userNo;
+  }
+  public get userId(): string {
+    return this.userInfo?.userId;
+  }
+  public get userLevel(): string {
+    return this.userInfo?.userLevel;
+  }
+  public get projectId(): string {
+    return this.userInfo?.project?.projectId;
+  }
+  public get projectName(): string {
+    return this.userInfo?.project?.projectName;
+  }
+  public get isAdminAcount(): boolean {
+    return this.userInfo?.userNo === "admin";
+  }
 
-    // 获取用户详情
-    async GetUserDetail({ commit }, userInfoStatic) {
-      try {
-        const userInfo: UserInfo = transformUserInfo(userInfoStatic || (await getUserDetail()));
-        // 使用本地static中的菜单
-        const useLocalMenu = process.env.VUE_APP_LOCAL_MENU === "1";
-        if (useLocalMenu) {
-          userInfo.functionTreeList = staticRoutes;
-        }
-        commit("SET_USERINFO", userInfo);
-        return Promise.resolve(userInfo);
-      } catch (error) {
-        commit("SET_TOKEN", null);
-        commit("SET_USERINFO", null);
-        return Promise.reject(error);
+  @Mutation
+  public SET_USERINFO(userInfo: UserInfo) {
+    this.userInfo_ = userInfo;
+    if (userInfo) {
+      storage.set("userInfo", userInfo);
+      if (userInfo.functionTreeList && userInfo.functionTreeList.length > 0) {
+        // 这里直接用对象浅拷贝的特性赋值了。懒得写commit
+        addRoutes(userInfo.functionTreeList);
       }
-    },
-    // 退出登录
-    async FedLogOut({ commit }) {
-      try {
-        const data = await logout();
-        commit("SET_TOKEN", null);
-        commit("SET_USERINFO", null);
-        return data;
-      } catch (error) {
-        return Promise.reject(error);
-      }
+    } else {
+      storage.remove("userInfo");
     }
   }
-};
+  @Mutation
+  public SET_TOKEN(token) {
+    this.token_ = token;
+    if (token) {
+      storage.set("accessToken", token);
+    } else {
+      storage.remove("accessToken");
+    }
+  }
+  @Mutation
+  public SET_POINT_INFO(pointInfo) {
+    this.pointInfo_ = pointInfo;
+  }
 
-export default userStore;
+  // 重新加载登录信息到store
+  @Action
+  public RE_LOADUSER() {
+    const token = storage.get("accessToken");
+    const userInfo = storage.get<UserInfo>("userInfo");
+    if (!token || !userInfo) {
+      return Promise.reject(Error(""));
+    }
+    this.SET_TOKEN(token);
+    this.SET_USERINFO(userInfo);
+    return Promise.resolve(token);
+  }
+  // 模拟登录
+  @Action
+  public async MockLogin() {
+    await this.GetUserDetail({
+      userName: "虚拟登录",
+      functionTreeList: staticRoutes
+    });
+    return Promise.resolve();
+  }
+  // 登录和获取用户信息分开接口，如接口合并，需重新处理逻辑
+  // 登录通过code和state
+  @Action
+  public async CasLogin(code: string, state: string) {
+    try {
+      const { data } = await loginByCode(code, state);
+      if (data.code !== 200) {
+        return Promise.reject(data.message);
+      }
+      this.SET_TOKEN(data.data.accessToken);
+      await this.GetUserDetail();
+      return Promise.resolve("login:success");
+    } catch (error) {
+      this.SET_TOKEN(null);
+      return Promise.reject(error);
+    }
+  }
+  // 通过用户名和密码登录
+  @Action
+  public async Login({ username, password }) {
+    try {
+      const { data } = await login(username, password);
+      if (data.code !== 200) {
+        return Promise.reject(data.message);
+      }
+      this.SET_TOKEN(data.data.accessToken);
+      // await dispatch('GetUserDetail', data)
+      await this.GetUserDetail();
+      return Promise.resolve("login:success");
+    } catch (error) {
+      this.SET_TOKEN(null);
+      return Promise.reject(error);
+    }
+  }
+  // 通过token登录
+  @Action
+  public async TokenLogin(token: string) {
+    this.SET_TOKEN(token);
+    await this.GetUserDetail();
+    return Promise.resolve("login:success");
+  }
+  // 通过userInfo和token登录
+  @Action
+  public async TokenUserLogin({ token, userInfo }) {
+    this.SET_TOKEN(token);
+    await this.GetUserDetail(userInfo);
+    return Promise.resolve("login:success");
+  }
+
+  // 获取用户详情
+  @Action
+  public async GetUserDetail(userInfoStatic?: UserInfo) {
+    try {
+      const userInfo: UserInfo = transformUserInfo(userInfoStatic || (await getUserDetail()));
+      // 使用本地static中的菜单
+      const useLocalMenu = process.env.VUE_APP_LOCAL_MENU === "1";
+      if (useLocalMenu) {
+        userInfo.functionTreeList = staticRoutes;
+      }
+      this.SET_USERINFO(userInfo);
+      return Promise.resolve(userInfo);
+    } catch (error) {
+      this.SET_TOKEN(null);
+      this.SET_USERINFO(null);
+      return Promise.reject(error);
+    }
+  }
+  // 退出登录
+  @Action
+  public async FedLogOut() {
+    try {
+      const data = await logout();
+      this.SET_TOKEN(null);
+      this.SET_USERINFO(null);
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+}
+
+const StoreUser = getModule(User);
+export default StoreUser;

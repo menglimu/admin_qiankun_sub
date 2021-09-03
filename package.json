@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "serve:qiankun": "vue-cli-service serve --mode prod",
+    "dev": "vue-cli-service serve",
+    "dev:qiankun": "vue-cli-service serve --mode prod",
     "build": "vue-cli-service build",
     "build:qiankun": "vue-cli-service build --mode prod",
+    "build:report": "vue-cli-service build --report",
+    "release": "node build/release.js",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md}\"",
     "api": "node --loader ts-node/esm ./src/api/generate.ts"
   },
@@ -18,9 +20,11 @@
     "element-ui": "^2.15.2",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
+    "screenfull": "^5.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "xml-loader": "^1.2.1"
   },
   "devDependencies": {
     "@ml/lint": "^1.2.0",
