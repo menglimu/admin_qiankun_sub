@@ -50,7 +50,7 @@ export default Vue.extend({
   render() {
     // 设置key，让菜单组件重新渲染。不重新渲染的话。激活的值有问题
     return (
-      <el-scrollbar class={[styles.sidebar, styles.active]}>
+      <el-scrollbar class={[styles.sidebar, StoreApp.collapsed ? styles.collapsed : ""]}>
         {!!this.menus?.length && (
           <el-menu
             class={[styles.menu, "leftMenu"]}

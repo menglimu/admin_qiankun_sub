@@ -65,7 +65,7 @@ export default Vue.extend({
   render(this: any) {
     return this.hideBreadcrumb() ? null : (
       <div class={styles.breadcrumb}>
-        {StoreApp.isCollapsed && <Collapse />}
+        {StoreApp.isCollapse && <Collapse />}
         <el-breadcrumb separator="/">
           {this.levelList.map(item => (
             <el-breadcrumb-item

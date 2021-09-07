@@ -31,6 +31,13 @@
   padding-right: 20px;
   margin-left: auto;
 
+  .screenfull {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
   .avatar {
     width: 24px;
     height: 24px;
@@ -84,18 +91,19 @@
   background: #fff;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.09);
 
-  &.active {
+  .menu {
+    width: 256px;
+    min-height: 100%;
+    border: 0;
+  }
+
+  &.collapsed {
     .menu {
       width: auto;
     }
   }
 }
 
-.menu {
-  width: 256px;
-  min-height: 100%;
-  border: 0;
-}
 // 中间页面
 .mainBox {
   display: flex;

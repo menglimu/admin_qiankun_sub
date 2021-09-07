@@ -6,9 +6,7 @@ import styles from "../index.module.scss";
 import { mapGetters } from "vuex";
 import TopMenu from "./Sidebar/TopMenu";
 import StoreApp from "@/store/modules/app";
-// import Breadcrumb from "./Breadcrumb";
-// import Collapse from "./Collapse";
-// import Screenfull from "./Screenfull";
+import Screenfull from "./Screenfull";
 
 export default Vue.extend({
   name: "Header",
@@ -30,10 +28,6 @@ export default Vue.extend({
   render() {
     return (
       <div class={styles.header}>
-        {/*  菜单折叠  */}
-        {/* <Collapse  :is-active="sidebar.opened" @toggleClick="toggleSideBar" /> */}
-        {/*  面包屑  */}
-        {/* <Breadcrumb class="breadcrumb-container" /> */}
         {/* logo和名称 */}
         <div class={styles.logoBox}>
           {StoreApp.logo && <img class={styles.logo} src={StoreApp.logo}></img>}
@@ -43,7 +37,7 @@ export default Vue.extend({
         {StoreApp.isTopMenu && <TopMenu></TopMenu>}
         <div class={styles.headerRight}>
           {/* 全屏 */}
-          {/* <Screenfull id="screenfull" class="right-menu-item hover-effect" /> */}
+          {StoreApp.isScreenFull && <Screenfull class="right-menu-item hover-effect" />}
           {/* 消息 */}
           {/* <el-button type="text" class="message">
         <svg-icon icon-class="message" />

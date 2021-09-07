@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "dev:qiankun": "vue-cli-service serve --mode prod",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && node build/release.js",
     "build:qiankun": "vue-cli-service build --mode prod",
     "build:report": "vue-cli-service build --report",
     "release": "node build/release.js",

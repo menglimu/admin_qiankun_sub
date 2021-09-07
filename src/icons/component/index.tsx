@@ -38,9 +38,9 @@ export default Vue.extend({
   },
   render() {
     return this.iconName?.includes("el-icon") ? (
-      <i class={[this.iconName, this.className]} />
+      <i class={[this.iconName, this.className]} on={this.$listeners} />
     ) : (
-      <svg class={["svg-icon", this.className]} aria-hidden="true">
+      <svg class={["svg-icon", this.className]} on={this.$listeners} aria-hidden="true">
         <use attrs={{ "xlink:href": `#icon-${this.iconName}` }} />
       </svg>
     );
