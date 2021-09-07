@@ -22,9 +22,11 @@ export default Vue.extend({
       }
     }
   },
-  render: () => (
-    <div class={styles.iframeBox}>
-      <iframe src="url" key="url"></iframe>
-    </div>
-  )
+  render() {
+    return (
+      <div class={styles.iframeBox}>
+        <iframe src="url" key="url"></iframe>
+      </div>
+    );
+  }
 });

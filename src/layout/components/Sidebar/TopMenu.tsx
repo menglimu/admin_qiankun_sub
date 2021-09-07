@@ -2,6 +2,7 @@
  * @Author: wenlin
  * @Description: 顶部菜单
  */
+import { goLink } from "@/layout/common";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
 import styles from "../../index.module.scss";
@@ -12,7 +13,7 @@ export default Vue.extend({
   created() {
     //  有顶部菜单的时候。查询左侧的菜单。没有的时候。左侧直接使用store的menu
     if (StoreApp.isTopMenu) {
-      this.$watch("$route.path", this.findSidebarMenu, { immediate: true });
+      this.$watch("$route", this.findSidebarMenu, { immediate: true });
     }
   },
   methods: {
@@ -24,13 +25,10 @@ export default Vue.extend({
     handleRouteJump({ name }) {
       const menu = StoreApp.menus.find(_ => _.id === name);
       if (menu.urlType === "http") {
-        window.open(window.atob(menu.url.slice(6)));
         // 外链的时候。将激活的还原为当前的路由
         (this.$refs.tabs as any).setCurrentName(this.$route.meta?.pids?.[0] || this.$route.name);
-        return;
-      } else {
-        this.$router.push({ name: menu.id });
       }
+      goLink(menu);
     }
   },
   //

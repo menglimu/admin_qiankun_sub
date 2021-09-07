@@ -1,16 +1,12 @@
 /*
- * @Author: your name
- * @Date: 2020-11-09 09:34:04
- * @LastEditTime: 2020-11-27 16:45:52
- * @LastEditors: wenlin
- * @Description: In User Settings Edi,
- * @FilePath: \hcsg_evaluation_fore\src\router\index.ts
+ *
  */
-// eslint-disable
 import Vue from "vue";
 import Router from "vue-router";
 import NProgress from "nprogress"; // Progress 进度条
 import "nprogress/nprogress.css"; // Progress 进度条样式
+import StoreApp from "@/store/modules/app";
+import { getMenuById } from "@/layout/common";
 
 Vue.use(Router);
 
@@ -54,7 +50,7 @@ router.beforeEach((to, from, next) => {
 router.onError(() => {
   NProgress.done(); // 结束Progress
 });
-router.afterEach(() => {
+router.afterEach(to => {
   NProgress.done(); // 结束Progress
 });
 export default router;

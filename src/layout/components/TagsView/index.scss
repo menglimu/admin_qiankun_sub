@@ -1,0 +1,59 @@
+.tagsView {
+  width: 100%;
+  padding: 16px 16px 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6;
+
+  .el-tabs__header {
+    margin: 0;
+    border-bottom: none;
+
+    .el-tabs__nav-prev,
+    .el-tabs__nav-next {
+      line-height: 32px;
+      color: #d9d9d9;
+    }
+
+    .el-tabs__nav-wrap {
+      &::after {
+        background-color: transparent;
+      }
+    }
+
+    .el-tabs__nav {
+      border: 0;
+      border-radius: 0;
+    }
+
+    .el-tabs__active-bar {
+      background: transparent;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    .el-tabs__item {
+      height: 32px;
+      padding: 0 16px !important;
+      margin-right: 1px;
+      font-size: 12px;
+      line-height: 32px;
+      color: #666;
+      text-align: center;
+      background: #f0f2f5;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+
+      .el-icon-close {
+        width: 14px;
+      }
+
+      &.is-active {
+        color: $main;
+        background: #e0edff;
+      }
+    }
+  }
+}

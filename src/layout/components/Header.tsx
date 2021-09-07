@@ -35,7 +35,10 @@ export default Vue.extend({
         {/*  面包屑  */}
         {/* <Breadcrumb class="breadcrumb-container" /> */}
         {/* logo和名称 */}
-        <div class={styles.logoBox}>xxxx系统</div>
+        <div class={styles.logoBox}>
+          {StoreApp.logo && <img class={styles.logo} src={StoreApp.logo}></img>}
+          {StoreApp.name || StoreApp.title}
+        </div>
         {/* 顶部菜单 */}
         {StoreApp.isTopMenu && <TopMenu></TopMenu>}
         <div class={styles.headerRight}>

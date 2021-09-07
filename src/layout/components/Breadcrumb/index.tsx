@@ -1,20 +1,19 @@
 /**
  * 面包屑
  */
+import { goLink } from "@/layout/common";
+import { MenuItem, RouteCustom } from "@/router/permission";
+import StoreApp from "@/store/modules/app";
 import Vue from "vue";
-import styles from "./index.module.scss";
+import styles from "../../index.module.scss";
+import Collapse from "../Collapse";
 
 export default Vue.extend({
   name: "Breadcrumb",
   data() {
     return {
-      levelList: null
+      levelList: [] as MenuItem[]
     };
-  },
-  computed: {
-    menu() {
-      return this.$store.getters.menu;
-    }
   },
   watch: {
     $route() {
@@ -26,37 +25,57 @@ export default Vue.extend({
   },
   methods: {
     getBreadcrumb() {
-      this.levelList = this.getList(this.menu, this.$route.meta.url);
+      this.levelList = []; // this.getList(StoreApp.menus, this.$route.name);
+      let parent = StoreApp.menus;
+      [...this.$route.meta.pids, this.$route.name].forEach(id => {
+        const menu = parent.find(item => item.id === id);
+        this.levelList.push(menu);
+        parent = menu.children || [];
+      });
     },
-    getList(data, val, key = "url", childrenKey = "children") {
-      for (const i in data) {
-        if (data[i][key] && data[i][key] === val) {
-          return [data[i]];
-        }
-        if (data[i][childrenKey] && data[i][childrenKey].length) {
-          const result = this.getList(data[i][childrenKey], val, key, childrenKey);
-          if (result) return [data[i], ...result];
-        }
+    goLink(menu: MenuItem) {
+      if (!menu.url || menu.id === this.$route.name) {
+        return;
       }
+      goLink(menu);
     },
     onBack() {
       this.$router.go(-1);
+    },
+    hideBreadcrumb() {
+      const menu = this.levelList[this.levelList.length - 1];
+      if (StoreApp.isTopMenu && !StoreApp.sidebarMenus?.length) {
+        return true;
+      }
+      if (!menu) return false;
+      for (const rule of StoreApp.hiddenBreadcrumbViews) {
+        if (typeof rule === "string" && rule === menu.url) {
+          return true;
+        }
+        if (rule instanceof RegExp && rule.test(menu.url)) {
+          return true;
+        }
+        if (typeof rule === "function" && rule(menu)) {
+          return true;
+        }
+      }
+      return false;
     }
   },
-  render() {
-    return (
-      <div class="app-breadcrumb">
-        <el-button type="text" click="onBack">
-          <i class="el-icon-arrow-left"></i>
-        </el-button>
+  render(this: any) {
+    return this.hideBreadcrumb() ? null : (
+      <div class={styles.breadcrumb}>
+        {StoreApp.isCollapsed && <Collapse />}
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item
-            v-for="item in levelList"
-            key="item.id"
-            to="item.url && item.url != $route.meta.url ? item.url : null"
-          >
-            {item.text}
-          </el-breadcrumb-item>
+          {this.levelList.map(item => (
+            <el-breadcrumb-item
+              key={item.id}
+              class={{ [styles.disabled]: !item.url, [styles.active]: item.id === this.$route.name }}
+              nativeOnClick={() => this.goLink(item)}
+            >
+              {item.text}
+            </el-breadcrumb-item>
+          ))}
         </el-breadcrumb>
       </div>
     );

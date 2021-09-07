@@ -62,8 +62,14 @@
   width: 256px;
   padding-left: 20px;
   margin-right: 50px;
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 600;
+  line-height: 1;
+}
+
+.logo {
+  height: 38px;
+  margin-right: 7px;
 }
 
 // 顶部菜单
@@ -76,10 +82,72 @@
   height: 100%;
   overflow-y: auto;
   background: #fff;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.09);
+
+  &.active {
+    .menu {
+      width: auto;
+    }
+  }
 }
 
 .menu {
   width: 256px;
   min-height: 100%;
   border: 0;
+}
+// 中间页面
+.mainBox {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.main {
+  position: relative;
+  flex: 1;
+  padding: 20px 24px;
+  margin: 20px;
+  background: #fff;
+  // box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.09);
+}
+
+// 面包屑
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding-left: 20px;
+  font-size: 12px;
+  background: #fff;
+
+  :global(.el-breadcrumb__separator) {
+    margin: 0 6px;
+  }
+
+  .disabled {
+    :global(.el-breadcrumb__inner) {
+      color: #999;
+    }
+  }
+
+  .active {
+    :global(.el-breadcrumb__inner) {
+      color: #333;
+    }
+  }
+}
+// 折叠
+.collapse {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+  vertical-align: middle;
+  cursor: pointer;
+
+  &.active {
+    transform: rotate(180deg);
+  }
 }

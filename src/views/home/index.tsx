@@ -7,10 +7,18 @@ import Vue from "vue";
 export default Vue.extend({
   name: "Home",
   data() {
-    return {};
+    return { aa: 1 };
   },
   methods: {},
+  created() {
+    console.log(this.$route.meta.btns);
+  },
   render() {
-    return <div>这是测试</div>;
+    return (
+      <div>
+        这是测试
+        <el-input v-model={this.aa}></el-input>
+      </div>
+    );
   }
 });

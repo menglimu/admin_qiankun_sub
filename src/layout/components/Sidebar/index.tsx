@@ -2,6 +2,7 @@
  * @Author: wenlin
  * @Description: 左侧菜单栏
  */
+import { goLink } from "@/layout/common";
 import { MenuItem } from "@/router/permission";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
@@ -16,12 +17,10 @@ export default Vue.extend({
     // 跳转链接
     goLink(menu: MenuItem) {
       if (menu.urlType === "http") {
-        window.open(window.atob(menu.url.slice(6)));
         // 外链的时候。将激活的还原为当前的路由
         (this.$refs.menu as any).updateActiveIndex(this.$route.name);
-      } else {
-        this.$router.push({ name: menu.id });
       }
+      goLink(menu);
     },
     // 渲染单个子菜单或者具体一个菜单
     renderItem(menu: MenuItem) {
@@ -51,12 +50,12 @@ export default Vue.extend({
   render() {
     // 设置key，让菜单组件重新渲染。不重新渲染的话。激活的值有问题
     return (
-      <el-scrollbar class={styles.sidebar}>
+      <el-scrollbar class={[styles.sidebar, styles.active]}>
         {!!this.menus?.length && (
           <el-menu
             class={[styles.menu, "leftMenu"]}
             default-active={this.$route.name}
-            collapse={StoreApp.isCollapsed}
+            collapse={StoreApp.collapsed}
             unique-opened
             collapse-transition={false}
             mode="vertical"

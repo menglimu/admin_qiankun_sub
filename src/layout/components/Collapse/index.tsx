@@ -1,29 +1,17 @@
 /**
  * 折叠按钮
  */
+import StoreApp from "@/store/modules/app";
 import Vue from "vue";
-import styles from "./index.module.scss";
+import styles from "../../index.module.scss";
 
 export default Vue.extend({
   name: "Collapse",
-
-  props: {
-    isActive: {
-      type: Boolean,
-      default: false
-    }
-  },
-  methods: {
-    toggleClick() {
-      this.$emit("toggleClick");
-    }
-  },
   render() {
     return (
-      <div style="padding: 0 15px;" click="toggleClick">
+      <div onClick={StoreApp.TagCollapsed}>
         <svg
-          class="{ 'is-active': isActive }"
-          class="hamburger"
+          class={{ [styles.collapse]: true, [styles.active]: StoreApp.collapsed }}
           viewBox="0 0 1024 1024"
           xmlns="http://www.w3.org/2000/svg"
           width="64"
@@ -38,13 +26,9 @@ export default Vue.extend({
 
 /* <style scoped>
 .hamburger {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
 }
 
 .hamburger.is-active {
-  transform: rotate(180deg);
+  
 }
 </style> */

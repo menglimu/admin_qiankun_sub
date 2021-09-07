@@ -1,40 +1,48 @@
 /**
  * 页面中间的内容
  */
+import StoreApp from "@/store/modules/app";
 import Vue from "vue";
+import { getMenuById } from "../common";
 import styles from "../index.module.scss";
 
 export default Vue.extend({
   name: "AppMain",
   computed: {
-    cachedViews() {
-      return this.$store.state.tagsView.cachedViews;
+    cachedIds: () => StoreApp.cachedIds
+  },
+  created() {
+    this.$watch("$route", this.destroyNoCache, { immediate: true });
+  },
+  methods: {
+    destroyNoCache() {
+      this.addCache();
+      this.$children.forEach(item => {
+        if (!this.cachedIds.includes(item.$attrs.pageId)) {
+          item.$destroy();
+        }
+      });
     },
-    key() {
-      return this.$route.path;
-    },
-    isCached() {
-      return this.$route.meta?.cache;
+    addCache() {
+      // 处理缓存相关
+      if (StoreApp.isCacheTag) {
+        StoreApp.addCachedTags(getMenuById(this.$route.name));
+      } else if (this.$route.meta.cache) {
+        StoreApp.AddCachedId(this.$route.name);
+      }
     }
   },
   render() {
-    //   <div class="app-box">
-    //   <keep-alive>
-    //     <router-view class="app-main" v-if="isCached"></router-view>
-    //   </keep-alive>
-    //   <router-view v-if="!isCached" class="app-main"></router-view>
-    // </div>
-    //  include={this.cachedViews}
     return (
       <transition name="fade-transform" mode="out-in">
         <keep-alive>
-          <router-view class={styles.main} />
+          <router-view class={styles.main} key={this.$route.name} pageId={this.$route.name} />
         </keep-alive>
       </transition>
     );
   }
 });
-
+//  include={StoreApp.cachedNames}
 // .app-box {
 //   // height: calc(100% - 60px);
 //   height: 100%;
