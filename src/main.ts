@@ -1,9 +1,9 @@
 import "./public-path";
 import casLogin from "./casLogin";
-import StoreApp from "./store/modules/app";
+// import StoreApp from "./store/modules/app";
+// document.title = StoreApp.title || StoreApp.name || '';
 // TODO 整体页面加载中的动画
 let instance = null;
-// document.title = StoreApp.title || StoreApp.name || '';
 
 async function initial(props: any = {}) {
   // 如果走cas认证
