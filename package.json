@@ -6,7 +6,7 @@
     "dev": "vue-cli-service serve",
     "dev:qiankun": "vue-cli-service serve --mode prod",
     "build": "vue-cli-service build && node build/release.js",
-    "build:qiankun": "vue-cli-service build --mode prod",
+    "build:qiankun": "vue-cli-service build --mode prod  && node build/release.js",
     "build:report": "vue-cli-service build --report",
     "release": "node build/release.js",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md}\"",
