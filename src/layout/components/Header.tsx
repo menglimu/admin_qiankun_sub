@@ -7,6 +7,7 @@ import { mapGetters } from "vuex";
 import TopMenu from "./Sidebar/TopMenu";
 import StoreApp from "@/store/modules/app";
 import Screenfull from "./Screenfull";
+import Message from "../Message";
 
 export default Vue.extend({
   name: "Header",
@@ -39,9 +40,7 @@ export default Vue.extend({
           {/* 全屏 */}
           {StoreApp.isScreenFull && <Screenfull class="right-menu-item hover-effect" />}
           {/* 消息 */}
-          {/* <el-button type="text" class="message">
-        <svg-icon icon-class="message" />
-      </el-button> */}
+          {StoreApp.isMessage && <Message />}
           {/* 用户信息: 头像、名字 */}
           {this.avatar && <img class={styles.avatar} />}
           <svg-icon name="avatar" class={styles.avatar} />

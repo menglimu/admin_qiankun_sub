@@ -12,8 +12,10 @@ class App extends VuexModule {
   public isTopMenu = true;
   /** 是否使用面包屑 */
   public isBreadcrumb = true;
-  /** 是否使用折叠 */
+  /** 是否使用全屏 */
   public isScreenFull = false;
+  /** 是否使用消息 */
+  public isMessage = false;
   /** 是否使用折叠 */
   public isCollapse = false;
   /** 是否使用顶部的tag页签，开启后,会缓存所有的页面 */
