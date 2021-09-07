@@ -7,34 +7,34 @@
  */
 
 export class Storage {
-  privatePreKey: string
+  private privatePreKey: string;
   // 所有均添加上项目私有前缀
-  constructor(name = process.env.VUE_APP_NAME || '') {
-    this.privatePreKey = name ? name + '_'  : ''
+  public constructor(name = process.env.VUE_APP_NAME || "") {
+    this.privatePreKey = name ? name + "_" : "";
   }
-  get<T>(key: string): T | null | string {
-    if (!key) return null
-    let value = window.localStorage.getItem(this.privatePreKey + key)
+  public get<T = string>(key: string): T | null {
+    if (!key) return null;
+    let value = window.localStorage.getItem(this.privatePreKey + key);
     try {
-      value = JSON.parse(value!)
-      return value
+      value = JSON.parse(value);
+      return value as any;
     } catch (e) {
-      return value
+      return value as any;
     }
   }
 
-  set(key: string, value: any) {
-    if (!key) return
-    if (Object.prototype.toString.call(value) === '[object Object]') {
-      value = JSON.stringify(value)
+  public set(key: string, value: any) {
+    if (!key) return;
+    if (Object.prototype.toString.call(value) === "[object Object]") {
+      value = JSON.stringify(value);
     }
-    window.localStorage.setItem(this.privatePreKey + key, value)
+    window.localStorage.setItem(this.privatePreKey + key, value);
   }
 
-  remove(key: string) {
-    if (!key) return
-    window.localStorage.removeItem(this.privatePreKey + key)
+  public remove(key: string) {
+    if (!key) return;
+    window.localStorage.removeItem(this.privatePreKey + key);
   }
 }
 
-export default new Storage()
+export default new Storage();

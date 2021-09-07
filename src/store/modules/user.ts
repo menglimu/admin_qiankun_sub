@@ -1,76 +1,62 @@
-import { loginByCode, getUserDetail, login, logout } from '@/api/modules/login' // 几个自定义的登录
+import { loginByCode, getUserDetail, login, logout, getUserDetailByToken } from "@/api/modules/login"; // 几个自定义的登录
 
-import { staticRoutes } from '@/router/static'
-import { MenuAsync } from '@/types'
-import { addRoutes } from '@/permission'
-import { Storage } from '@/utils/storage/local'
+import { staticRoutes } from "@/router/static";
+import { addRoutes, FunItem } from "@/router/permission";
+import { Storage } from "@/utils/storage/local";
 
-import { Module } from 'vuex'
+import { Module, VuexModule, Mutation, Action, getModule } from "vuex-module-decorators";
+import store from "../root";
 
-let storage = new Storage()
-const qiankun = window.__POWERED_BY_QIANKUN__
-if (qiankun) {
-  // 从全局加载当前项目的项目名
-  storage = new Storage(window.qiankun_app_name)
-}
-
+const storage = new Storage();
 export interface UserInfo {
-  functionList?: AnyObj[]
-  functionTreeList?: MenuAsync[]
-  systemType?: string
+  functionList?: AnyObj[];
+  functionTreeList?: FunItem[];
+  systemType?: string;
 
   group?: {
-    groupId?: string
-    groupName?: string
-  }
+    groupId?: string;
+    groupName?: string;
+  };
   project?: {
-    projectId?: string
-    projectName?: string
-  }
+    projectId?: string;
+    projectName?: string;
+  };
 
-  userName?: string
-  userNo?: string
-  userId?: string
-  userLevel?: string
-  areaCode?: string
-  avatar?: string
+  userName?: string;
+  userNo?: string;
+  userId?: string;
+  userLevel?: string;
+  areaCode?: string;
+  avatar?: string;
+  roles?: string[];
 }
 
-export interface UserState {
-  token: string
-  userInfo: UserInfo | null
-  roles: any[]
-  pointInfo: AnyObj
-  sidebarItem: AnyObj
-}
-
-function transformFuncs(funcs, pids = []): MenuAsync[] {
+function transformFuncs(funcs, pids = []) {
   for (let i = 0; i < funcs.length; i++) {
-    const info: any = {
+    const info: FunItem = {
       expanded: true,
-      helpUrl: '',
+      helpUrl: "",
       leaf: false,
       nodeType: { 101: 0, 102: 1, 103: 2, 104: 3 }[funcs[i].funType],
-      openNew: false,
-      systemType: 0,
       text: funcs[i].funName,
       url: funcs[i].location,
-      pids: pids
-    }
-    Object.assign(info, funcs[i])
-    info.id = funcs[i].id + ''
+      id: funcs[i].id,
+      children: funcs[i].children
+    };
+    Object.assign(info, funcs[i]);
+    info.id = String(funcs[i].id);
     if (info.children) {
-      info.children = transformFuncs(info.children, [...pids, funcs[i].id])
+      info.children = transformFuncs(info.children, [...pids, funcs[i].id]);
     }
-    funcs[i] = info
+    funcs[i] = info;
   }
-  return funcs
+  return funcs;
 }
 
 function transformUserInfo(userInfoBase): UserInfo {
-  userInfoBase.userNo = userInfoBase.userAccount
+  userInfoBase.userNo = userInfoBase.userAccount;
   if (!userInfoBase.functionTreeList && userInfoBase.funcs) {
-    userInfoBase.functionTreeList = transformFuncs(userInfoBase.funcs)
+    userInfoBase.functionTreeList = transformFuncs(userInfoBase.funcs);
   }
   const userInfo = {
     functionList: [],
@@ -92,147 +78,188 @@ function transformUserInfo(userInfoBase): UserInfo {
     userLevel: null,
     areaCode: null,
     avatar: null
-  }
-  Object.assign(userInfo, userInfoBase)
-  return userInfo
+  };
+  Object.assign(userInfo, userInfoBase);
+  return userInfo;
 }
+@Module({ dynamic: true, store, name: "user" })
+class User extends VuexModule {
+  private token_ = "";
+  private userInfo_: UserInfo = {};
+  private pointInfo_ = {};
 
-const userStore: Module<UserState, {}> = {
-  state: {
-    token: '',
-    userInfo: {},
-    roles: [],
-    pointInfo: {},
-    sidebarItem: {}
-  },
-  getters: {
-    token: state => state.token,
-    userInfo: state => state.userInfo,
-    groupId: state => state.userInfo && state.userInfo.group && state.userInfo.group.groupId,
-    groupName: state => state.userInfo && state.userInfo.group && state.userInfo.group.groupName,
-    userName: state => state.userInfo && state.userInfo.userName,
-    userNo: state => state.userInfo && state.userInfo.userNo,
-    userId: state => state.userInfo && state.userInfo.userId,
-    userLevel: state => state.userInfo && state.userInfo.userLevel,
-    projectId: state => state.userInfo && state.userInfo.project && state.userInfo.project.projectId,
-    projectName: state => state.userInfo && state.userInfo.project && state.userInfo.project.projectName,
-    systemType: state => state.userInfo && state.userInfo.systemType,
-    roles: state => state.roles,
-    pointInfo: state => state.pointInfo,
-    menu: state => state.userInfo && state.userInfo.functionTreeList,
-    sidebarItem: state => state.sidebarItem,
-    isAdminAcount: state => state.userInfo && state.userInfo.userNo === 'admin'
-  },
-  mutations: {
-    SET_USERINFO: (state, userInfo: UserInfo) => {
-      state.userInfo = userInfo
-      if (userInfo) {
-        storage.set('userInfo', userInfo)
-        if (userInfo.functionTreeList && userInfo.functionTreeList.length > 0) {
-          addRoutes(userInfo.functionTreeList)
-        }
-      } else {
-        storage.remove('userInfo')
-      }
-    },
-    SET_TOKEN: (state, token) => {
-      state.token = token
-      if (token) {
-        storage.set('accessToken', token)
-      } else {
-        storage.remove('accessToken')
-      }
-    },
-    SET_POINT_INFO: (state, pointInfo) => {
-      state.pointInfo = pointInfo
-    },
-    SET_SIDEBAR_ITEM: (state, sidebarItem) => {
-      state.sidebarItem = sidebarItem
-    }
-  },
+  public get token(): string {
+    return this.token_;
+  }
+  public get userInfo(): UserInfo {
+    return this.userInfo_;
+  }
+  public get pointInfo() {
+    return this.pointInfo_;
+  }
 
-  actions: {
-    RE_LOADUSER: ({ commit }) => {
-      const token = storage.get('accessToken')
-      const userInfo = storage.get('userInfo')
-      if (!token || !userInfo) {
-        return Promise.reject()
-      }
-      commit('SET_TOKEN', token)
-      commit('SET_USERINFO', userInfo)
-      return Promise.resolve()
-    },
-    // 模拟登录
-    async MockLogin({ dispatch }) {
-      await dispatch('GetUserDetail', {
-        userName: '虚拟登录',
-        functionTreeList: staticRoutes
-      })
-      return Promise.resolve()
-    },
-    // 登录和获取用户信息分开接口，如接口合并，需重新处理逻辑
-    // 登录通过code
-    async CasLogin({ commit, dispatch }, obj) {
-      try {
-        const { code, state } = obj
-        const { data } = await loginByCode(code, state)
-        if (data.code !== 200) {
-          return Promise.reject(data.message)
-        }
-        commit('SET_TOKEN', data.data.accessToken)
-        await dispatch('GetUserDetail')
-        return Promise.resolve('login:success')
-      } catch (error) {
-        commit('SET_TOKEN', null)
-        return Promise.reject(error)
-      }
-    },
+  public get roles() {
+    return this.userInfo?.roles;
+  }
+  public get avatar(): string {
+    return this.userInfo?.avatar;
+  }
+  public get groupId(): string {
+    return this.userInfo?.group?.groupId;
+  }
+  public get groupName(): string {
+    return this.userInfo?.group?.groupName;
+  }
+  public get userName(): string {
+    return this.userInfo?.userName;
+  }
+  public get userNo(): string {
+    return this.userInfo?.userNo;
+  }
+  public get userId(): string {
+    return this.userInfo?.userId;
+  }
+  public get userLevel(): string {
+    return this.userInfo?.userLevel;
+  }
+  public get projectId(): string {
+    return this.userInfo?.project?.projectId;
+  }
+  public get projectName(): string {
+    return this.userInfo?.project?.projectName;
+  }
+  public get isAdminAcount(): boolean {
+    return this.userInfo?.userNo === "admin";
+  }
 
-    async Login({ commit, dispatch }, { username, password }) {
-      try {
-        const { data } = await login(username, password)
-        if (data.code !== 200) {
-          return Promise.reject(data.message)
-        }
-        commit('SET_TOKEN', data.data.accessToken)
-        // await dispatch('GetUserDetail', data)
-        await dispatch('GetUserDetail')
-        return Promise.resolve('login:success')
-      } catch (error) {
-        commit('SET_TOKEN', null)
-        return Promise.reject(error)
+  @Mutation
+  public SET_USERINFO(userInfo: UserInfo) {
+    this.userInfo_ = userInfo;
+    if (userInfo) {
+      storage.set("userInfo", userInfo);
+      if (userInfo.functionTreeList && userInfo.functionTreeList.length > 0) {
+        // 这里直接用对象浅拷贝的特性赋值了。懒得写commit
+        addRoutes(userInfo.functionTreeList);
       }
-    },
-
-    // 获取用户详情
-    async GetUserDetail({ commit }, userInfoStatic) {
-      try {
-        const userInfo: UserInfo = transformUserInfo(userInfoStatic || (await getUserDetail()))
-        // 使用本地static中的菜单
-        const useLocalMenu = process.env.VUE_APP_LOCAL_MENU === '1'
-        if (useLocalMenu) {
-          userInfo.functionTreeList = staticRoutes
-        }
-        commit('SET_USERINFO', userInfo)
-        return Promise.resolve(userInfo)
-      } catch (error) {
-        commit('SET_TOKEN', null)
-        commit('SET_USERINFO', null)
-        return Promise.reject(error)
-      }
-    },
-    // 退出登录
-    async FedLogOut({ commit }) {
-      try {
-        const data = await logout()
-        commit('SET_TOKEN', null)
-        commit('SET_USERINFO', null)
-        return data
-      } catch (error) {
-        return Promise.reject(error)
-      }
+    } else {
+      storage.remove("userInfo");
     }
   }
+  @Mutation
+  public SET_TOKEN(token) {
+    this.token_ = token;
+    if (token) {
+      storage.set("accessToken", token);
+    } else {
+      storage.remove("accessToken");
+    }
+  }
+  @Mutation
+  public SET_POINT_INFO(pointInfo) {
+    this.pointInfo_ = pointInfo;
+  }
+
+  // 重新加载登录信息到store
+  @Action
+  public RE_LOADUSER() {
+    const token = storage.get("accessToken");
+    const userInfo = storage.get<UserInfo>("userInfo");
+    if (!token || !userInfo) {
+      return Promise.reject(Error(""));
+    }
+    this.SET_TOKEN(token);
+    this.SET_USERINFO(userInfo);
+    return Promise.resolve(token);
+  }
+  // 模拟登录
+  @Action
+  public async MockLogin() {
+    await this.GetUserDetail({
+      userName: "虚拟登录",
+      functionTreeList: staticRoutes
+    });
+    return Promise.resolve();
+  }
+  // 登录和获取用户信息分开接口，如接口合并，需重新处理逻辑
+  // 登录通过code和state
+  @Action
+  public async CasLogin(code: string, state: string) {
+    try {
+      const { data } = await loginByCode(code, state);
+      if (data.code !== 200) {
+        return Promise.reject(data.message);
+      }
+      this.SET_TOKEN(data.data.accessToken);
+      await this.GetUserDetail();
+      return Promise.resolve("login:success");
+    } catch (error) {
+      this.SET_TOKEN(null);
+      return Promise.reject(error);
+    }
+  }
+  // 通过用户名和密码登录
+  @Action
+  public async Login({ username, password }) {
+    try {
+      const { data } = await login(username, password);
+      if (data.code !== 200) {
+        return Promise.reject(data.message);
+      }
+      this.SET_TOKEN(data.data.accessToken);
+      // await dispatch('GetUserDetail', data)
+      await this.GetUserDetail();
+      return Promise.resolve("login:success");
+    } catch (error) {
+      this.SET_TOKEN(null);
+      return Promise.reject(error);
+    }
+  }
+  // 通过token登录
+  @Action
+  public async TokenLogin(token: string) {
+    this.SET_TOKEN(token);
+    await this.GetUserDetail();
+    return Promise.resolve("login:success");
+  }
+  // 通过userInfo和token登录
+  @Action
+  public async TokenUserLogin({ token, userInfo }) {
+    this.SET_TOKEN(token);
+    await this.GetUserDetail(userInfo);
+    return Promise.resolve("login:success");
+  }
+
+  // 获取用户详情
+  @Action
+  public async GetUserDetail(userInfoStatic?: UserInfo) {
+    try {
+      const userInfo: UserInfo = transformUserInfo(userInfoStatic || (await getUserDetail()));
+      // 使用本地static中的菜单
+      const useLocalMenu = process.env.VUE_APP_LOCAL_MENU === "1";
+      if (useLocalMenu) {
+        userInfo.functionTreeList = staticRoutes;
+      }
+      this.SET_USERINFO(userInfo);
+      return Promise.resolve(userInfo);
+    } catch (error) {
+      this.SET_TOKEN(null);
+      this.SET_USERINFO(null);
+      return Promise.reject(error);
+    }
+  }
+  // 退出登录
+  @Action
+  public async FedLogOut() {
+    try {
+      const data = await logout();
+      this.SET_TOKEN(null);
+      this.SET_USERINFO(null);
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
 
-export default userStore
+const StoreUser = getModule(User);
+export default StoreUser;

@@ -1,0 +1,21 @@
+.forget {
+  :global(.el-dialog) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 150px;
+    margin-left: -200px;
+  }
+}
+
+.vcode-box {
+  display: flex;
+
+  &-input {
+  }
+
+  &-btn {
+    width: 120px;
+    margin-left: 10px;
+  }
+}

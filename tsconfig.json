@@ -2,47 +2,23 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "noUnusedLocals": false,// 忽略未使用的变量警告
-    "importHelpers": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "suppressImplicitAnyIndexErrors": true, // 运行通过对象的aa.bb的方式取值
+    "experimentalDecorators": true, // 去除 装饰器 可能被废弃警告
+    "jsx": "preserve",
     "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "strictNullChecks": false,
-    "strictPropertyInitialization": false,
-    "noImplicitAny": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    // "isolatedModules": true,
+    "noImplicitAny": false, // 允许隐式any
+    "strictNullChecks": false, // 不检测null和undefined的赋值
+    "types": ["node"], // 引入node的类型定义 在./node_modules/@types 下查找
+    "lib": ["esnext", "dom"],
     "baseUrl": "./",
-    "typeRoots": [
-      "./node_modules/vue/types"
-    ],
-    "types": [
-      "webpack-env"
-    ],
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+      "@/*": [ "src/*"]
+    }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "**/*.vue"]
 }

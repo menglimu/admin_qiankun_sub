@@ -1,24 +1,11 @@
-import Vue from 'vue'
-import Vuex, { Module } from 'vuex'
-// import app from './modules/app'
-import user, { UserState } from './modules/user'
-import table from './modules/table'
-import dict, { Dict } from './modules/dict'
+/**
+ * action 中不能操作 数据源
+ * mutation 中不能调用其他方法
+ */
+import store from "./root";
+// 防止有人直接用getters取store的值，先引一次进行注册
+import "./modules/app";
+import "./modules/user";
+import "./modules/dict";
 
-export interface RootState {
-  dict: Dict
-  user: Module<UserState, {}>
-}
-
-Vue.use(Vuex)
-
-const store = new Vuex.Store<RootState>({
-  modules: {
-    // app,
-    user,
-    table,
-    dict
-  }
-})
-
-export default store
+export default store;

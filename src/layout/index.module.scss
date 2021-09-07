@@ -1,0 +1,161 @@
+.app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex: 1;
+  height: 100%;
+  overflow: auto;
+  background: #f5f6fa;
+  transition: width 0.28s;
+}
+// 头部
+.header {
+  display: flex;
+  height: 64px;
+  color: #fff;
+  background: $main;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-right: 20px;
+  margin-left: auto;
+
+  .screenfull {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    margin-left: 15px;
+  }
+
+  .userName {
+    margin: 0 12px 0 8px;
+  }
+
+  .exit {
+    padding: 0 12px;
+    margin-right: 20px;
+    line-height: 1;
+    color: #fff;
+    cursor: pointer;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+.logoBox {
+  display: flex;
+  align-items: center;
+  width: 256px;
+  padding-left: 20px;
+  margin-right: 50px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.logo {
+  height: 38px;
+  margin-right: 7px;
+}
+
+// 顶部菜单
+.topMenu {
+  flex: 1;
+}
+// 左侧菜单
+.sidebar {
+  max-width: 256px;
+  height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.09);
+
+  .menu {
+    width: 256px;
+    min-height: 100%;
+    border: 0;
+  }
+
+  &.collapsed {
+    .menu {
+      width: auto;
+    }
+  }
+}
+
+// 中间页面
+.mainBox {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.main {
+  position: relative;
+  flex: 1;
+  padding: 20px 24px;
+  margin: 20px;
+  background: #fff;
+  // box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.09);
+}
+
+// 面包屑
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding-left: 20px;
+  font-size: 12px;
+  background: #fff;
+
+  :global(.el-breadcrumb__separator) {
+    margin: 0 6px;
+  }
+
+  .disabled {
+    :global(.el-breadcrumb__inner) {
+      color: #999;
+    }
+  }
+
+  .active {
+    :global(.el-breadcrumb__inner) {
+      color: #333;
+    }
+  }
+}
+// 折叠
+.collapse {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+  vertical-align: middle;
+  cursor: pointer;
+
+  &.active {
+    transform: rotate(180deg);
+  }
+}

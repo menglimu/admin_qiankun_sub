@@ -1,6 +1,7 @@
 /node_modules/
 /dist/
-/src/utils/
 /public/
+shim-tsx.d.ts
+vue.config.js
+# vite.config.ts
 *.md
-*.d.ts

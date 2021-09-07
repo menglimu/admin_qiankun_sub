@@ -1,34 +1,26 @@
-/*
- * @Author: wenlin
- * @Date: 2020-11-06 10:25:28
- * @LastEditors: wenlin
- * @LastEditTime: 2020-11-17 18:29:46
- * @Description:
- */
-import Vue, { VNode } from 'vue'
-import { RootState } from './store';
-import { Store } from 'vuex';
+import Vue, { VNode } from "vue";
+import { RouteCustom } from "./router/permission";
 
 declare global {
   namespace JSX {
-    // tslint:disable no-empty-interface
-    interface Element extends VNode {}
-    // tslint:disable no-empty-interface
-    interface ElementClass extends Vue {}
+    // // tslint:disable no-empty-interface
+    // type Element = VNode;
+    // // tslint:disable no-empty-interface
+    // type ElementClass = Vue;
+    // interface IntrinsicElements {
+    //   [elem: string]: any;
+    // }
+
+    type Element = VNode;
+    // interface ElementClass extends ComponentRenderProxy {}
+    interface ElementAttributesProperty {
+      $props: any; // specify the property name to use
+    }
     interface IntrinsicElements {
-      [elem: string]: any
+      [elem: string]: any;
     }
   }
 }
-// 设置VueOptions为任意属性。屏蔽jsx检测属性报错问题
-declare module 'vue/types/options' {
-  interface ComponentOptions<V extends Vue> {
-    [propName: string]: any
-  }
-}
-
-// 扩展vue原型上的方法
-declare module 'vue/types/vue' {
-  interface Vue {
-  }
+interface RouteMeta {
+  aa: any;
 }

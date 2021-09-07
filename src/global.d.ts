@@ -1,56 +1,170 @@
 /*
  * @Author: wenlin
- * @Date: 2020-06-09 16:25:28
- * @LastEditors: wenlin
- * @LastEditTime: 2020-12-24 11:26:24
- * @Description:
+ * @Description: 一些全局的类型定义
  */
-// declare function Amap(): any
-declare module '*.svg'
-declare module '*.png'
-declare module '*.jpg'
-declare module '*.jpeg'
-declare module '*.gif'
-declare module '*.bmp'
-declare module '*.tiff'
-declare module '*.module.scss'
-
 
 interface AnyObj {
-  [key: string]: any
+  [key: string]: any;
 }
-declare module '@cci/cui'
-declare module '@cci/cp-svg-icon'
-
-declare module 'nprogress'
-declare module 'qs'
-
-declare module 'hls.js'
-// declare module 'AMap'
-// declare let AMap: any
-// {
-//   export default class {
-
-//   }
-
-// }
-
-// declare let EventEmitter: any
-
-// declare function merge<T>(...obj: any): T
-declare module 'webpack-merge' {
-  export default function merge<T>(...obj: any): T
-}
-
 interface Window {
-  /* 项目的全局eventBus */
-  eventBus: Vue
-  /* 主项目的全局eventBus */
-  appEventBus?: Vue
-  /* 是否是qiankun的子系统运行 */
-  __POWERED_BY_QIANKUN__: boolean 
-  /* 主应用的baseURL */
-  qiankun_app_baseurl?: string
-  /* 主应用的项目名 */
-  qiankun_app_name?: string
+  eventBus: Vue;
+  appEventBus?: Vue;
+  VUE_APP_WS_URI: string;
+  /** 全局的云际会议的js核心 */
+  PexRTC?: any;
+  __POWERED_BY_QIANKUN__: boolean; // 是否是qiankun微服务
+  qiankun_app_name: string; // qiankun主应用的名称
+}
+
+interface Date {
+  Format: (fmt?: string) => string;
+}
+
+// 文件的类型定义
+interface CSSModuleClasses {
+  readonly [key: string]: string;
+}
+
+declare module "*.module.css" {
+  const classes: CSSModuleClasses;
+  export default classes;
+}
+declare module "*.module.scss" {
+  const classes: CSSModuleClasses;
+  export default classes;
+}
+declare module "*.module.sass" {
+  const classes: CSSModuleClasses;
+  export default classes;
+}
+declare module "*.module.less" {
+  const classes: CSSModuleClasses;
+  export default classes;
+}
+declare module "*.module.styl" {
+  const classes: CSSModuleClasses;
+  export default classes;
+}
+declare module "*.module.stylus" {
+  const classes: CSSModuleClasses;
+  export default classes;
+}
+declare module "*.module.pcss" {
+  const classes: CSSModuleClasses;
+  export default classes;
+}
+
+// CSS
+declare module "*.css" {
+  const css: string;
+  export default css;
+}
+declare module "*.scss" {
+  const css: string;
+  export default css;
+}
+declare module "*.sass" {
+  const css: string;
+  export default css;
+}
+declare module "*.less" {
+  const css: string;
+  export default css;
+}
+declare module "*.styl" {
+  const css: string;
+  export default css;
+}
+declare module "*.stylus" {
+  const css: string;
+  export default css;
+}
+declare module "*.pcss" {
+  const css: string;
+  export default css;
+}
+
+// Built-in asset types
+// see `src/constants.ts`
+
+// images
+declare module "*.jpg" {
+  const src: string;
+  export default src;
+}
+declare module "*.jpeg" {
+  const src: string;
+  export default src;
+}
+declare module "*.png" {
+  const src: string;
+  export default src;
+}
+declare module "*.gif" {
+  const src: string;
+  export default src;
+}
+declare module "*.svg" {
+  const src: string;
+  export default src;
+}
+declare module "*.ico" {
+  const src: string;
+  export default src;
+}
+declare module "*.webp" {
+  const src: string;
+  export default src;
+}
+
+// media
+declare module "*.mp4" {
+  const src: string;
+  export default src;
+}
+declare module "*.webm" {
+  const src: string;
+  export default src;
+}
+declare module "*.ogg" {
+  const src: string;
+  export default src;
+}
+declare module "*.mp3" {
+  const src: string;
+  export default src;
+}
+declare module "*.wav" {
+  const src: string;
+  export default src;
+}
+declare module "*.flac" {
+  const src: string;
+  export default src;
+}
+declare module "*.aac" {
+  const src: string;
+  export default src;
+}
+
+// fonts
+declare module "*.woff" {
+  const src: string;
+  export default src;
+}
+declare module "*.woff2" {
+  const src: string;
+  export default src;
+}
+declare module "*.eot" {
+  const src: string;
+  export default src;
+}
+declare module "*.ttf" {
+  const src: string;
+  export default src;
+}
+declare module "*.otf" {
+  const src: string;
+  export default src;
 }
