@@ -1,2 +1,2 @@
-git fetch base
+git pull base
 git merge base
