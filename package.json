@@ -9,6 +9,7 @@
     "build:qiankun": "vue-cli-service build --mode prod  && node build/release.js",
     "build:report": "vue-cli-service build --report",
     "release": "node build/release.js",
+    "lint": "vue-cli-service lint",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,less,md}\"",
     "api": "node --loader ts-node/esm ./src/api/generate.ts"
   },
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@ml/lint": "^1.2.0",
     "@types/lodash": "^4.14.170",
+    "@types/node": "^16.9.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",

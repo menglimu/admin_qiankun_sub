@@ -11,6 +11,7 @@ import App from "./App";
 import router from "./router";
 import store from "./store";
 import mlComponents from "@ml/ml-components";
+import("@ml/ml-components/dist/style.css");
 import elementUi from "element-ui";
 
 // TODO: 先通过zindex展示处理嵌套到主应用中的层级问题。后面考虑使用主应用和子应用共享同一elementUI框架

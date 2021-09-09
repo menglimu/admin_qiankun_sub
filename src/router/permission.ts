@@ -16,8 +16,12 @@ export interface FunItem {
   helpUrl?: string;
   icon?: string;
   leaf?: boolean;
+  // 0"顶级菜单", 1"节点", 2"叶子", 3"按钮"
   nodeType?: number;
+  // 排序号
   orderNo?: number;
+  // 是否日志
+  logFlag?: boolean;
   children?: FunItem[];
 
   /** 是否隐藏的菜单，目前后台没有字段配。通过nodeType */
@@ -152,7 +156,7 @@ const toMenuRoute = function(funs: FunItem[], pids: string[]) {
           urlType === "iframe"
             ? () => import(`@/views/base/iframe`)
             : fun.url && urlType !== "http"
-            ? () => import(`@/views/home`) //  () => import(`@/views${menu.url}`)
+            ? () => import(`@/views${menu.url}`)
             : null,
         name: fun.id,
         meta: { pids, url: fun.url, btns, text: fun.text, icon: fun.icon, id: fun.id, cache: fun.cache },

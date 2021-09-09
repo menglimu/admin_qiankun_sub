@@ -25,7 +25,7 @@ export default Vue.extend({
   render() {
     return (
       <div class={styles.iframeBox}>
-        <iframe src="url" key="url"></iframe>
+        <iframe src={this.url} key={this.$route.name}></iframe>
       </div>
     );
   }
