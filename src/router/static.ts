@@ -20,7 +20,8 @@ export const staticRoutes: FunItem[] = [
       {
         id: createRandomId(),
         text: "cache缓存",
-        url: "/cache"
+        url: "/cache",
+        icon: "avatar"
       },
       {
         id: createRandomId(),

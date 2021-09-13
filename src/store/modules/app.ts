@@ -17,7 +17,7 @@ class App extends VuexModule {
   /** 是否使用消息 */
   public isMessage = false;
   /** 是否使用折叠 */
-  public isCollapse = false;
+  public isCollapse = true;
   /** 是否使用顶部的tag页签，开启后,会缓存所有的页面 */
   public isCacheTag = false;
 

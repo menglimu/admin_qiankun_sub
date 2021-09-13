@@ -85,11 +85,18 @@
 }
 // 左侧菜单
 .sidebar {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
   max-width: 256px;
   height: 100%;
   overflow-y: auto;
   background: #fff;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.09);
+
+  .menuBox {
+    flex: 1;
+  }
 
   .menu {
     width: 256px;
@@ -99,8 +106,24 @@
 
   &.collapsed {
     .menu {
-      width: auto;
+      width: 64px;
     }
+  }
+}
+// 折叠
+.collapseBox {
+  margin-bottom: 16px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.collapse {
+  width: 20px;
+  height: 20px;
+
+  &.active {
+    transform: rotate(180deg);
   }
 }
 
@@ -144,18 +167,5 @@
     :global(.el-breadcrumb__inner) {
       color: #333;
     }
-  }
-}
-// 折叠
-.collapse {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 20px;
-  vertical-align: middle;
-  cursor: pointer;
-
-  &.active {
-    transform: rotate(180deg);
   }
 }

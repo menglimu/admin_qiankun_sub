@@ -2,11 +2,10 @@
  * 面包屑
  */
 import { goLink } from "@/layout/common";
-import { MenuItem, RouteCustom } from "@/router/permission";
+import { MenuItem } from "@/router/permission";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
 import styles from "../../index.module.scss";
-import Collapse from "../Collapse";
 
 export default Vue.extend({
   name: "Breadcrumb",
@@ -65,7 +64,6 @@ export default Vue.extend({
   render(this: any) {
     return this.hideBreadcrumb() ? null : (
       <div class={styles.breadcrumb}>
-        {StoreApp.isCollapse && <Collapse />}
         <el-breadcrumb separator="/">
           {this.levelList.map(item => (
             <el-breadcrumb-item

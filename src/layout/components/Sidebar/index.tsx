@@ -7,6 +7,8 @@ import { MenuItem } from "@/router/permission";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
 import styles from "../../index.module.scss";
+import Collapse from "../Collapse";
+import "./index.scss";
 
 export default Vue.extend({
   name: "Sidebar",
@@ -31,8 +33,8 @@ export default Vue.extend({
         return (
           <el-submenu index={menu.id}>
             <template slot="title">
-              <svg-icon name={menu.icon} class="sub-svg-icon" />
-              <span class="title">{menu.text}</span>
+              {menu.icon && <svg-icon name={menu.icon} class="menu_icon" />}
+              <span>{menu.text}</span>
             </template>
             {menu.children.map(_ => this.renderItem(_))}
           </el-submenu>
@@ -40,32 +42,35 @@ export default Vue.extend({
       } else {
         return (
           <el-menu-item index={menu.id} onClick={() => this.goLink(menu)}>
-            <svg-icon name={menu.icon} class="sub-svg-icon" />
-            <span class="title">{menu.text}</span>
+            {menu.icon && <svg-icon name={menu.icon} class="menu_icon" />}
+            <span>{menu.text}</span>
           </el-menu-item>
         );
       }
     }
   },
-  render() {
+  render(this: any) {
     // 设置key，让菜单组件重新渲染。不重新渲染的话。激活的值有问题
-    return (
-      <el-scrollbar class={[styles.sidebar, StoreApp.collapsed ? styles.collapsed : ""]}>
-        {!!this.menus?.length && (
-          <el-menu
-            class={[styles.menu, "leftMenu"]}
-            default-active={this.$route.name}
-            collapse={StoreApp.collapsed}
-            unique-opened
-            collapse-transition={false}
-            mode="vertical"
-            key={this.menus[0].id}
-            ref="menu"
-          >
-            {this.menus.map(this.renderItem)}
-          </el-menu>
-        )}
-      </el-scrollbar>
-    );
+    return this.menus?.length ? (
+      <div class={[styles.sidebar, StoreApp.collapsed ? styles.collapsed : ""]}>
+        <el-scrollbar class={styles.menuBox}>
+          {
+            <el-menu
+              class={[styles.menu, "leftMenu"]}
+              default-active={this.$route.name}
+              collapse={StoreApp.collapsed}
+              unique-opened
+              collapse-transition={false}
+              mode="vertical"
+              key={this.menus[0].id}
+              ref="menu"
+            >
+              {this.menus.map(this.renderItem)}
+            </el-menu>
+          }
+        </el-scrollbar>
+        {StoreApp.isCollapse && <Collapse />}
+      </div>
+    ) : null;
   }
 });
