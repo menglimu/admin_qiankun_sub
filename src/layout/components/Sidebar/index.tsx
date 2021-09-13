@@ -33,7 +33,7 @@ export default Vue.extend({
         return (
           <el-submenu index={menu.id}>
             <template slot="title">
-              {menu.icon && <svg-icon name={menu.icon} class="menu_icon" />}
+              <svg-icon name={menu.icon} class="menu_icon" />
               <span>{menu.text}</span>
             </template>
             {menu.children.map(_ => this.renderItem(_))}
@@ -42,7 +42,7 @@ export default Vue.extend({
       } else {
         return (
           <el-menu-item index={menu.id} onClick={() => this.goLink(menu)}>
-            {menu.icon && <svg-icon name={menu.icon} class="menu_icon" />}
+            <svg-icon name={menu.icon} class="menu_icon" />
             <span>{menu.text}</span>
           </el-menu-item>
         );
