@@ -156,7 +156,7 @@ const toMenuRoute = function(funs: FunItem[], pids: string[]) {
           urlType === "iframe"
             ? () => import(`@/views/base/iframe`)
             : fun.url && urlType !== "http"
-            ? () => import(`@/views/home`) // () => import(`@/views${menu.url}`)
+            ? () => import(`@/views${fun.url}`)
             : null,
         name: fun.id,
         meta: { pids, url: fun.url, btns, text: fun.text, icon: fun.icon, id: fun.id, cache: fun.cache },

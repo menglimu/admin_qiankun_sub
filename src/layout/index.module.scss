@@ -69,14 +69,17 @@
   width: 256px;
   padding-left: 20px;
   margin-right: 50px;
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1;
 }
 
 .logo {
   height: 38px;
   margin-right: 7px;
+}
+
+.name {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 // 顶部菜单
@@ -147,6 +150,7 @@
 // 面包屑
 .breadcrumb {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   height: 44px;
   padding-left: 20px;

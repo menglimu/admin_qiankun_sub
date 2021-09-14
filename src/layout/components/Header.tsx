@@ -32,7 +32,7 @@ export default Vue.extend({
         {/* logo和名称 */}
         <div class={styles.logoBox}>
           {StoreApp.logo && <img class={styles.logo} src={StoreApp.logo}></img>}
-          {StoreApp.name || StoreApp.title}
+          <div class={styles.name}>{StoreApp.name || StoreApp.title}</div>
         </div>
         {/* 顶部菜单 */}
         {StoreApp.isTopMenu && <TopMenu></TopMenu>}
