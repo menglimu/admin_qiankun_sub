@@ -40,29 +40,31 @@ export default Vue.extend({
     },
     onBack() {
       this.$router.go(-1);
-    },
-    hideBreadcrumb() {
-      const menu = this.levelList[this.levelList.length - 1];
-      if (StoreApp.isTopMenu && !StoreApp.sidebarMenus?.length) {
-        return true;
-      }
-      if (!menu) return false;
-      for (const rule of StoreApp.hiddenBreadcrumbViews) {
-        if (typeof rule === "string" && rule === menu.url) {
-          return true;
-        }
-        if (rule instanceof RegExp && rule.test(menu.url)) {
-          return true;
-        }
-        if (typeof rule === "function" && rule(menu)) {
-          return true;
-        }
-      }
-      return false;
     }
+    // 注释掉左侧没有菜单，自动隐藏面包屑的功能
+    // hideBreadcrumb() {
+    //   const menu = this.levelList[this.levelList.length - 1];
+    //   if (StoreApp.isTopMenu && !StoreApp.sidebarMenus?.length) {
+    //     return true;
+    //   }
+    //   if (!menu) return false;
+    //   for (const rule of StoreApp.hiddenBreadcrumbViews) {
+    //     if (typeof rule === "string" && rule === menu.url) {
+    //       return true;
+    //     }
+    //     if (rule instanceof RegExp && rule.test(menu.url)) {
+    //       return true;
+    //     }
+    //     if (typeof rule === "function" && rule(menu)) {
+    //       return true;
+    //     }
+    //   }
+    //   return false;
+    // }
   },
   render(this: any) {
-    return this.hideBreadcrumb() ? null : (
+    return (
+      // this.hideBreadcrumb() ? null :
       <div class={styles.breadcrumb}>
         <el-breadcrumb separator="/">
           {this.levelList.map(item => (

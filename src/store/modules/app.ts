@@ -17,7 +17,7 @@ class App extends VuexModule {
   /** 是否使用消息 */
   public isMessage = false;
   /** 是否使用折叠 */
-  public isCollapse = true;
+  public isCollapse = false;
   /** 是否使用顶部的tag页签，开启后,会缓存所有的页面 */
   public isCacheTag = false;
 
@@ -25,7 +25,7 @@ class App extends VuexModule {
   public cacheViews: (string | RegExp | ((fun: FunItem) => boolean))[] = []; // ["/cache"]
   /** 不需要layout而直接显示的页面，会根据条件匹配到true或结束 */
   public rootViews: (string | RegExp | ((fun: FunItem) => boolean))[] = []; // ["/root"]
-  /** 隐藏面包屑的页面。左侧没有菜单的时候。面包屑会默认不显示 */
+  /** 隐藏面包屑的页面 */
   public hiddenBreadcrumbViews: (string | RegExp | ((fun: FunItem) => boolean))[] = [];
   /** 隐藏缓存标签页的页面 */
   public hiddenCacheTagViews: (string | RegExp | ((fun: FunItem) => boolean))[] = [];

@@ -19,7 +19,6 @@ export default Vue.extend({
     // 查询左侧的菜单
     findSidebarMenu() {
       const menu = StoreApp.menus.find(_ => _.id === this.$route.meta.pids[0]);
-      console.log(menu);
       StoreApp.SetSidebarMenus(menu?.children || []);
     },
     handleRouteJump({ name }) {
@@ -28,8 +27,6 @@ export default Vue.extend({
         // 外链的时候。将激活的还原为当前的路由
         (this.$refs.tabs as any).setCurrentName(this.$route.meta?.pids?.[0] || this.$route.name);
       }
-      console.log(menu);
-
       goLink(menu);
     }
   },

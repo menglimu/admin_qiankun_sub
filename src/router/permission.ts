@@ -217,7 +217,6 @@ function createMenusRoutes(funs: FunItem[]) {
     },
     ...rootRoutes
   ];
-  console.log(main);
   router.addRoutes(main);
   StoreApp.SetMenus(menus);
 }
