@@ -1,5 +1,5 @@
-import request from '@/api/request';
-import store from '@/store';
+import request from "@/api/request";
+import StoreDict from "@/store/modules/dict";
 
 // 获取字典类型
 export function getDictByType(type: string) {
@@ -9,7 +9,7 @@ export function getDictByType(type: string) {
 // 获取组织结构
 export function getOrganizationStructureTree() {
   // 统一从字典中取,2小时刷新一次
-  return store.dispatch('getDeptTree');
+  return StoreDict.getDeptTree();
   // return request.get(`/userc-api/v1/userc/dept/tree`)
 }
 

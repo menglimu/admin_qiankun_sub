@@ -1,9 +1,9 @@
-import store from "@/store";
 import { Message, MessageBox } from "element-ui";
 import axios, { AxiosPromise, AxiosRequestConfig, Method } from "axios";
 import qs from "qs";
 import merge from "webpack-merge";
 import router from "@/router";
+import StoreUser from "@/store/modules/user";
 
 // 创建axios实例
 const service = axios.create({
@@ -19,7 +19,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // 设置全局设置token头
-    const accessToken = store.getters.token;
+    const accessToken = StoreUser.token;
     if (accessToken && !config.headers.hasOwnProperty("accessToken")) {
       config.headers["accessToken"] = accessToken; // 让每个请求携带自定义token 请根据实际情况自行修改
     }
@@ -62,7 +62,7 @@ service.interceptors.response.use(
             .then(() => {
               alerted = false;
               if (process.env.NODE_ENV === "development") {
-                store.dispatch("FedLogOut");
+                StoreUser.FedLogOut();
                 location.href = location.origin + process.env.BASE_URL + "#/login";
                 location.reload();
                 return;

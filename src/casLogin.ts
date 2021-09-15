@@ -1,4 +1,4 @@
-import store from "@/store";
+import StoreUser from "./store/modules/user";
 import { GetQueryString } from "./utils";
 
 /* 单点登录未完成 */
@@ -13,13 +13,13 @@ export default async function casLogin(props) {
 
   // 模拟登录
   if (!isCasLogin) {
-    store.dispatch("MockLogin");
+    StoreUser.MockLogin();
     return;
   }
 
   try {
     if (window.__POWERED_BY_QIANKUN__) {
-      store.dispatch("TokenUserLogin", props);
+      await StoreUser.TokenUserLogin(props);
       return;
     }
 
@@ -31,22 +31,22 @@ export default async function casLogin(props) {
     const accessToken = GetQueryString("access_token") || GetQueryString("accessToken");
     if (code) {
       const state = GetQueryString("state");
-      await store.dispatch("CasLogin", { code, state });
+      await StoreUser.CasLogin({ code, state });
       location.href = location.origin + process.env.BASE_URL + "#/";
       return;
     } else if (username && password) {
-      await store.dispatch("Login", { username, password });
+      await StoreUser.Login({ username, password });
       location.href = location.origin + process.env.BASE_URL + "#/";
       return;
     } else if (accessToken) {
-      await store.dispatch("TokenLogin", accessToken);
+      await StoreUser.TokenLogin(accessToken);
       location.href = location.origin + process.env.BASE_URL + "#/";
       return;
     }
 
-    let token = store.getters.token;
+    let token = StoreUser.token;
     if (!token) {
-      token = await store.dispatch("RE_LOADUSER");
+      token = await StoreUser.RE_LOADUSER();
     }
     // TODO: 调用后台接口校验token是否已失效
     // }

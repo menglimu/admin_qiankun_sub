@@ -9,7 +9,7 @@ import Vue from "vue";
 import { getDictByType, getDeptTree } from "@/api/modules/public";
 const refreshTmp = 1000 * 60 * 60 * 2; // 部门树两小时更新一次
 let countTmp = null;
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { Module, VuexModule, Mutation, Action, getModule } from "vuex-module-decorators";
 import store from "../root";
 // TODO: jest test
 interface DictState {
@@ -20,11 +20,11 @@ interface DictState {
   };
 }
 @Module({ dynamic: true, store, name: "dict" })
-export default class Dict extends VuexModule {
+class Dict extends VuexModule {
   private dicts: DictState = {};
 
   @Mutation
-  public setDict(name: string, value: any) {
+  public setDict({ name, value }) {
     if (!name) return;
     Vue.set(this.dicts, name, { loading: false, loadPromise: null, value });
   }
@@ -52,7 +52,7 @@ export default class Dict extends VuexModule {
     if (this.dicts[name] && !refresh) {
       return Promise.resolve(this.dicts[name].value);
     }
-    let loadPromise = getDictByType(name)
+    const loadPromise = getDictByType(name)
       .then(data => {
         const value = data.map(item => {
           if (item.codeFieldType === "number" && !isNaN(item.code)) {
@@ -63,7 +63,7 @@ export default class Dict extends VuexModule {
           return item;
         });
 
-        this.setDict(name, value);
+        this.setDict({ name, value });
         return value;
       })
       .catch(err => {
@@ -74,14 +74,27 @@ export default class Dict extends VuexModule {
   }
 
   @Action
-  public async getDeptTree(DictObj, refresh?: boolean) {
-    const nothasTree = !DictObj.state.deptTree || !DictObj.state.deptTree[0];
-    if (refresh || !countTmp || new Date().getTime() - countTmp >= refreshTmp || nothasTree) {
-      const data = await getDeptTree();
-      this.setDict("deptTree", data);
-      countTmp = new Date().getTime();
-      return Promise.resolve(data);
+  public async getDeptTree(refresh?: boolean) {
+    const name = "deptTree";
+    // 正在请求的字典返回请求promise
+    if (this.dicts[name]?.loading) return this.dicts[name]?.loadPromise;
+    // 字典存在，并且不是强制刷新的时候，返回当前字典
+    if (this.dicts[name] && !refresh && countTmp && Date.now() - countTmp < refreshTmp) {
+      return Promise.resolve(this.dicts[name].value);
     }
-    return Promise.resolve(DictObj.state["deptTree"]);
+    const loadPromise = getDeptTree()
+      .then(data => {
+        countTmp = Date.now();
+        const value = data;
+        this.setDict({ name, value });
+        return value;
+      })
+      .catch(err => {
+        this.isLoading(name, false);
+      });
+    this.isLoading(name, true, loadPromise);
+    return loadPromise;
   }
 }
+const StoreDict = getModule(Dict);
+export default StoreDict;

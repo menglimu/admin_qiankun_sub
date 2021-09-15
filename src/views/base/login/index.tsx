@@ -1,33 +1,34 @@
-import Vue from 'vue';
-import style from './index.module.scss';
-import Forget from './components/forget';
-import { MlForm, MlFormConfig } from '@ml/ml-components/types/form';
+import Vue from "vue";
+import style from "./index.module.scss";
+import Forget from "./components/forget";
+import { MlForm, MlFormConfig } from "@ml/ml-components/types/form";
+import StoreUser from "@/store/modules/user";
 export default Vue.extend({
-  name: 'Login',
+  name: "Login",
   data() {
     return {
       formConfig: null as MlFormConfig,
       formValue: {
-        username: '',
-        password: ''
+        username: "",
+        password: ""
       }
     };
   },
   created() {
     this.formConfig = {
       inline: false,
-      size: 'large',
-      uiType: 'line',
-      labelWidth: '0',
+      size: "large",
+      uiType: "line",
+      labelWidth: "0",
       columns: [
-        { prop: 'username', placeholder: '用户名', required: true, error: '请输入注册手机号' },
+        { prop: "username", placeholder: "用户名", required: true, error: "请输入注册手机号" },
         {
-          prop: 'password',
-          placeholder: '密  码',
-          type: 'string',
-          props: { type: 'password' },
+          prop: "password",
+          placeholder: "密  码",
+          type: "string",
+          props: { type: "password" },
           required: true,
-          error: '请输入密码'
+          error: "请输入密码"
         }
       ]
     };
@@ -40,8 +41,8 @@ export default Vue.extend({
       const form = this.$refs.form as MlForm;
       await form.validate();
       try {
-        await this.$store.dispatch('Login', this.formValue);
-        this.$router.push('/');
+        await this.$store.dispatch("Login", this.formValue);
+        this.$router.push("/");
       } catch (error) {
         console.error(error);
       }

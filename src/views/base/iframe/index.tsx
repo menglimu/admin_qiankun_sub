@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { urlAdd } from "@/utils";
 import styles from "./index.module.scss";
+import StoreUser from "@/store/modules/user";
 export default Vue.extend({
   name: "IframeTemplateEmpty",
   data() {
@@ -15,7 +16,7 @@ export default Vue.extend({
   methods: {
     refreshIframe() {
       let url = this.$route?.path?.slice(8);
-      const token = this.$store.getters.token;
+      const token = StoreUser.token;
       if (url) {
         url = window.atob(url);
         this.url = urlAdd({ token }, url);

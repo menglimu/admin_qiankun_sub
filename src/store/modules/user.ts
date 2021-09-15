@@ -183,7 +183,7 @@ class User extends VuexModule {
   // 登录和获取用户信息分开接口，如接口合并，需重新处理逻辑
   // 登录通过code和state
   @Action
-  public async CasLogin(code: string, state: string) {
+  public async CasLogin({ code, state }) {
     try {
       const { data } = await loginByCode(code, state);
       if (data.code !== 200) {
@@ -206,7 +206,6 @@ class User extends VuexModule {
         return Promise.reject(data.message);
       }
       this.SET_TOKEN(data.data.accessToken);
-      // await dispatch('GetUserDetail', data)
       await this.GetUserDetail();
       return Promise.resolve("login:success");
     } catch (error) {

@@ -3,26 +3,20 @@
  */
 import Vue from "vue";
 import styles from "../index.module.scss";
-import { mapGetters } from "vuex";
 import TopMenu from "./Sidebar/TopMenu";
 import StoreApp from "@/store/modules/app";
 import Screenfull from "./Screenfull";
 import Message from "../Message";
+import StoreUser from "@/store/modules/user";
 
 export default Vue.extend({
   name: "Header",
   data() {
     return {};
   },
-  computed: {
-    ...mapGetters(["sidebar", "avatar", "userName"])
-  },
   methods: {
-    toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
-    },
     async onExit() {
-      await this.$store.dispatch("FedLogOut");
+      await StoreUser.FedLogOut();
       location.href = "/login";
     }
   },
@@ -42,9 +36,9 @@ export default Vue.extend({
           {/* 消息 */}
           {StoreApp.isMessage && <Message />}
           {/* 用户信息: 头像、名字 */}
-          {this.avatar && <img class={styles.avatar} />}
+          {StoreUser.avatar && <img class={styles.avatar} />}
           <svg-icon name="avatar" class={styles.avatar} />
-          <div class={styles.userName}>{this.userName}</div>
+          <div class={styles.userName}>{StoreUser.userName}</div>
           {/* 退出 */}
           <div class={styles.exit} onClick={this.onExit}>
             退出
