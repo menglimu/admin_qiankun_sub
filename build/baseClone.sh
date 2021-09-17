@@ -1,3 +1,3 @@
-git remote add -f base ssh://git@git.citycloud.com.cn:3022/hcsg_code/web_template_qiankun_sub.git
+git remote add -f base ssh://git@github.com:menglimu/admin_qiankun_main.git
 git branch base remotes/base/master
 # git checkout -b base remotes/base/master
