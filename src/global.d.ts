@@ -13,7 +13,6 @@ interface Window {
   /** 全局的云际会议的js核心 */
   PexRTC?: any;
   __POWERED_BY_QIANKUN__: boolean; // 是否是qiankun微服务
-  qiankun_app_name: string; // qiankun主应用的名称
 }
 
 interface Date {

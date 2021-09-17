@@ -253,6 +253,23 @@ class User extends VuexModule {
       const data = await logout();
       this.SET_TOKEN(null);
       this.SET_USERINFO(null);
+      try {
+        // location.href = data.url
+        const { loginUrl, logoutType } = data;
+        if (logoutType === "1") {
+          window.opener = null;
+          window.open("", "_self", "");
+          window.close(); // 以上三行可关闭单个页面
+          window.open("", "_top");
+          window.top.close();
+          window.location.href = "about:blank ";
+          window.close(); // 上面两次关闭适用于FireFox等浏览器
+        } else {
+          location.href = loginUrl;
+        }
+      } catch (error) {
+        console.log(error);
+      }
       return data;
     } catch (error) {
       return Promise.reject(error);

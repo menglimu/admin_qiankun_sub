@@ -16,8 +16,7 @@ export default Vue.extend({
   },
   methods: {
     async onExit() {
-      await StoreUser.FedLogOut();
-      location.href = "/login";
+      StoreUser.FedLogOut();
     }
   },
   render() {

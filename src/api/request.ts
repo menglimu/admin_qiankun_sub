@@ -61,17 +61,7 @@ service.interceptors.response.use(
           })
             .then(() => {
               alerted = false;
-              if (process.env.NODE_ENV === "development") {
-                StoreUser.FedLogOut();
-                location.href = location.origin + process.env.BASE_URL + "#/login";
-                location.reload();
-                return;
-              }
-              try {
-                location.href = data.url;
-              } catch (error) {
-                console.log(error);
-              }
+              StoreUser.FedLogOut();
             })
             .catch(() => {
               alerted = false;

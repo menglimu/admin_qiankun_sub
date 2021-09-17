@@ -1,3 +1,4 @@
+import { checkToken } from "./api/modules/login";
 import StoreUser from "./store/modules/user";
 import { GetQueryString } from "./utils";
 
@@ -51,7 +52,7 @@ export default async function casLogin(props) {
     // TODO: 调用后台接口校验token是否已失效
     // }
   } catch (error) {
-    return Promise.reject(Error("登录校验失败"));
+    console.error(error);
     // console.log(error)
     // const canLogin = false //默认去到登录页
     // if (process.env.NODE_ENV === 'development' || canLogin) {
@@ -59,4 +60,6 @@ export default async function casLogin(props) {
     //   return Promise.resolve()
     // }
   }
+  const res = await checkToken();
+  return res;
 }
