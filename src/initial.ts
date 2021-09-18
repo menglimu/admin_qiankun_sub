@@ -13,7 +13,7 @@ import store from "./store";
 import mlComponents from "@ml/ml-components";
 import("@ml/ml-components/dist/style.css");
 import elementUi from "element-ui";
-// import "@/icons"; // icon svg图标
+import "@/icons"; // icon svg图标
 // import "@/directives"; // 指令
 
 import "@/styles/index.scss"; // global css
