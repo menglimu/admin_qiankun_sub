@@ -13,7 +13,7 @@ import store from "./store";
 import mlComponents from "@ml/ml-components";
 import("@ml/ml-components/dist/style.css");
 import elementUi from "element-ui";
-import "@/icons"; // icon svg图标
+// import "@/icons"; // icon svg图标
 // import "@/directives"; // 指令
 
 import "@/styles/index.scss"; // global css
@@ -25,6 +25,11 @@ Vue.use(elementUi, { size: "small", zIndex: 3000 }).use(mlComponents);
 Vue.config.productionTip = false;
 // 初始化vue
 export async function render(props: QKProps) {
+  // 在这里用await 防止公共样式没加载。页面就展示
+  // 微服务启动的时候，公共样式从主应用引入
+  if (process.env?.VUE_APP_QIANKUN === "0") {
+    await import("@/styles/common/index.scss");
+  }
   const container = props?.container;
   return new Vue({
     router,

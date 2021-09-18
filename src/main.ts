@@ -1,6 +1,7 @@
 import "./public-path";
 import casLogin from "./casLogin";
 import { UserInfo } from "./store/modules/user";
+import Vue from "vue";
 // import StoreApp from "./store/modules/app";
 // document.title = StoreApp.title || StoreApp.name || '';
 // TODO 整体页面加载中的动画
@@ -15,15 +16,15 @@ export interface QKProps {
 }
 
 async function initial(props?: QKProps) {
-  // 在这里用await 防止公共样式没加载。页面就展示
-  // 微服务启动的时候，公共样式从主应用引入
-  if (process.env?.VUE_APP_QIANKUN === "0") {
-    await import("@/styles/common/index.scss");
-  }
   // 如果走cas认证
   try {
     await casLogin(props);
   } catch (error) {
+    const page = await import("@/views/base/401");
+    const container = props?.container;
+    new Vue({
+      render: h => h(page.default)
+    }).$mount(container ? container.querySelector("#app") : "#app");
     return;
   }
   const { render } = await import("./initial");
