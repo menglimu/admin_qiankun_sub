@@ -5,6 +5,7 @@
 import { getMenuById, goLink } from "@/layout/common";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
+import { VNode } from "vue/types/umd";
 import "./index.scss";
 
 export default Vue.extend({
@@ -49,7 +50,7 @@ export default Vue.extend({
     }
   },
   //
-  render(this: any) {
+  render(): VNode {
     return this.hideTagsView() ? null : (
       <el-tabs
         ref="tabs"

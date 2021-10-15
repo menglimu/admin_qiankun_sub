@@ -41,8 +41,9 @@ export default Vue.extend({
       const form = this.$refs.form as MlForm;
       await form.validate();
       try {
-        await this.$store.dispatch("Login", this.formValue);
-        this.$router.push("/");
+        await StoreUser.Login(this.formValue);
+        // this.$router.push("/");
+        window.open("/", "_self");
       } catch (error) {
         console.error(error);
       }

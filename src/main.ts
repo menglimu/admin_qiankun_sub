@@ -46,8 +46,8 @@ export async function mount(props) {
   }
 }
 export async function unmount() {
-  instance.$destroy();
-  instance.$el.innerHTML = "";
+  instance?.$destroy();
+  instance && (instance.$el.innerHTML = "");
   instance = null;
   // router = null
 }

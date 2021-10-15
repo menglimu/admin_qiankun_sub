@@ -2,20 +2,35 @@
  * @Author: wenlin
  * @Description: 左侧菜单栏
  */
-import { goLink } from "@/layout/common";
+import { goLink, getMenuById } from "@/layout/common";
 import { MenuItem } from "@/router/permission";
 import StoreApp from "@/store/modules/app";
 import Vue from "vue";
+import { VNode } from "vue/types/umd";
 import styles from "../../index.module.scss";
 import Collapse from "../Collapse";
 import "./index.scss";
 
 export default Vue.extend({
   name: "Sidebar",
+  data() {
+    return { activeMenu: null as MenuItem };
+  },
   computed: {
-    menus: () => (StoreApp.isTopMenu ? StoreApp.sidebarMenus : StoreApp.menus)
+    menus: () => (StoreApp.isTopMenu ? StoreApp.sidebarMenus : StoreApp.menus),
+    activeId(): string {
+      return this.getActiveId(this.activeMenu);
+    }
   },
   methods: {
+    // 当前激活的id。当前是隐藏的菜单的话，激活父级
+    getActiveId(menu: MenuItem) {
+      if (menu.hidden) {
+        return this.getActiveId(getMenuById(menu.pids[menu.pids.length - 1]));
+      } else {
+        return menu.id;
+      }
+    },
     // 跳转链接
     goLink(menu: MenuItem) {
       if (menu.urlType === "http") {
@@ -33,7 +48,7 @@ export default Vue.extend({
         return (
           <el-submenu index={menu.id}>
             <template slot="title">
-              <svg-icon name={menu.icon} class="menu_icon" />
+              {menu.icon && <svg-icon name={menu.icon} class="menu_icon" />}
               <span>{menu.text}</span>
             </template>
             {menu.children.map(_ => this.renderItem(_))}
@@ -42,22 +57,22 @@ export default Vue.extend({
       } else {
         return (
           <el-menu-item index={menu.id} onClick={() => this.goLink(menu)}>
-            <svg-icon name={menu.icon} class="menu_icon" />
+            {menu.icon && <svg-icon name={menu.icon} class="menu_icon" />}
             <span>{menu.text}</span>
           </el-menu-item>
         );
       }
     }
   },
-  render(this: any) {
+  render(): VNode {
     // 设置key，让菜单组件重新渲染。不重新渲染的话。激活的值有问题
     return this.menus?.length ? (
       <div class={[styles.sidebar, StoreApp.collapsed ? styles.collapsed : ""]}>
         <el-scrollbar class={styles.menuBox}>
           {
             <el-menu
-              class={[styles.menu, "leftMenu"]}
-              default-active={this.$route.name}
+              class={[styles.menu, "leftMenuMain"]}
+              default-active={this.activeId}
               collapse={StoreApp.collapsed}
               unique-opened
               collapse-transition={false}

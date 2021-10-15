@@ -62,15 +62,19 @@ export default Vue.extend({
     //   return false;
     // }
   },
-  render(this: any) {
+  render() {
     return (
       // this.hideBreadcrumb() ? null :
       <div class={styles.breadcrumb}>
         <el-breadcrumb separator="/">
-          {this.levelList.map(item => (
+          {this.levelList.map((item, index) => (
             <el-breadcrumb-item
               key={item.id}
-              class={{ [styles.disabled]: !item.url, [styles.active]: item.id === this.$route.name }}
+              class={{
+                [styles.disabled]: !item.url,
+                [styles.normal]: item.url,
+                [styles.active]: index === this.levelList.length - 1
+              }}
               nativeOnClick={() => this.goLink(item)}
             >
               {item.text}

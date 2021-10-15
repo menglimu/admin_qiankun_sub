@@ -16,6 +16,7 @@ export interface FunItem {
   helpUrl?: string;
   icon?: string;
   leaf?: boolean;
+  remark?: string;
   // 0"顶级菜单", 1"节点", 2"叶子", 3"按钮"
   nodeType?: number;
   // 排序号
@@ -104,7 +105,7 @@ export function parseUrl(url: string): { url: string; urlType?: "http" | "iframe
       urlType: "http"
     };
   }
-  if (url.substring(0, 8) === "/iframe/") {
+  if (/^\/iframe\//.test(url)) {
     return {
       url: "/iframe/" + window.btoa(url.slice(8)),
       urlType: "iframe"
@@ -206,18 +207,22 @@ function createMenusRoutes(funs: FunItem[]) {
   layoutRoutes = [];
   const menus = toMenuRoute(funs, []);
   const first = findFirstRoute(menus);
-  // 入口路由
-  const main: RouteCustom[] = [
-    {
-      path: "/",
-      component: !window.__POWERED_BY_QIANKUN__ ? () => import("@/layout/") : null,
-      children: layoutRoutes || [],
-      redirect: first,
-      meta: {}
-    },
-    ...rootRoutes
-  ];
-  router.addRoutes(main);
+  if (window.__POWERED_BY_QIANKUN__) {
+    router.addRoutes(layoutRoutes);
+  } else {
+    // 入口路由
+    const main: RouteCustom[] = [
+      {
+        path: "/",
+        component: !window.__POWERED_BY_QIANKUN__ ? () => import("@/layout") : null,
+        children: layoutRoutes || [],
+        redirect: first,
+        meta: {}
+      },
+      ...rootRoutes
+    ];
+    router.addRoutes(main);
+  }
   StoreApp.SetMenus(menus);
 }
 

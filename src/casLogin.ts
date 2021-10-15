@@ -1,4 +1,5 @@
 import { checkToken } from "./api/modules/login";
+import { QKProps } from "./main";
 import StoreUser from "./store/modules/user";
 import { GetQueryString } from "./utils";
 
@@ -7,7 +8,7 @@ import { GetQueryString } from "./utils";
 // 是否使用 cas 认证
 const isCasLogin = process.env.VUE_APP_CAS === "1";
 
-export default async function casLogin(props) {
+export default async function casLogin(props: QKProps) {
   if (window.location.href.includes("/login")) {
     return;
   }
