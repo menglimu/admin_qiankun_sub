@@ -55,11 +55,11 @@ class Dict extends VuexModule {
     const loadPromise = getDictByType(name)
       .then(data => {
         const value = data.map(item => {
-          if (item.codeFieldType === "number" && !isNaN(item.code)) {
-            item.code = Number(item.code);
+          if (item.dictFieldType === "number" && !isNaN(item.dictCode)) {
+            item.dictCode = Number(item.dictCode);
           }
-          item.label = item.codeName;
-          item.value = item.code;
+          item.label = item.dictName;
+          item.value = item.dictCode;
           return item;
         });
 
@@ -98,3 +98,13 @@ class Dict extends VuexModule {
 }
 const StoreDict = getModule(Dict);
 export default StoreDict;
+
+/**
+ * 加载字典，返回 一个方法。方法内返回对应的数据
+ * @param name 字典名
+ * @param refresh 是否强制刷新
+ * @returns Promise
+ */
+export function getDictRequest(name: string, refresh?: boolean) {
+  return () => StoreDict.getDict({ name, refresh });
+}

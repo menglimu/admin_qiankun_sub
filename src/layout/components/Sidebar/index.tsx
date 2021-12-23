@@ -14,13 +14,20 @@ import "./index.scss";
 export default Vue.extend({
   name: "Sidebar",
   data() {
-    return { activeMenu: null as MenuItem };
+    return { activeId: "" };
   },
   computed: {
-    menus: () => (StoreApp.isTopMenu ? StoreApp.sidebarMenus : StoreApp.menus),
-    activeId(): string {
-      return this.getActiveId(this.activeMenu);
-    }
+    menus: () => (StoreApp.isTopMenu ? StoreApp.sidebarMenus : StoreApp.menus)
+  },
+  created() {
+    this.$watch(
+      "$route",
+      () => {
+        const menu = getMenuById(this.$route.meta.id);
+        this.activeId = this.getActiveId(menu);
+      },
+      { immediate: true }
+    );
   },
   methods: {
     // 当前激活的id。当前是隐藏的菜单的话，激活父级
