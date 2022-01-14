@@ -210,7 +210,7 @@ function createMenusRoutes(funs: FunItem[]) {
   if (window.__POWERED_BY_QIANKUN__) {
     router.addRoutes(layoutRoutes);
   } else {
-    //  入口路由
+    // 入口路由
     const main: RouteCustom[] = [
       {
         path: "/",
