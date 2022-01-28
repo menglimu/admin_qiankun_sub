@@ -1,7 +1,7 @@
 import Vue from "vue";
 import style from "./index.module.scss";
 import Forget from "./components/forget";
-import { MlForm, MlFormConfig } from "@ml/ml-components/types/form";
+import { MlForm, MlFormConfig } from "ml-component/types/form";
 import StoreUser from "@/store/modules/user";
 export default Vue.extend({
   name: "Login",
@@ -10,8 +10,8 @@ export default Vue.extend({
       formConfig: null as MlFormConfig,
       formValue: {
         username: "",
-        password: ""
-      }
+        password: "",
+      },
     };
   },
   created() {
@@ -28,9 +28,9 @@ export default Vue.extend({
           type: "string",
           props: { type: "password" },
           required: true,
-          error: "请输入密码"
-        }
-      ]
+          error: "请输入密码",
+        },
+      ],
     };
   },
   methods: {
@@ -47,7 +47,7 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       }
-    }
+    },
   },
   render() {
     return (
@@ -72,5 +72,5 @@ export default Vue.extend({
         <Forget ref="forget" phone={this.formValue?.username} />
       </div>
     );
-  }
+  },
 });

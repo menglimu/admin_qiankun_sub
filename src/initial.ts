@@ -10,8 +10,8 @@ import Vue from "vue";
 import App from "./App";
 import router from "./router";
 import store from "./store";
-import mlComponents from "@ml/ml-components";
-import("@ml/ml-components/dist/style.css");
+import mlComponents from "ml-component";
+import("ml-component/dist/style.css");
 import elementUi from "element-ui";
 import "@/icons"; // icon svg图标
 // import "@/directives"; // 指令
@@ -34,7 +34,7 @@ export async function render(props: QKProps) {
   return new Vue({
     router,
     store,
-    render: h => h(App)
+    render: h => h(App),
   }).$mount(container ? container.querySelector("#app") : "#app");
 }
 
@@ -51,7 +51,7 @@ Date.prototype.Format = function(fmt = "yyyy-MM-dd hh:mm:ss") {
     "m+": this.getMinutes(), // 分
     "s+": this.getSeconds(), // 秒
     "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
-    S: this.getMilliseconds() // 毫秒
+    S: this.getMilliseconds(), // 毫秒
   };
   if (/(y+)/.test(fmt_)) fmt_ = fmt_.replace(RegExp.$1, String(this.getFullYear()).substr(4 - RegExp.$1.length));
   for (const k in o)
@@ -67,7 +67,7 @@ Vue.prototype.$confirm = function(...params) {
     return baseConfirm(params[0], "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
-      type: "warning"
+      type: "warning",
     });
   } else {
     return baseConfirm(...params);
