@@ -14,7 +14,7 @@ const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 const path = require("path");
 module.exports = {
   lintOnSave: false,
-  publicPath: process.env.VUE_APP_BASEURL || "/",
+  publicPath: process.env.VUE_APP_BASE_URL || "/",
   productionSourceMap: false,
   chainWebpack: config => {
     // 按需加载lodash
@@ -31,7 +31,7 @@ module.exports = {
       .use("svg-sprite-loader")
       .loader("svg-sprite-loader")
       .options({
-        symbolId: "icon-[name]"
+        symbolId: "icon-[name]",
       });
   },
   configureWebpack: function() {
@@ -40,22 +40,22 @@ module.exports = {
       output: {
         library: `${process.env.VUE_APP_NAME}-[name]`,
         libraryTarget: "umd", // 把微应用打包成 umd 库格式
-        jsonpFunction: `webpackJsonp_${process.env.VUE_APP_NAME}`
+        jsonpFunction: `webpackJsonp_${process.env.VUE_APP_NAME}`,
       },
       resolve: {
         extensions: [".js", ".ts", ".jsx", "tsx", ".vue", ".json"],
         alias: {
-          "@": path.resolve(__dirname, "./src")
-        }
-      }
+          "@": path.resolve(__dirname, "./src"),
+        },
+      },
     };
   },
   css: {
     loaderOptions: {
       sass: {
-        prependData: '@import "@/styles/mixin.scss";' // 全局引入
-      }
-    }
+        prependData: '@import "@/styles/mixin.scss";', // 全局引入
+      },
+    },
   },
   devServer: {
     https: false,
@@ -63,7 +63,7 @@ module.exports = {
       // api接口代理
       "^/api": {
         target: `http://0.0.0.0`,
-        changeOrigin: true
+        changeOrigin: true,
         // pathRewrite: {
         //   '^/chat': '/' //重写,
         // }
@@ -72,14 +72,14 @@ module.exports = {
       "^/wss": {
         target: `wss://0.0.0.0`,
         ws: true,
-        changeOrigin: true
+        changeOrigin: true,
         // pathRewrite: {
         //   '^/chat': '/' //重写,
         // }
-      }
+      },
     },
     headers: {
-      "Access-Control-Allow-Origin": "*"
-    }
-  }
+      "Access-Control-Allow-Origin": "*",
+    },
+  },
 };
