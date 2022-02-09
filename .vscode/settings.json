@@ -8,5 +8,7 @@
     // "source.fixAll": true, // 修复所有
     "source.fixAll.eslint": true, // 修复 eslint
     "source.fixAll.stylelint": true // 修复 stylelint
-  }
+  },
+  "stylelint.snippet": ["css", "less", "postcss", "scss"],
+  "stylelint.validate": ["css", "less", "postcss", "scss"]
 }
