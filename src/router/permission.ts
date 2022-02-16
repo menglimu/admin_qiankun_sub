@@ -12,6 +12,8 @@ export interface FunItem {
   id: string;
   text: string;
   url: string;
+  /** 组件地址 */
+  component?: string;
   expanded?: boolean;
   helpUrl?: string;
   icon?: string;
@@ -95,20 +97,20 @@ export function parseUrl(url: string): { url: string; urlType?: "http" | "iframe
   if (/^https?:\/\//.test(url)) {
     return {
       url: "/http/" + window.btoa(url),
-      urlType: "http"
+      urlType: "http",
     };
   }
   // 外部链接可能不以http开头, 暂定以/http/的相对路径为外链
   if (/^\/http\//.test(url)) {
     return {
       url: "/http/" + window.btoa(url.slice(6)),
-      urlType: "http"
+      urlType: "http",
     };
   }
   if (/^\/iframe\//.test(url)) {
     return {
       url: "/iframe/" + window.btoa(url.slice(8)),
-      urlType: "iframe"
+      urlType: "iframe",
     };
   }
   return { url };
@@ -157,18 +159,18 @@ const toMenuRoute = function(funs: FunItem[], pids: string[]) {
           urlType === "iframe"
             ? () => import(`@/views/base/iframe`)
             : fun.url && urlType !== "http"
-            ? () => import(`@/views${fun.url}`)
+            ? () => import(`@/views${fun.component || fun.url}`)
             : null,
         name: fun.id,
         meta: { pids, url: fun.url, btns, text: fun.text, icon: fun.icon, id: fun.id, cache: fun.cache },
-        redirect: null
+        redirect: null,
       };
       // 菜单
       const menu: MenuItem = {
         ...fun,
         url,
         urlType,
-        pids
+        pids,
       };
       if (fun.children?.length) {
         menu.children = toMenuRoute(fun.children, [...pids, fun.id]);
@@ -217,9 +219,9 @@ function createMenusRoutes(funs: FunItem[]) {
         component: !window.__POWERED_BY_QIANKUN__ ? () => import("@/layout") : null,
         children: layoutRoutes || [],
         redirect: first,
-        meta: {}
+        meta: {},
       },
-      ...rootRoutes
+      ...rootRoutes,
     ];
     router.addRoutes(main);
   }
