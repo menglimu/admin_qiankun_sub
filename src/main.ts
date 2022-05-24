@@ -23,12 +23,13 @@ async function initial(props?: QKProps) {
     const page = await import("@/views/base/401");
     const container = props?.container;
     new Vue({
-      render: h => h(page.default)
+      render: h => h(page.default),
     }).$mount(container ? container.querySelector("#app") : "#app");
     return;
   }
   const { render } = await import("./initial");
   instance = await render(props);
+  window.appEventBus.$emit("loadEnd", process.env.VUE_APP_NAME);
 }
 // 独立运行时
 if (!window.__POWERED_BY_QIANKUN__) {
